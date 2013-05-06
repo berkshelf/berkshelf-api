@@ -36,7 +36,11 @@ module Berkshelf::API
     attr_reader :cache
 
     def initialize
-      @cache = DependencyCache.new
+      @builder_sup = CacheBuilder::Opscode.supervise
+      @cache       = DependencyCache.new
+
+      load_save if File.exist?(save_file)
+      builder.async(:build)
     end
 
     # @param [String] name
@@ -52,6 +56,15 @@ module Berkshelf::API
       }
     end
 
+    # @return [CacheBuilder::Base]
+    def builder
+      @builder_sup.actors.first
+    end
+
+    def load_save
+      @cache = DependencyCache.from_file(save_file)
+    end
+
     # @param [String] name
     # @param [String] version
     #
@@ -62,6 +75,10 @@ module Berkshelf::API
         @cache.delete(name)
       end
       @cache
+    end
+
+    def save_file
+      "~/.berkshelf/#{builder.archive_name}.cerch"
     end
   end
 end
