@@ -16,4 +16,5 @@ module Berkshelf
   end
 end
 
+require 'berkshelf/api/errors'
 require 'berkshelf/api/endpoints'

@@ -6,7 +6,10 @@ module Berkshelf::API
       #
       # @return [Celluloid::Actor(Berkshelf::API::CacheManager)]
       def instance
-        Berkshelf::API::Application[:cache_manager] or raise Celluloid::DeadActorError, "cache manager not running"
+        unless Berkshelf::API::Application[:cache_manager].try(:alive?)
+          raise Berkshelf::NotStartedError, "cache manager not running"
+        end
+        Berkshelf::API::Application[:cache_manager]
       end
 
       # Start the cache manager and add it to the application's registry.
@@ -15,6 +18,16 @@ module Berkshelf::API
       #   are testing the application. Start the entire application with {Berkshelf::API::Application.run}
       def start
         Berkshelf::API::Application[:cache_manager] = new
+      end
+
+      # Stop the cache manager if it's running.
+      #
+      # @note you probably don't want to manually stop the cache manager unless you are testing
+      #   the application. Stop the entire application with {Berkshelf::API::Application.shutdown}
+      def stop
+        instance.terminate
+      rescue Berkshelf::NotStartedError
+        nil
       end
     end
 
