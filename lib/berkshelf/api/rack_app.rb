@@ -1,8 +1,6 @@
-require 'berkshelf/api/endpoints'
-
 module Berkshelf::API
   # @author Jamie Winsor <reset@riotgames.com>
-  class RackApp < Grape::API
-    mount Berkshelf::API::V1
+  class RackApp < Endpoint::Base
+    mount Berkshelf::API::Endpoint::V1
   end
 end

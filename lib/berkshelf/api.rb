@@ -19,4 +19,3 @@ module Berkshelf
 end
 
 require 'berkshelf/api/errors'
-require 'berkshelf/api/endpoints'

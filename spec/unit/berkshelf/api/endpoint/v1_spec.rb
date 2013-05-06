@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Berkshelf::API::V1 do
+describe Berkshelf::API::Endpoint::V1 do
   include Rack::Test::Methods
   include Berkshelf::API::Mixin::Services
 
