@@ -16,7 +16,7 @@ describe Berkshelf::API::DependencyCache do
         end
 
         it "returns an instance of DependencyCache" do
-          subject.should be_a(described_class)
+          expect(subject).to be_a(described_class)
         end
       end
 

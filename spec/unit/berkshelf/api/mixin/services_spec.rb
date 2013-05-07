@@ -12,7 +12,7 @@ describe Berkshelf::API::Mixin::Services do
       before { Berkshelf::API::CacheManager.start }
 
       it "returns the running instance of CacheManager" do
-        subject.should be_a(Berkshelf::API::CacheManager)
+        expect(subject).to be_a(Berkshelf::API::CacheManager)
       end
     end
 

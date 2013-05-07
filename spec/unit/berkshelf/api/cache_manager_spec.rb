@@ -45,7 +45,7 @@ describe Berkshelf::API::CacheManager do
     subject { described_class.new.builder }
 
     it "should return an instance inheriting from CacheBuilder::Base" do
-      should be_a(Berkshelf::API::CacheBuilder::Base)
+      expect(subject).to be_a(Berkshelf::API::CacheBuilder::Base)
     end
   end
 
