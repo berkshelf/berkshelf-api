@@ -6,7 +6,7 @@ module Berkshelf::API
       #
       # @return [Celluloid::Actor(Berkshelf::API::CacheManager)]
       def instance
-        unless Berkshelf::API::Application[:cache_manager].try(:alive?)
+        unless Berkshelf::API::Application[:cache_manager] && Berkshelf::API::Application[:cache_manager].alive?
           raise Berkshelf::NotStartedError, "cache manager not running"
         end
         Berkshelf::API::Application[:cache_manager]
