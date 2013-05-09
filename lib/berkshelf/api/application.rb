@@ -46,7 +46,10 @@ module Berkshelf::API
       end
 
       def run!
-        @instance = SupervisionGroup.new
+        @instance = Celluloid::SupervisionGroup.new(registry)
+        @instance.supervise_as(:cache_manager, Berkshelf::API::CacheManager)
+        @instance.supervise_as(:rest_gateway, Berkshelf::API::RESTGateway)
+        @instance
       end
 
       def shutdown
