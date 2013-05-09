@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = ">= 1.9.2"
 
-  spec.add_dependency 'ridley', '>= 0.11.0'
+  spec.add_dependency 'ridley', '= 0.12.0.rc1'
   spec.add_dependency 'celluloid', '~> 0.14.0'
   spec.add_dependency 'reel', '= 0.4.0.pre'
   spec.add_dependency 'grape', '>= 0.3.2'
