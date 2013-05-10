@@ -17,9 +17,7 @@ module Berkshelf::API
       # @note you probably do not want to manually start the cache manager unless you
       #   are testing the application. Start the entire application with {Berkshelf::API::Application.run}
       def start
-        puts "Calling Start"
         Berkshelf::API::Application[:cache_manager] = new
-        puts "Called Start"
       end
 
       # Stop the cache manager if it's running.
@@ -75,7 +73,7 @@ module Berkshelf::API
       "~/.berkshelf/cerch"
     end
 
-    def diff
+    def diff(cookbooks)
       []
     end
   end

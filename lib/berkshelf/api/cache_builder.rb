@@ -1,14 +1,32 @@
 module Berkshelf::API
   module CacheBuilder
+    class << self
+      # @raise [Celluloid::DeadActorError] if Cache Builder has not been started
+      #
+      # @return [Celluloid::Actor(Berkshelf::API::CacheBuilder)]
+      def instance
+        unless Berkshelf::API::Application[:cache_builder] && Berkshelf::API::Application[:cache_builder].alive?
+          raise Berkshelf::NotStartedError, "cache builder not running"
+        end
+        Berkshelf::API::Application[:cache_builder]
+      end
+
+      # Start the cache builder and add it to the application's registry.
+      #
+      # @note you probably do not want to manually start the cache manager unless you
+      #   are testing the application. Start the entire application with {Berkshelf::API::Application.run}
+      def start
+        Berkshelf::API::Application[:cache_builder].async(:build)
+      end
+    end
+
     # @author Jamie Winsor <reset@riotgames.com>
     class Base
+
       INTERVAL = 5
 
       include Celluloid
       include Berkshelf::API::Mixin::Services
-
-      def initialize
-      end
 
       # @abstract
       # 

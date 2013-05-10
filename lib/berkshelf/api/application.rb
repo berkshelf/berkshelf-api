@@ -62,6 +62,7 @@ module Berkshelf::API
           s.supervise_as :cache_builder, Berkshelf::API::CacheBuilder::Opscode
           s.supervise_as :rest_gateway, Berkshelf::API::RESTGateway
         end
+        Berkshelf::API::CacheBuilder.start
       end
     end
   end
