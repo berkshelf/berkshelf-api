@@ -19,12 +19,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = ">= 1.9.2"
 
-  spec.add_dependency 'ridley', '>= 0.11.0'
-  spec.add_dependency 'celluloid'
-  spec.add_dependency 'celluloid-io', '= 0.13.0'
-  spec.add_dependency 'reel'
+  spec.add_dependency 'ridley', '= 0.12.0.rc1'
+  spec.add_dependency 'celluloid', '~> 0.14.0'
+  spec.add_dependency 'reel', '= 0.4.0.pre'
   spec.add_dependency 'grape', '>= 0.3.2'
   spec.add_dependency 'multi_json', '>= 1.0.4'
+  spec.add_dependency 'json', '~> 1.7.7'
   spec.add_dependency 'hashie', '>= 2.0.4'
   spec.add_dependency 'faraday'
   spec.add_dependency 'faraday_middleware'
