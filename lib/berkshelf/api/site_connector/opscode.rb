@@ -1,5 +1,6 @@
 module Berkshelf::API
   module SiteConnector
+    # @author Andrew Garson <agarson@riotgames.com>
     class Opscode
 
       # @param [Faraday::Connection] connection 

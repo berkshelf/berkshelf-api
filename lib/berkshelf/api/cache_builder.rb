@@ -28,6 +28,10 @@ module Berkshelf::API
       include Celluloid
       include Berkshelf::API::Mixin::Services
 
+      def initialize(options={})
+        @options = options
+      end
+
       # @abstract
       # 
       # @return [#to_s]
@@ -48,7 +52,6 @@ module Berkshelf::API
       def cookbooks
         raise RuntimeError, "must be implemented"
       end
-
 
       def build
         loop do

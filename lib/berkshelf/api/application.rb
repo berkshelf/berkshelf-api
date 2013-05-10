@@ -57,9 +57,10 @@ module Berkshelf::API
 
     class SupervisionGroup < ::Celluloid::SupervisionGroup
       def initialize
+        # TODO: AG Remove the :get_only option given to CacheBuilder
         super(Berkshelf::API::Application.registry) do |s|
           s.supervise_as :cache_manager, Berkshelf::API::CacheManager
-          s.supervise_as :cache_builder, Berkshelf::API::CacheBuilder::Opscode
+          s.supervise_as :cache_builder, Berkshelf::API::CacheBuilder::Opscode, :args=>[:options=>{:get_only=>10}]
           s.supervise_as :rest_gateway, Berkshelf::API::RESTGateway
         end
         Berkshelf::API::CacheBuilder.start
