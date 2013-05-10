@@ -7,9 +7,30 @@ module Berkshelf::API
       include Celluloid
       include Berkshelf::API::Mixin::Services
 
+      def initialize
+      end
+
+      # @abstract
+      # 
+      # @return [#to_s]
       def archive_name
         raise RuntimeError, "must be implemented"
       end
+
+      # @param [RemoteCookbook] remote
+      #
+      # @return [Ridley::Chef::Cookbook::Metadata]
+      def metadata(remote)
+        raise RuntimeError, "must be implemented"
+      end
+
+      # @abstract
+      #
+      # @return [Array<RemoteCookbook>]
+      def cookbooks
+        raise RuntimeError, "must be implemented"
+      end
+
 
       def build
         loop do
@@ -25,12 +46,6 @@ module Berkshelf::API
         @diff ||= cache_manager.diff(cookbooks)
       end
 
-      # @param [RemoteCookbook] remote
-      #
-      # @return [Ridley::Chef::Cookbook::Metadata]
-      def metadata(remote)
-        raise RuntimeError, "must be implemented"
-      end
 
       def update_cache
         diff.collect { |remote| cache_manager.future(:add, remote, metadata(remote)) }.map(&:value)

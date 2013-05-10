@@ -59,6 +59,7 @@ module Berkshelf::API
       def initialize
         super(Berkshelf::API::Application.registry) do |s|
           s.supervise_as :cache_manager, Berkshelf::API::CacheManager
+          s.supervise_as :cache_builder, Berkshelf::API::CacheBuilder::Opscode
           s.supervise_as :rest_gateway, Berkshelf::API::RESTGateway
         end
       end

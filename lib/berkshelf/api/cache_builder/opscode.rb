@@ -8,7 +8,11 @@ module Berkshelf::API
       end
 
       def stale?
-        false
+        true
+      end
+
+      def cookbooks
+        []
       end
     end
   end

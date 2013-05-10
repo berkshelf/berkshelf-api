@@ -17,7 +17,9 @@ module Berkshelf::API
       # @note you probably do not want to manually start the cache manager unless you
       #   are testing the application. Start the entire application with {Berkshelf::API::Application.run}
       def start
+        puts "Calling Start"
         Berkshelf::API::Application[:cache_manager] = new
+        puts "Called Start"
       end
 
       # Stop the cache manager if it's running.
@@ -36,11 +38,8 @@ module Berkshelf::API
     attr_reader :cache
 
     def initialize
-      @builder_sup = CacheBuilder::Opscode.supervise
       @cache       = DependencyCache.new
-
       load_save if File.exist?(save_file)
-      builder.async(:build)
     end
 
     # @param [String] name
@@ -54,11 +53,6 @@ module Berkshelf::API
         platforms: metadata.platforms,
         dependencies: metadata.dependencies
       }
-    end
-
-    # @return [CacheBuilder::Base]
-    def builder
-      @builder_sup.actors.first
     end
 
     def load_save
@@ -78,7 +72,11 @@ module Berkshelf::API
     end
 
     def save_file
-      "~/.berkshelf/#{builder.archive_name}.cerch"
+      "~/.berkshelf/cerch"
+    end
+
+    def diff
+      []
     end
   end
 end
