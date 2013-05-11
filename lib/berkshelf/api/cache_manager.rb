@@ -73,8 +73,11 @@ module Berkshelf::API
       "~/.berkshelf/cerch"
     end
 
+    # @param [Array<RemoteCookbook>] 
+    #
+    # @return [Array<(Array<RemoteCookbook>, Array<RemoteCookbook>)>]
     def diff(cookbooks)
-      []
+      [[],[]]
     end
   end
 end

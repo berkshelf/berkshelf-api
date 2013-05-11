@@ -67,7 +67,6 @@ module Berkshelf::API
         @diff ||= cache_manager.diff(cookbooks)
       end
 
-
       def update_cache
         diff.collect { |remote| cache_manager.future(:add, remote, metadata(remote)) }.map(&:value)
       end

@@ -1,5 +1,21 @@
 module Berkshelf::API
   # @author Jamie Winsor <reset@riotgames.com>
+  # @author Andrew Garson <agarson@riotgames.com>
+  #
+  # @note
+  #   DependencyCache stores its data internally as a Mash
+  #   The structure is as follows
+  #
+  #   { 
+  #     "cookbook_name" => 
+  #       [
+  #         { :version => "x.y.z",
+  #           :dependencies => {
+  #             "cookbook_name" => "constraint"
+  #           }
+  #         }
+  #       ]
+  #   }
   class DependencyCache
     class << self
       # Read an archived cache and re-instantiate it
@@ -40,5 +56,19 @@ module Berkshelf::API
     def to_json(options = {})
       MultiJson.encode(to_hash, options)
     end
+
+    # @return [Array<RemoteCookbook>]
+    def cookbooks
+      remote_cookbooks = []
+      @cache.keys.each do |cookbook_name|
+        versions = @cache[cookbook_name]
+        versions.each do |version_data|
+          remote_cookbooks << RemoteCookbook.new(cookbook_name, version_data[:version])
+        end
+      end
+      remote_cookbooks
+    end
+
+
   end
 end
