@@ -35,6 +35,9 @@ module Berkshelf::API
       end
     end
 
+    extend Forwardable
+    def_delegators :@cache, :[], :[]=
+
     # @param [Hash] contents
     def initialize(contents = {})
       @cache = Hashie::Mash.new(contents)

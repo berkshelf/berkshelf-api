@@ -40,6 +40,8 @@ module Berkshelf::API
         raise RuntimeError, "must be implemented"
       end
 
+      # @abstract
+      #
       # @param [RemoteCookbook] remote
       #
       # @return [Ridley::Chef::Cookbook::Metadata]
@@ -50,6 +52,7 @@ module Berkshelf::API
       # @abstract
       #
       # @return [Array<RemoteCookbook>]
+      #  The list of cookbooks this builder can find
       def cookbooks
         raise RuntimeError, "must be implemented"
       end
@@ -69,13 +72,9 @@ module Berkshelf::API
       end
 
       def update_cache
-        create_cookbooks, deleted_cookbooks = diff
-        created_cookbooks.collect do |remote|
-          cache_manager.future(:add, remote, metadata(remote)).map(&:value)
-        end
-        deleted_cookbooks.each do |remote|
-          cache_manager.remove(remote.name, remote.version)
-        end
+        created_cookbooks, deleted_cookbooks = diff
+        created_cookbooks.collect { |remote| cache_manager.future(:add, remote.name, remote.version, metadata(remote)) }.map(&:value)
+        deleted_cookbooks.each { |remote| cache_manager.remove(remote.name, remote.version) }
       end
 
       def stale?

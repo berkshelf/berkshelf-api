@@ -12,7 +12,6 @@ module Berkshelf::API
           Berkshelf::API::SiteConnector::Opscode.pool
       end
 
-      # @return [String]
       def archive_name
         "opscode-site"
       end
@@ -21,8 +20,6 @@ module Berkshelf::API
         true
       end
 
-      # @return [Array<RemoteCookbook>]
-      #  The list of cookbooks this builder can find
       def cookbooks
         all_cookbooks = connection.all_cookbooks
         slice = @options[:get_only] || all_cookbooks.size
@@ -31,6 +28,10 @@ module Berkshelf::API
           versions = connection.all_versions(cookbook)
           versions.map { |version| RemoteCookbook.new(cookbook, version) }
         end.flatten
+      end
+
+      def metadata(remote)
+        CookbookMetadata.new([], {})
       end
 
       private

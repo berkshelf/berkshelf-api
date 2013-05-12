@@ -3,13 +3,15 @@ module Berkshelf::API
     # @author Andrew Garson <agarson@riotgames.com>
     class Opscode
 
+      include Celluloid
+
       # @param [Faraday::Connection] connection 
       #   Optional parameter for setting the connection object
       #   This should only be set manually for testing
       def initialize(connection=nil)
         @connection = connection
         @connection ||= Faraday.new("http://cookbooks.opscode.com") do |c|
-          c.use Faraday::Middleware::ParseJson, content_type: 'application/json'
+          c.use FaradayMiddleware::ParseJson, content_type: 'application/json'
           c.use Faraday::Adapter::NetHttp
         end
       end

@@ -16,6 +16,7 @@ module Berkshelf
     autoload :Mixin, 'berkshelf/api/mixin'
     autoload :RackApp, 'berkshelf/api/rack_app'
     autoload :RemoteCookbook, 'berkshelf/api/remote_cookbook'
+    autoload :CookbookMetadata, 'berkshelf/api/cookbook_metadata'
     autoload :RESTGateway, 'berkshelf/api/rest_gateway'
     autoload :SiteConnector, 'berkshelf/api/site_connector'
   end
