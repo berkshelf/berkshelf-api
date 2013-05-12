@@ -21,6 +21,7 @@ module Berkshelf::API
     end
 
     # @author Jamie Winsor <reset@riotgames.com>
+    # @author Andrew Garson <agarson@riotgames.com>
     class Base
 
       INTERVAL = 5
@@ -68,11 +69,18 @@ module Berkshelf::API
       end
 
       def update_cache
-        diff.collect { |remote| cache_manager.future(:add, remote, metadata(remote)) }.map(&:value)
+        create_cookbooks, deleted_cookbooks = diff
+        created_cookbooks.collect do |remote|
+          cache_manager.future(:add, remote, metadata(remote)).map(&:value)
+        end
+        deleted_cookbooks.each do |remote|
+          cache_manager.remove(remote.name, remote.version)
+        end
       end
 
       def stale?
-        diff.any?
+        created_cookbooks, deleted_cookbooks = diff
+        create_cookbooks.any? || deleted_cookbooks.any?
       end
 
       private

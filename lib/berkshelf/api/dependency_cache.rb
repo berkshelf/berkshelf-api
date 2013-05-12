@@ -7,14 +7,12 @@ module Berkshelf::API
   #   The structure is as follows
   #
   #   { 
-  #     "cookbook_name" => 
-  #       [
-  #         { :version => "x.y.z",
-  #           :dependencies => {
-  #             "cookbook_name" => "constraint"
-  #           }
-  #         }
-  #       ]
+  #     "cookbook_name" => {
+  #       "x.y.z" => {
+  #         :dependencies => { "cookbook_name" => "constraint" },
+  #         :platforms => ["platform"]
+  #       }
+  #     }
   #   }
   class DependencyCache
     class << self
@@ -61,14 +59,11 @@ module Berkshelf::API
     def cookbooks
       remote_cookbooks = []
       @cache.keys.each do |cookbook_name|
-        versions = @cache[cookbook_name]
-        versions.each do |version_data|
-          remote_cookbooks << RemoteCookbook.new(cookbook_name, version_data[:version])
+        @cache[cookbook_name].keys.each do |version|
+          remote_cookbooks << RemoteCookbook.new(cookbook_name, version)
         end
       end
       remote_cookbooks
     end
-
-
   end
 end

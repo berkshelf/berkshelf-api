@@ -42,10 +42,24 @@ describe Berkshelf::API::DependencyCache do
     end
   end
 
+  let(:chicken) do
+    { "1.0" => 
+      { :dependencies => { "tuna" => "= 3.0.0" },
+        :platforms => ["centos"]
+      }
+    }
+  end
+  let(:tuna) do
+    { "3.0.0" => 
+      { :dependencies => { },
+        :platforms => ["centos"]
+      }
+    }
+  end
   let(:contents) do
     {
-      "chicken" => [ { :version => "1.0", :dependencies => { "tuna" => "= 3.0.0" } } ],
-      "tuna" => [ { :version => "3.0.0", :dependencies => {} } ]
+      "chicken" => chicken,
+      "tuna" => tuna,
     }
   end
 
