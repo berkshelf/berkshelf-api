@@ -9,7 +9,7 @@ module Berkshelf::API
       def initialize(options={})
         super
         @connection = options[:connection] || 
-          Berkshelf::API::SiteConnector::Opscode.pool
+          Berkshelf::API::SiteConnector::Opscode.pool_link
       end
 
       def archive_name
