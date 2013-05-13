@@ -13,7 +13,7 @@ describe Berkshelf::API::CacheBuilder::Opscode do
   end
   subject do
     Berkshelf::API::CacheManager.start 
-    described_class.new(:connection => connection)
+    described_class.new()
   end
 
   its(:archive_name) { should eq("opscode-site") }
@@ -27,9 +27,8 @@ describe Berkshelf::API::CacheBuilder::Opscode do
         Berkshelf::API::RemoteCookbook.new("tuna", "3.0.1"),
       ]
 
-      Berkshelf::API::CacheManager.start 
-      builder = described_class.new(:connection => connection)
-      expect(builder.cookbooks).to eql(expected_value)
+      subject.should_receive(:connection).at_least(1).times.and_return(connection)
+      expect(subject.cookbooks).to eql(expected_value)
     end
 
     it "respects options[:get_only] to limit the number of cookbooks requested" do
@@ -37,13 +36,10 @@ describe Berkshelf::API::CacheBuilder::Opscode do
         Berkshelf::API::RemoteCookbook.new("chicken", "1.0"),
         Berkshelf::API::RemoteCookbook.new("chicken", "2.0"),
       ]
-
-      Berkshelf::API::CacheManager.start 
-      builder = described_class.new({
-        :get_only => 1,
-        :connection => connection
-      })
-      expect(builder.cookbooks).to eql(expected_value)
+      
+      subject.should_receive(:connection).at_least(1).times.and_return(connection)
+      subject.should_receive(:options).and_return({:get_only => 1})
+      expect(subject.cookbooks).to eql(expected_value)
     end
   end
 end

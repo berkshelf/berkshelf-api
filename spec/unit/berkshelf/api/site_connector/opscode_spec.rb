@@ -18,7 +18,7 @@ describe Berkshelf::API::SiteConnector::Opscode do
       ]}) 
   end
 
-  subject { described_class.new(connection) }
+  subject { described_class.new }
 
   describe "#all_cookbooks" do
     it "should fetch all the cookbooks and return a list of their names" do
@@ -30,6 +30,7 @@ describe Berkshelf::API::SiteConnector::Opscode do
         with("/api/v1/cookbooks?start=0&items=10").
         and_return(cookbooks_response)
 
+      subject.should_receive(:connection).at_least(1).times.and_return(connection)
       expect(subject.all_cookbooks).to eql(["chicken", "tuna"])
     end
   end
@@ -40,6 +41,7 @@ describe Berkshelf::API::SiteConnector::Opscode do
         with("/api/v1/cookbooks/chicken").
         and_return(chicken_versions_response)
 
+      subject.should_receive(:connection).at_least(1).times.and_return(connection)
       expect(subject.all_versions("chicken")).to eql(["1.0", "2.0"])
     end
   end

@@ -29,6 +29,8 @@ module Berkshelf::API
       include Celluloid
       include Berkshelf::API::Mixin::Services
 
+      attr_reader :options
+
       def initialize(options={})
         @options = options
       end
