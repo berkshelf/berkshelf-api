@@ -16,7 +16,7 @@ module Berkshelf::API
       # @note you probably do not want to manually start the cache manager unless you
       #   are testing the application. Start the entire application with {Berkshelf::API::Application.run}
       def start
-        Berkshelf::API::Application[:cache_builder].async(:build)
+        instance.async(:build)
       end
     end
 
