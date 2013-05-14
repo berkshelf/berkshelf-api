@@ -45,14 +45,14 @@ describe Berkshelf::API::DependencyCache do
   let(:chicken) do
     { "1.0" => 
       { :dependencies => { "tuna" => "= 3.0.0" },
-        :platforms => ["centos"]
+        :platforms => { "centos" => ">= 0.0.0" }
       }
     }
   end
   let(:tuna) do
     { "3.0.0" => 
       { :dependencies => { },
-        :platforms => ["centos"]
+        :platforms => { "centos" => ">= 0.0.0" }
       }
     }
   end

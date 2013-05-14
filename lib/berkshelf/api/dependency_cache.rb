@@ -10,7 +10,7 @@ module Berkshelf::API
   #     "cookbook_name" => {
   #       "x.y.z" => {
   #         :dependencies => { "cookbook_name" => "constraint" },
-  #         :platforms => ["platform"]
+  #         :platforms => { "platform" => "constraint" }
   #       }
   #     }
   #   }

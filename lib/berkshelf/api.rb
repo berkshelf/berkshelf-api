@@ -4,6 +4,11 @@ require 'multi_json'
 require 'hashie'
 require 'faraday'
 require 'faraday_middleware'
+require 'zlib'
+require 'rubygems/package'
+require 'ridley'
+require 'tempfile'
+require 'pathname'
 
 module Berkshelf
   # @author Jamie Winsor <reset@riotgames.com>

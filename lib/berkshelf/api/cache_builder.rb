@@ -81,7 +81,7 @@ module Berkshelf::API
 
       def stale?
         created_cookbooks, deleted_cookbooks = diff
-        create_cookbooks.any? || deleted_cookbooks.any?
+        created_cookbooks.any? || deleted_cookbooks.any?
       end
 
       private

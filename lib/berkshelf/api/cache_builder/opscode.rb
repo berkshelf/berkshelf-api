@@ -12,15 +12,10 @@ module Berkshelf::API
         "opscode-site"
       end
 
-      def stale?
-        true
-      end
-
       def cookbooks
         all_cookbooks = connection.all_cookbooks
         slice = options[:get_only] || all_cookbooks.size
         all_cookbooks = all_cookbooks.take(slice)
-        puts "ALL: #{all_cookbooks}"
         all_cookbooks.map do |cookbook|
           versions = connection.all_versions(cookbook)
           versions.map { |version| RemoteCookbook.new(cookbook, version) }
@@ -28,7 +23,7 @@ module Berkshelf::API
       end
 
       def metadata(remote)
-        CookbookMetadata.new([], {})
+        connection.download_meta_data(remote.name, remote.version)
       end
 
       private
