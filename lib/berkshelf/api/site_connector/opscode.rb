@@ -74,7 +74,7 @@ module Berkshelf::API
                 destination_directory = File.dirname(destination_file)
                 FileUtils.mkdir_p destination_directory unless File.directory?(destination_directory)
                 File.open destination_file, "wb" do |f|
-                  f.print tarfile.read
+                  f.write tarfile.read
                 end
               end
             end
