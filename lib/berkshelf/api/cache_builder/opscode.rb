@@ -23,11 +23,19 @@ module Berkshelf::API
       end
 
       def metadata(remote)
-        connection.download_meta_data(remote.name, remote.version)
+        Dir.mktmpdir do |destination|
+          connection.download(remote.name, remote.version, destination)
+          load_metadata(destination, remote.name)
+        end
       end
 
       private
         attr_accessor :connection
+
+        def load_metadata(directory, cookbook)
+          metadata_file = File.join(directory, cookbook, "metadata.rb")
+          Ridley::Chef::Cookbook::Metadata.from_file(metadata_file)
+        end
     end
   end
 end

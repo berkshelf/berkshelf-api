@@ -17,26 +17,38 @@ module Berkshelf::API
         end
       end
 
+      # @return [Array<String>]
+      #   A list of cookbook names available on the server
       def all_cookbooks
         count = connection.get("/api/v1/cookbooks?start=0&items=0").body["total"]
         cookbooks = connection.get("/api/v1/cookbooks?start=0&items=#{count}").body["items"]
         cookbooks.map { |cb| cb["cookbook_name"] }
       end
 
+      # @param [String] cookbook
+      #   the name of the cookbook to find version for
+      #
+      # @return [Array<String>]
+      #   A list of versions of this cookbook available on the server
       def all_versions(cookbook)
         versions = connection.get("/api/v1/cookbooks/#{cookbook}").body["versions"]
         versions.map { |version| version.split("/").last.gsub("_", ".") }
       end
 
-      def download_meta_data(cookbook, version)
+      # @param [String] cookbook 
+      #   The name of the cookbook to download
+      # @param [String] version 
+      #   The version of the cookbook to download
+      # @param [String] destination
+      #   The directory to download the cookbook to
+      #
+      # @return [void]
+      def download(cookbook, version, destination)
         version_data = connection.get("/api/v1/cookbooks/#{cookbook}/versions/#{version.gsub(".", "_")}").body
         uri = version_data["file"]
         tgz = StringIO.new(Faraday.get(uri).body)
         tar = ungzip(tgz)
-        Dir.mktmpdir do |destination|
-          untar(tar, destination)
-          get_metadata(destination)
-        end
+        untar(tar, destination)
       end
 
       private
@@ -54,11 +66,8 @@ module Berkshelf::API
         # https://gist.github.com/sinisterchipmunk/1335041
         def untar(io, destination)
           Gem::Package::TarReader.new io do |tar|
-
             tar.each do |tarfile|
-
               destination_file = File.join destination, tarfile.full_name
-
               if tarfile.directory?
                 FileUtils.mkdir_p destination_file
               else
@@ -70,14 +79,6 @@ module Berkshelf::API
               end
             end
           end
-        end
-
-        def get_metadata(directory)
-          cookbook_root = Pathname.new(directory).children.first
-          metadata_file = cookbook_root.join("metadata.rb")
-          require 'pry'
-          binding.pry
-          Ridley::Chef::Cookbook::Metadata.from_file(metadata_file)
         end
     end
   end

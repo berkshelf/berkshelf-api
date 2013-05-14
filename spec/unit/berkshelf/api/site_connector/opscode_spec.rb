@@ -45,5 +45,27 @@ describe Berkshelf::API::SiteConnector::Opscode do
       expect(subject.all_versions("chicken")).to eql(["1.0", "2.0"])
     end
   end
+
+  describe "#download" do
+    it "should download then ungzip/tar the cookbook" do
+      # I don't like this test, but the code is very procedural and I 
+      # don't have a better way to test it
+
+      subject.should_receive(:connection).at_least(1).times.and_return(connection)
+
+      connection.should_receive(:get).
+        with("/api/v1/cookbooks/chicken/versions/1_0_0").
+        and_return(stub(:body => {"file" => "foo"}))
+
+      Faraday.should_receive(:get).
+        with("foo").
+        and_return(stub(:body => "bar"))
+
+      subject.should_receive(:ungzip).with(kind_of(StringIO)).and_return("baz")
+      subject.should_receive(:untar).with("baz", "location").and_return(nil)
+
+      subject.download("chicken", "1.0.0", "location")
+    end
+  end
 end
 
