@@ -56,9 +56,9 @@ module Berkshelf::API
         # Shamelessly stolen from 
         # https://gist.github.com/sinisterchipmunk/1335041
         def ungzip(tarfile)
-          z = Zlib::GzipReader.new(tarfile)
-          unzipped = StringIO.new(z.read)
-          z.close
+          reader = Zlib::GzipReader.new(tarfile)
+          unzipped = StringIO.new(reader.read)
+          reader.close
           unzipped
         end
 
