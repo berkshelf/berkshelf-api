@@ -5,15 +5,6 @@ describe Berkshelf::API::CacheManager do
     describe "::new" do
       subject { described_class.new }
       its(:cache) { should be_empty }
-      its(:builder) { should be_a(Berkshelf::API::CacheBuilder::Base) }
-
-      it "tells the builder to begin building" do
-        builder = double(archive_name: nil)
-        described_class.any_instance.stub(:builder).and_return(builder)
-        builder.should_receive(:async).with(:build)
-
-        subject
-      end
 
       context "when a save file exists" do
         before do
@@ -69,19 +60,70 @@ describe Berkshelf::API::CacheManager do
     pending
   end
 
-  describe "#builder" do
-    subject { described_class.new.builder }
-
-    it "should return an instance inheriting from CacheBuilder::Base" do
-      expect(subject).to be_a(Berkshelf::API::CacheBuilder::Base)
-    end
-  end
-
   describe "#load_save" do
     pending
   end
 
   describe "#remove" do
     pending
+  end
+
+  describe "#diff" do
+    let(:known_cookbooks) { [ :chicken_1, :tuna_3 ] }
+    let(:cache) { double("cache", :cookbooks => known_cookbooks) }
+    subject { described_class.new }
+
+    context "when there are created and deleted cookbooks" do
+      it "should return created and deleted cookbooks" do
+        subject.should_receive(:cache).and_return(cache)
+
+        site_cookbooks = [ :tuna_3, :tuna_4 ]
+
+        diff = subject.diff(site_cookbooks)
+        expect(diff.size).to eql(2)
+        expect(diff.first).to eql([:tuna_4])
+        expect(diff.last).to eql([:chicken_1])
+      end
+    end
+
+    context "when there are only created cookbooks" do
+      it "should return only created cookbooks" do
+        subject.should_receive(:cache).and_return(cache)
+
+        site_cookbooks = [ :chicken_1, :tuna_3, :tuna_4 ]
+
+        diff = subject.diff(site_cookbooks)
+        expect(diff.size).to eql(2)
+        expect(diff.first).to eql([:tuna_4])
+        expect(diff.last).to be_empty
+      end
+    end
+
+    context "when there are only deleted cookbooks" do
+      it "should return only deleted cookbooks" do
+        subject.should_receive(:cache).and_return(cache)
+
+        site_cookbooks = [ :tuna_3 ]
+
+        diff = subject.diff(site_cookbooks)
+        expect(diff.size).to eql(2)
+        expect(diff.first).to be_empty
+        expect(diff.last).to eql([:chicken_1])
+      end
+    end
+
+    context "when there are no differences" do
+      it "should return empty arrays" do
+        subject.should_receive(:cache).and_return(cache)
+
+        site_cookbooks = [ :chicken_1, :tuna_3 ]
+
+        diff = subject.diff(site_cookbooks)
+        expect(diff.size).to eql(2)
+        expect(diff.first).to be_empty
+        expect(diff.last).to be_empty
+      end
+    end
+
   end
 end

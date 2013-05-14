@@ -41,4 +41,38 @@ describe Berkshelf::API::DependencyCache do
       end
     end
   end
+
+  let(:chicken) do
+    { "1.0" => 
+      { :dependencies => { "tuna" => "= 3.0.0" },
+        :platforms => { "centos" => ">= 0.0.0" }
+      }
+    }
+  end
+  let(:tuna) do
+    { "3.0.0" => 
+      { :dependencies => { },
+        :platforms => { "centos" => ">= 0.0.0" }
+      }
+    }
+  end
+  let(:contents) do
+    {
+      "chicken" => chicken,
+      "tuna" => tuna,
+    }
+  end
+
+  subject { described_class.new(contents) }
+
+  describe "#cookbooks" do
+    it "should return a list of RemoteCookbooks" do
+      expected_value = [
+        Berkshelf::API::RemoteCookbook.new("chicken", "1.0"),
+        Berkshelf::API::RemoteCookbook.new("tuna", "3.0.0")
+      ]
+
+      expect(subject.cookbooks).to eql(expected_value)
+    end
+  end
 end

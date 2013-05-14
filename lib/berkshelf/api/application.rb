@@ -45,25 +45,19 @@ module Berkshelf::API
         end
       end
 
+      #TODO: AG - Remove the :get_only
       def run!
         @instance = Celluloid::SupervisionGroup.new(registry)
         @instance.supervise_as(:cache_manager, Berkshelf::API::CacheManager)
+        @instance.supervise_as(:cache_builder, Berkshelf::API::CacheBuilder::Opscode, :get_only=>2)
         @instance.supervise_as(:rest_gateway, Berkshelf::API::RESTGateway)
+        Berkshelf::API::CacheBuilder.start
         @instance
       end
 
       def shutdown
         instance.terminate
         Celluloid.shutdown
-      end
-    end
-
-    class SupervisionGroup < ::Celluloid::SupervisionGroup
-      def initialize
-        super(Berkshelf::API::Application.registry) do |s|
-          s.supervise_as :cache_manager, Berkshelf::API::CacheManager
-          s.supervise_as :rest_gateway, Berkshelf::API::RESTGateway
-        end
       end
     end
   end
