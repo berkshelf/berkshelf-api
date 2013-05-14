@@ -36,11 +36,8 @@ module Berkshelf::API
     attr_reader :cache
 
     def initialize
-      @builder_sup = CacheBuilder::Opscode.supervise
       @cache       = DependencyCache.new
-
       load_save if File.exist?(save_file)
-      builder.async(:build)
     end
 
     # @param [String] name
@@ -49,16 +46,11 @@ module Berkshelf::API
     #
     # @return [Hash]
     def add(name, version, metadata)
-      @cache[name] ||= Hashie::Mash.new
-      @cache[name][version] = {
+      cache[name] ||= Hashie::Mash.new
+      cache[name][version] = {
         platforms: metadata.platforms,
         dependencies: metadata.dependencies
       }
-    end
-
-    # @return [CacheBuilder::Base]
-    def builder
-      @builder_sup.actors.first
     end
 
     def load_save
@@ -70,15 +62,29 @@ module Berkshelf::API
     #
     # @return [DependencyCache]
     def remove(name, version)
-      @cache[name].delete(version)
-      if @cache[name].empty?
-        @cache.delete(name)
+      cache[name].delete(version)
+      if cache[name].empty?
+        cache.delete(name)
       end
-      @cache
+      cache
     end
 
     def save_file
-      "~/.berkshelf/#{builder.archive_name}.cerch"
+      "~/.berkshelf/cerch"
+    end
+
+    # @param [Array<RemoteCookbook>] cookbooks
+    #   An array of RemoteCookbooks representing all the cookbooks on the indexed site
+    #
+    # @return [Array<(Array<RemoteCookbook>, Array<RemoteCookbook>)>]
+    #   A tuple of Arrays of RemoteCookbooks
+    #   The first array contains items not in the cache
+    #   The second array contains items in the cache, but not in the cookbooks parameter
+    def diff(cookbooks)
+      known_cookbooks = cache.cookbooks
+      created_cookbooks = cookbooks - known_cookbooks
+      deleted_cookbooks = known_cookbooks - cookbooks
+      [created_cookbooks, deleted_cookbooks]
     end
   end
 end
