@@ -10,9 +10,11 @@ module Berkshelf::API
 
         attr_reader :options
 
+        # @option options [Boolean] :eager_build (true)
+        #   immediately begin building the cache
         def initialize(options = {})
-          @options = options
-          async(:build)
+          @options = { eager_build: true }.merge(options)
+          async(:build) if @options[:eager_build]
         end
 
         # @abstract

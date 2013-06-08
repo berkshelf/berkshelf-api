@@ -34,7 +34,7 @@ module Berkshelf::API
       @worker_registry   = Celluloid::Registry.new
       @worker_supervisor = WorkerSupervisor.new(@worker_registry)
       # TODO AG - Remove the :get_only
-      @worker_supervisor.supervise(CacheBuilder::Worker::Opscode, get_only: 2)
+      @worker_supervisor.supervise(CacheBuilder::Worker::Opscode, eager_build: true, get_only: 2)
     end
 
     def build
