@@ -65,5 +65,10 @@ module Berkshelf::API
       end
       remote_cookbooks
     end
+
+    def save(path)
+      FileUtils.mkdir_p(File.dirname(path))
+      File.open(path, 'w+') { |f| f.write(self.to_json) }
+    end
   end
 end

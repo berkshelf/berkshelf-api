@@ -31,11 +31,14 @@ module Berkshelf::API
     end
 
     include Celluloid
+    include Berkshelf::API::Logging
+
+    finalizer :finalize_callback
 
     attr_reader :cache
 
     def initialize
-      @cache       = DependencyCache.new
+      @cache = DependencyCache.new
       load_save if File.exist?(save_file)
     end
 
@@ -69,7 +72,7 @@ module Berkshelf::API
     end
 
     def save_file
-      "~/.berkshelf/cerch"
+      File.expand_path("~/.berkshelf/api-server/cerch")
     end
 
     # @param [Array<RemoteCookbook>] cookbooks
@@ -85,5 +88,14 @@ module Berkshelf::API
       deleted_cookbooks = known_cookbooks - cookbooks
       [created_cookbooks, deleted_cookbooks]
     end
+
+    private
+
+      def finalize_callback
+        log.info "Cache Manager shutting down..."
+        log.info "Saving the cache to: #{save_file}"
+        cache.save(save_file)
+        log.info "Cache saved!"
+      end
   end
 end

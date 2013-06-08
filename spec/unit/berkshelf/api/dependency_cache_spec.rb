@@ -44,15 +44,17 @@ describe Berkshelf::API::DependencyCache do
 
   let(:chicken) do
     { "1.0" =>
-      { :dependencies => { "tuna" => "= 3.0.0" },
-        :platforms => { "centos" => ">= 0.0.0" }
+      {
+        dependencies: { "tuna" => "= 3.0.0" },
+        platforms: { "centos" => ">= 0.0.0" }
       }
     }
   end
   let(:tuna) do
     { "3.0.0" =>
-      { :dependencies => { },
-        :platforms => { "centos" => ">= 0.0.0" }
+      {
+        dependencies: { },
+        platforms: { "centos" => ">= 0.0.0" }
       }
     }
   end
@@ -73,6 +75,15 @@ describe Berkshelf::API::DependencyCache do
       ]
 
       expect(subject.cookbooks).to eql(expected_value)
+    end
+  end
+
+  describe "#save" do
+    let(:path) { tmp_path.join('cerch.json') }
+
+    it "saves the contents of the cache as json to the given path" do
+      subject.save(path)
+      expect(File.exist?(path)).to be_true
     end
   end
 end
