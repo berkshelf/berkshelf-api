@@ -1,8 +1,11 @@
 module Berkshelf::API
   module CacheBuilder
     class ChefServer < CacheBuilder::Base
+      finalizer :finalize_callback
+
       def initialize(options = {})
-        @ridley_sup = Ridley::Client.supervise(options)
+        super
+        @connection = Ridley::Client.new_link(options)
       end
 
       # @return [String]
@@ -16,8 +19,10 @@ module Berkshelf::API
 
       private
 
-        def connection
-          @ridley_sup.actors.first
+        attr_reader :connection
+
+        def finalize_callback
+          connection.terminate if connection && connection.alive?
         end
     end
   end

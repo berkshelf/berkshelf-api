@@ -35,7 +35,7 @@ module Berkshelf::API
     attr_reader :cache
 
     def initialize
-      @cache       = DependencyCache.new
+      @cache = DependencyCache.new
       load_save if File.exist?(save_file)
     end
 

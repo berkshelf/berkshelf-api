@@ -1,6 +1,8 @@
 module Berkshelf::API
   module CacheBuilder
     class Opscode < CacheBuilder::Base
+      finalizer :finalize_callback
+
       def initialize(options = {})
         super
         @connection = Berkshelf::API::SiteConnector::Opscode.pool_link
@@ -28,7 +30,12 @@ module Berkshelf::API
       end
 
       private
+
         attr_accessor :connection
+
+        def finalize_callback
+          connection.terminate if connection && connection.alive?
+        end
 
         def load_metadata(directory, cookbook)
           metadata_file = File.join(directory, cookbook, "metadata.rb")
