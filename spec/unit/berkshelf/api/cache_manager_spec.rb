@@ -20,6 +20,8 @@ describe Berkshelf::API::CacheManager do
       end
 
       context "when a save file does not exist" do
+        before { described_class.any_instance.stub(save_file: tmp_path.join('does_not_exist').to_s) }
+
         it "skips loading of the saved cache" do
           described_class.any_instance.should_not_receive(:load_save)
           subject
