@@ -36,7 +36,7 @@ module Berkshelf::API
       end
 
       # @abstract
-      # 
+      #
       # @return [#to_s]
       def archive_name
         raise RuntimeError, "must be implemented"

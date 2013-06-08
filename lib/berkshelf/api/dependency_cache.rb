@@ -6,7 +6,7 @@ module Berkshelf::API
   #   DependencyCache stores its data internally as a Mash
   #   The structure is as follows
   #
-  #   { 
+  #   {
   #     "cookbook_name" => {
   #       "x.y.z" => {
   #         :dependencies => { "cookbook_name" => "constraint" },

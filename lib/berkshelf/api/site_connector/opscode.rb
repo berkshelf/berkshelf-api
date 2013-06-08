@@ -7,7 +7,7 @@ module Berkshelf::API
 
       attr_reader :connection
 
-      # @param [Faraday::Connection] connection 
+      # @param [Faraday::Connection] connection
       #   Optional parameter for setting the connection object
       #   This should only be set manually for testing
       def initialize()
@@ -35,9 +35,9 @@ module Berkshelf::API
         versions.map { |version| version.split("/").last.gsub("_", ".") }
       end
 
-      # @param [String] cookbook 
+      # @param [String] cookbook
       #   The name of the cookbook to download
-      # @param [String] version 
+      # @param [String] version
       #   The version of the cookbook to download
       # @param [String] destination
       #   The directory to download the cookbook to
@@ -53,7 +53,7 @@ module Berkshelf::API
 
       private
 
-        # Shamelessly stolen from 
+        # Shamelessly stolen from
         # https://gist.github.com/sinisterchipmunk/1335041
         def ungzip(tarfile)
           reader = Zlib::GzipReader.new(tarfile)
@@ -62,7 +62,7 @@ module Berkshelf::API
           unzipped
         end
 
-        # Shamelessly stolen from 
+        # Shamelessly stolen from
         # https://gist.github.com/sinisterchipmunk/1335041
         def untar(io, destination)
           Gem::Package::TarReader.new io do |tar|

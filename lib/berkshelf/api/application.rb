@@ -49,7 +49,7 @@ module Berkshelf::API
       def run!
         @instance = Celluloid::SupervisionGroup.new(registry)
         @instance.supervise_as(:cache_manager, Berkshelf::API::CacheManager)
-        @instance.supervise_as(:cache_builder, Berkshelf::API::CacheBuilder::Opscode, :get_only=>2)
+        @instance.supervise_as(:cache_builder, Berkshelf::API::CacheBuilder::Opscode, get_only: 2)
         @instance.supervise_as(:rest_gateway, Berkshelf::API::RESTGateway)
         Berkshelf::API::CacheBuilder.start
         @instance
