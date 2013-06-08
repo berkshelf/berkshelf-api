@@ -10,7 +10,7 @@ module Berkshelf::API
   module Application
     class << self
       extend Forwardable
-      include Celluloid::Logger
+      include Berkshelf::API::Logging
 
       def_delegators :registry, :[], :[]=
 
@@ -40,7 +40,7 @@ module Berkshelf::API
 
           break if supervisor.interrupted
 
-          error "!!! #{self} crashed. Restarting..."
+          log.error "!!! #{self} crashed. Restarting..."
         end
       end
 

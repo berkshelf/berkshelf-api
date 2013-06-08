@@ -17,7 +17,7 @@ Spork.prefork do
     config.filter_run focus: true
     config.run_all_when_everything_filtered = true
 
-    config.before(:all) { Celluloid.logger = nil }
+    config.before(:all) { Berkshelf::API::Logging.init(location: nil) }
 
     config.before do
       Celluloid.shutdown
