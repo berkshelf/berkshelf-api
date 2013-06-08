@@ -1,5 +1,9 @@
 module Berkshelf::API
-  module CacheBuilder
+  class CacheBuilder
+    require_relative 'cache_builder/worker'
+
+    class WorkerSupervisor < Celluloid::SupervisionGroup; end
+
     class << self
       # @raise [Celluloid::DeadActorError] if Cache Builder has not been started
       #
@@ -20,76 +24,28 @@ module Berkshelf::API
       end
     end
 
-    class Base
-      INTERVAL = 5
+    include Celluloid
+    include Berkshelf::API::Logging
 
-      include Celluloid
-      include Berkshelf::API::Mixin::Services
+    finalizer :finalize_callback
 
-      attr_reader :options
-
-      def initialize(options = {})
-        @options = options
-      end
-
-      # @abstract
-      #
-      # @return [#to_s]
-      def archive_name
-        raise RuntimeError, "must be implemented"
-      end
-
-      # @abstract
-      #
-      # @param [RemoteCookbook] remote
-      #
-      # @return [Ridley::Chef::Cookbook::Metadata]
-      def metadata(remote)
-        raise RuntimeError, "must be implemented"
-      end
-
-      # @abstract
-      #
-      # @return [Array<RemoteCookbook>]
-      #  The list of cookbooks this builder can find
-      def cookbooks
-        raise RuntimeError, "must be implemented"
-      end
-
-      def build
-        loop do
-          update_cache if stale?
-
-          sleep INTERVAL
-          clear_diff
-        end
-      end
-
-      # @return [Array<RemoteCookbook>]
-      def diff
-        @diff ||= cache_manager.diff(cookbooks)
-      end
-
-      def update_cache
-        created_cookbooks, deleted_cookbooks = diff
-        created_cookbooks.collect { |remote| cache_manager.future(:add, remote.name, remote.version, metadata(remote)) }.map(&:value)
-        deleted_cookbooks.each { |remote| cache_manager.remove(remote.name, remote.version) }
-      end
-
-      def stale?
-        created_cookbooks, deleted_cookbooks = diff
-        created_cookbooks.any? || deleted_cookbooks.any?
-      end
-
-      private
-
-        def clear_diff
-          @diff = nil
-        end
+    def initialize
+      log.info "Cache Builder starting..."
+      @worker_registry   = Celluloid::Registry.new
+      @worker_supervisor = WorkerSupervisor.new(@worker_registry)
+      # TODO AG - Remove the :get_only
+      @worker_supervisor.supervise(CacheBuilder::Worker::Opscode, get_only: 2)
     end
-  end
-end
 
-Dir["#{File.dirname(__FILE__)}/cache_builder/*.rb"].sort.each do |path|
-  require "berkshelf/api/cache_builder/#{File.basename(path, '.rb')}"
+    def build
+      @worker_supervisor.actors.map { |actor| actor.async(:build) }
+    end
+
+    private
+
+      def finalize_callback
+        log.info "Cache Builder shutting down..."
+        @worker_supervisor.terminate if @worker_supervisor && @worker_supervisor.alive?
+      end
+  end
 end
