@@ -39,7 +39,10 @@ module Berkshelf::API
         end
 
         def build
+          return if @building
+
           loop do
+            @building = true
             update_cache if stale?
 
             sleep INTERVAL
