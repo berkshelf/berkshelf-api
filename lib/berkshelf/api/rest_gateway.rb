@@ -4,7 +4,7 @@ module Berkshelf::API
   class RESTGateway < Reel::Server
     extend Forwardable
     include Celluloid
-    include Celluloid::Logger
+    include Berkshelf::API::Logging
 
     DEFAULT_OPTIONS = {
       host: '0.0.0.0',
@@ -40,7 +40,7 @@ module Berkshelf::API
       @handler = ::Rack::Handler::Reel.new(options)
       @pool    = ::Reel::RackWorker.pool(size: @workers, args: [ @handler ])
 
-      debug "REST Gateway listening on #{@host}:#{@port}"
+      log.info "REST Gateway listening on #{@host}:#{@port}"
       super(@host, @port, &method(:on_connect))
     end
 
