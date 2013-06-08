@@ -22,9 +22,7 @@ module Berkshelf::API
 
     def_delegator :handler, :rack_app
 
-    finalizer do
-      pool.terminate if pool && pool.alive?
-    end
+    finalizer :finalize_callback
 
     # @option options [String] :host ('0.0.0.0')
     # @option options [Integer] :port (26100)
@@ -55,5 +53,9 @@ module Berkshelf::API
       attr_reader :pool
       # @return [Rack::Handler::Reel]
       attr_reader :handler
+
+      def finalize_callback
+        pool.terminate if pool && pool.alive?
+      end
   end
 end
