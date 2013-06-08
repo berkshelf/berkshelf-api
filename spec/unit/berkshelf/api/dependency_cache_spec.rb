@@ -11,7 +11,7 @@ describe Berkshelf::API::DependencyCache do
 
       context "when the file contains valid json" do
         before do
-          @tempfile.write(MultiJson.encode(brooke: "winsor"))
+          @tempfile.write(JSON.generate({brooke: "winsor"}))
           @tempfile.flush
         end
 
@@ -43,14 +43,14 @@ describe Berkshelf::API::DependencyCache do
   end
 
   let(:chicken) do
-    { "1.0" => 
+    { "1.0" =>
       { :dependencies => { "tuna" => "= 3.0.0" },
         :platforms => { "centos" => ">= 0.0.0" }
       }
     }
   end
   let(:tuna) do
-    { "3.0.0" => 
+    { "3.0.0" =>
       { :dependencies => { },
         :platforms => { "centos" => ">= 0.0.0" }
       }

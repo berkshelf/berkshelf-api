@@ -23,11 +23,11 @@ module Berkshelf::API
       #
       # @return [DependencyCache]
       def from_file(filepath)
-        contents = MultiJson.decode(File.read(filepath.to_s))
+        contents = JSON.parse(File.read(filepath.to_s))
         new(contents)
       rescue Errno::ENOENT => ex
         raise Berkshelf::SaveNotFoundError.new(ex)
-      rescue MultiJson::LoadError => ex
+      rescue JSON::ParserError => ex
         raise Berkshelf::InvalidSaveError.new(ex)
       end
     end
@@ -52,7 +52,7 @@ module Berkshelf::API
 
     # @return [String]
     def to_json(options = {})
-      MultiJson.encode(to_hash, options)
+      JSON.generate(to_hash, options)
     end
 
     # @return [Array<RemoteCookbook>]

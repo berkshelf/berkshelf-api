@@ -6,7 +6,7 @@ module Berkshelf::API
       format :json
 
       rescue_from Grape::Exceptions::Validation do |e|
-        body = MultiJson.encode(status: e.status, message: e.message, param: e.param)
+        body = JSON.generate({status: e.status, message: e.message, param: e.param})
         rack_response(body, e.status, "Content-type" => "application/json")
       end
 
