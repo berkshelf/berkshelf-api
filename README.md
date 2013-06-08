@@ -24,5 +24,6 @@ TODO: Write usage instructions here
 # Authors and Contributors
 
 * Jamie Winsor (<reset@riotgames.com>)
+* Andrew Garson (<agarson@riotgames.com>)
 
 Thank you to all of our [Contributors](https://github.com/RiotGames/berkshelf-api/graphs/contributors), testers, and users.
