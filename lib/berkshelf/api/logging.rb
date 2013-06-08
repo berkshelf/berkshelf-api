@@ -15,7 +15,7 @@ module Berkshelf::API
       #
       # @return [Logger]
       def init(options = {})
-        options = options.reverse_merge(location: STDOUT, level: "INFO")
+        options = { location: STDOUT, level: "INFO" }.merge(options)
 
         Celluloid.logger = @logger = Logger.new(options[:location]).tap do |log|
           log.level     = Logger::Severity.const_get(options[:level])
