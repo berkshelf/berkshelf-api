@@ -1,5 +1,4 @@
 module Berkshelf::API
-  # @author Jamie Winsor <reset@riotgames.com>
   module Mixin; end
 end
 

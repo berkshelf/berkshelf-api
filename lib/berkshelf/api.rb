@@ -11,7 +11,6 @@ require 'tempfile'
 require 'pathname'
 
 module Berkshelf
-  # @author Jamie Winsor <reset@riotgames.com>
   module API
     autoload :Application, 'berkshelf/api/application'
     autoload :CacheBuilder, 'berkshelf/api/cache_builder'

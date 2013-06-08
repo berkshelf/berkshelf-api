@@ -20,10 +20,7 @@ module Berkshelf::API
       end
     end
 
-    # @author Jamie Winsor <reset@riotgames.com>
-    # @author Andrew Garson <agarson@riotgames.com>
     class Base
-
       INTERVAL = 5
 
       include Celluloid
@@ -31,7 +28,7 @@ module Berkshelf::API
 
       attr_reader :options
 
-      def initialize(options={})
+      def initialize(options = {})
         @options = options
       end
 

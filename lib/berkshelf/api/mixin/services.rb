@@ -1,6 +1,5 @@
 module Berkshelf::API
   module Mixin
-    # @author Jamie Winsor <reset@riotgames.com>
     module Services
       class << self
         def included(base)

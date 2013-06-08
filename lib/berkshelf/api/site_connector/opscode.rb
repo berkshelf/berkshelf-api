@@ -1,8 +1,6 @@
 module Berkshelf::API
   module SiteConnector
-    # @author Andrew Garson <agarson@riotgames.com>
     class Opscode
-
       include Celluloid
 
       attr_reader :connection
@@ -10,7 +8,7 @@ module Berkshelf::API
       # @param [Faraday::Connection] connection
       #   Optional parameter for setting the connection object
       #   This should only be set manually for testing
-      def initialize()
+      def initialize
         @connection = Faraday.new("http://cookbooks.opscode.com") do |c|
           c.use FaradayMiddleware::ParseJson, content_type: 'application/json'
           c.use Faraday::Adapter::NetHttp

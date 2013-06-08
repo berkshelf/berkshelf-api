@@ -1,5 +1,4 @@
 module Berkshelf::API
-  # @author Jamie Winsor <reset@riotgames.com>
   class CacheManager
     class << self
       # @raise [Celluloid::DeadActorError] if Bootstrap Manager has not been started

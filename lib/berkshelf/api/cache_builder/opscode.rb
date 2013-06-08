@@ -1,9 +1,7 @@
 module Berkshelf::API
   module CacheBuilder
-    # @author Jamie Winsor <reset@riotgames.com>
     class Opscode < CacheBuilder::Base
-
-      def initialize(options={})
+      def initialize(options = {})
         super
         @connection = Berkshelf::API::SiteConnector::Opscode.pool_link
       end

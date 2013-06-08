@@ -7,7 +7,6 @@ trap 'TERM' do
 end
 
 module Berkshelf::API
-  # @author Jamie Winsor <reset@riotgames.com>
   module Application
     class << self
       extend Forwardable

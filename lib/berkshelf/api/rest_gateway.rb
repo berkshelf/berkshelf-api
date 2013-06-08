@@ -1,7 +1,6 @@
 require 'reel'
 
 module Berkshelf::API
-  # @author Jamie Winsor <reset@riotgames.com>
   class RESTGateway < Reel::Server
     extend Forwardable
     include Celluloid

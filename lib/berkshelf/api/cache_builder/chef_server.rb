@@ -1,6 +1,5 @@
 module Berkshelf::API
   module CacheBuilder
-    # @author Jamie Winsor <reset@riotgames.com>
     class ChefServer < CacheBuilder::Base
       def initialize(options = {})
         @ridley_sup = Ridley::Client.supervise(options)

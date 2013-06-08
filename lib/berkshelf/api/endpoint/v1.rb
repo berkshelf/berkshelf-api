@@ -1,6 +1,5 @@
 module Berkshelf::API
   module Endpoint
-    # @author Jamie Winsor <reset@riotgames.com>
     class V1 < Endpoint::Base
       helpers Berkshelf::API::Mixin::Services
       version 'v1', using: :header, vendor: 'berkshelf'

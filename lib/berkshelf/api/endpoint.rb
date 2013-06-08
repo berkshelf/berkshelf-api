@@ -1,6 +1,5 @@
 module Berkshelf::API
   module Endpoint
-    # @author Jamie Winsor <reset@riotgames.com>
     class Base < Grape::API
       # Force inbound requests to be JSON
       def call(env)

@@ -1,7 +1,4 @@
 module Berkshelf::API
-  # @author Jamie Winsor <reset@riotgames.com>
-  # @author Andrew Garson <agarson@riotgames.com>
-  #
   # @note
   #   DependencyCache stores its data internally as a Mash
   #   The structure is as follows
