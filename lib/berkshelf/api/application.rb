@@ -7,6 +7,16 @@ trap 'TERM' do
 end
 
 module Berkshelf::API
+  class ApplicationSupervisor < Celluloid::SupervisionGroup
+    def initialize(registry)
+      super
+      supervise_as(:cache_manager, Berkshelf::API::CacheManager)
+      # @todo AG - Remove the :get_only
+      supervise_as(:cache_builder, Berkshelf::API::CacheBuilder::Opscode, get_only: 2)
+      supervise_as(:rest_gateway, Berkshelf::API::RESTGateway)
+    end
+  end
+
   module Application
     class << self
       extend Forwardable
@@ -38,25 +48,21 @@ module Berkshelf::API
 
           sleep 0.1 while supervisor.alive?
 
-          break if supervisor.interrupted
+          break if @shutdown
 
           log.error "!!! #{self} crashed. Restarting..."
         end
       end
 
-      #TODO: AG - Remove the :get_only
       def run!
-        @instance = Celluloid::SupervisionGroup.new(registry)
-        @instance.supervise_as(:cache_manager, Berkshelf::API::CacheManager)
-        @instance.supervise_as(:cache_builder, Berkshelf::API::CacheBuilder::Opscode, get_only: 2)
-        @instance.supervise_as(:rest_gateway, Berkshelf::API::RESTGateway)
+        @instance = ApplicationSupervisor.new(registry)
         Berkshelf::API::CacheBuilder.start
         @instance
       end
 
       def shutdown
+        @shutdown = true
         instance.terminate
-        Celluloid.shutdown
       end
     end
   end
