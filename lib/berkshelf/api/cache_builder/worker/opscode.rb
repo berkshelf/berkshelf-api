@@ -5,8 +5,8 @@ module Berkshelf::API
         finalizer :finalize_callback
 
         def initialize(options = {})
-          super
           @connection = Berkshelf::API::SiteConnector::Opscode.pool_link
+          super
         end
 
         def archive_name

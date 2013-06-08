@@ -12,6 +12,7 @@ module Berkshelf::API
 
         def initialize(options = {})
           @options = options
+          async(:build)
         end
 
         # @abstract
@@ -40,6 +41,8 @@ module Berkshelf::API
 
         def build
           return if @building
+
+          log.info "#{self} building..."
 
           loop do
             @building = true

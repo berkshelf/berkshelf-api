@@ -55,8 +55,6 @@ module Berkshelf::API
 
       def run!
         @instance = ApplicationSupervisor.new(registry)
-        Berkshelf::API::CacheBuilder.start
-        @instance
       end
 
       def shutdown
