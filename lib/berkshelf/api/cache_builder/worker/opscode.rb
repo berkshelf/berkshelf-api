@@ -14,11 +14,12 @@ module Berkshelf::API
         end
 
         def cookbooks
-          all_cookbooks = connection.all_cookbooks
-          slice = options[:get_only] || all_cookbooks.size
-          all_cookbooks = all_cookbooks.take(slice)
-          all_cookbooks.map do |cookbook|
-            versions = connection.all_versions(cookbook)
+          cookbooks = connection.cookbooks
+          slice     = options[:get_only] || cookbooks.size
+          cookbooks = cookbooks.take(slice)
+
+          cookbooks.map do |cookbook|
+            versions = connection.versions(cookbook)
             versions.map { |version| RemoteCookbook.new(cookbook, version) }
           end.flatten
         end

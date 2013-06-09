@@ -12,6 +12,13 @@ module Berkshelf::API
         def uri_escape_version(version)
           version.to_s.gsub('.', '_')
         end
+
+        # @param [String] uri
+        #
+        # @return [String]
+        def version_from_uri(uri)
+          File.basename(uri.to_s).gsub('_', '.')
+        end
       end
 
       include Celluloid
@@ -43,9 +50,17 @@ module Berkshelf::API
 
       # @return [Array<String>]
       #   A list of cookbook names available on the server
-      def all_cookbooks
-        count     = connection.get("cookbooks?start=0&items=0").body["total"]
-        cookbooks = connection.get("cookbooks?start=0&items=#{count}").body["items"]
+      def cookbooks
+        start     = 0
+        count     = connection.get("cookbooks").body["total"]
+        cookbooks = Array.new
+
+        while count > 0
+          cookbooks += connection.get("cookbooks?start=#{start}&items=#{count}").body["items"]
+          start += 100
+          count -= 100
+        end
+
         cookbooks.map { |cb| cb["cookbook_name"] }
       end
 
@@ -54,9 +69,17 @@ module Berkshelf::API
       #
       # @return [Array<String>]
       #   A list of versions of this cookbook available on the server
-      def all_versions(cookbook)
-        versions = connection.get("cookbooks/#{cookbook}").body["versions"]
-        versions.map { |version| version.split("/").last.gsub("_", ".") }
+      def versions(cookbook)
+        response = connection.get("cookbooks/#{cookbook}")
+
+        case response.status
+        when (200..299)
+          response.body['versions'].collect do |version_uri|
+            self.class.version_from_uri(version_uri)
+          end
+        else
+          Array.new
+        end
       end
 
       # @param [String] cookbook
