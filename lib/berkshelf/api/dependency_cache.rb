@@ -37,7 +37,7 @@ module Berkshelf::API
 
     # @param [Hash] contents
     def initialize(contents = {})
-      @cache = Hash.new(contents)
+      @cache = Hash[contents]
     end
 
     # @param [String] name
@@ -82,13 +82,11 @@ module Berkshelf::API
 
     # @return [Array<RemoteCookbook>]
     def cookbooks
-      remote_cookbooks = []
-      @cache.keys.each do |cookbook_name|
-        @cache[cookbook_name].keys.each do |version|
-          remote_cookbooks << RemoteCookbook.new(cookbook_name, version)
+      [].tap do |remote_cookbooks|
+        @cache.each_pair do |name, versions|
+          versions.keys.each { |version| remote_cookbooks << RemoteCookbook.new(name, version) }
         end
       end
-      remote_cookbooks
     end
 
     def save(path)
