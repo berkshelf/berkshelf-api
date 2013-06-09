@@ -37,7 +37,32 @@ module Berkshelf::API
 
     # @param [Hash] contents
     def initialize(contents = {})
-      @cache = Hashie::Mash.new(contents)
+      @cache = Hash.new(contents)
+    end
+
+    # @param [String] name
+    # @param [String] version
+    # @param [Ridley::Chef::Cookbook::Metadata] metadata
+    #
+    # @return [Hash]
+    def add(name, version, metadata)
+      @cache[name.to_s] ||= Hash.new
+      @cache[name.to_s][version.to_s] = {
+        platforms: metadata.platforms,
+        dependencies: metadata.dependencies
+      }
+    end
+
+    # @param [String] name
+    # @param [String] version
+    #
+    # @return [Hash]
+    def remove(name, version)
+      @cache[name.to_s].delete(version.to_s)
+      if @cache[name.to_s].empty?
+        @cache.delete(name.to_s)
+      end
+      @cache
     end
 
     # @return [Boolean]

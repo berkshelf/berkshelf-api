@@ -49,11 +49,7 @@ module Berkshelf::API
     #
     # @return [Hash]
     def add(name, version, metadata)
-      cache[name] ||= Hashie::Mash.new
-      cache[name][version] = {
-        platforms: metadata.platforms,
-        dependencies: metadata.dependencies
-      }
+      @cache.add(name, version, metadata)
     end
 
     def load_save
@@ -65,11 +61,7 @@ module Berkshelf::API
     #
     # @return [DependencyCache]
     def remove(name, version)
-      cache[name].delete(version)
-      if cache[name].empty?
-        cache.delete(name)
-      end
-      cache
+      @cache.remove(name, version)
     end
 
     def save_file
