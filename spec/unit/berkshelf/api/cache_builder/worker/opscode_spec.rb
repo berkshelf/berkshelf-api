@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Berkshelf::API::CacheBuilder::Opscode do
+describe Berkshelf::API::CacheBuilder::Worker::Opscode do
   let(:cookbooks) { ["chicken", "tuna"] }
   let(:chicken_versions) { ["1.0", "2.0"] }
   let(:tuna_versions) { ["3.0.0", "3.0.1"] }
-  let(:connection) do 
+  let(:connection) do
     connection = Object.new
     connection.stub(:all_cookbooks).and_return(cookbooks)
     connection.stub(:all_versions).with("chicken").and_return(chicken_versions)
@@ -12,7 +12,7 @@ describe Berkshelf::API::CacheBuilder::Opscode do
     connection
   end
   subject do
-    Berkshelf::API::CacheManager.start 
+    Berkshelf::API::CacheManager.start
     described_class.new()
   end
 
@@ -36,7 +36,7 @@ describe Berkshelf::API::CacheBuilder::Opscode do
         Berkshelf::API::RemoteCookbook.new("chicken", "1.0"),
         Berkshelf::API::RemoteCookbook.new("chicken", "2.0"),
       ]
-      
+
       subject.should_receive(:connection).at_least(1).times.and_return(connection)
       subject.should_receive(:options).and_return({:get_only => 1})
       expect(subject.cookbooks).to eql(expected_value)

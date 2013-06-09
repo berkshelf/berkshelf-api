@@ -11,8 +11,7 @@ module Berkshelf::API
     def initialize(registry)
       super
       supervise_as(:cache_manager, Berkshelf::API::CacheManager)
-      # @todo AG - Remove the :get_only
-      supervise_as(:cache_builder, Berkshelf::API::CacheBuilder::Opscode, get_only: 2)
+      supervise_as(:cache_builder, Berkshelf::API::CacheBuilder)
       supervise_as(:rest_gateway, Berkshelf::API::RESTGateway)
     end
   end
@@ -56,8 +55,6 @@ module Berkshelf::API
 
       def run!
         @instance = ApplicationSupervisor.new(registry)
-        Berkshelf::API::CacheBuilder.start
-        @instance
       end
 
       def shutdown
