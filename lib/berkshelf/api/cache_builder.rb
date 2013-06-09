@@ -10,7 +10,7 @@ module Berkshelf::API
       # @return [Celluloid::Actor(Berkshelf::API::CacheBuilder)]
       def instance
         unless Berkshelf::API::Application[:cache_builder] && Berkshelf::API::Application[:cache_builder].alive?
-          raise Berkshelf::NotStartedError, "cache builder not running"
+          raise NotStartedError, "cache builder not running"
         end
         Berkshelf::API::Application[:cache_builder]
       end
@@ -33,8 +33,7 @@ module Berkshelf::API
       log.info "Cache Builder starting..."
       @worker_registry   = Celluloid::Registry.new
       @worker_supervisor = WorkerSupervisor.new(@worker_registry)
-      # TODO AG - Remove the :get_only
-      @worker_supervisor.supervise(CacheBuilder::Worker::Opscode, eager_build: true, get_only: 2)
+      @worker_supervisor.supervise(CacheBuilder::Worker::Opscode, eager_build: true)
     end
 
     def build

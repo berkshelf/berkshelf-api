@@ -1,25 +1,66 @@
+require 'open-uri'
+require 'retryable'
+require 'archive'
+
 module Berkshelf::API
   module SiteConnector
     class Opscode
-      include Celluloid
+      class << self
+        # @param [String] version
+        #
+        # @return [String]
+        def uri_escape_version(version)
+          version.to_s.gsub('.', '_')
+        end
 
-      attr_reader :connection
+        # @param [String] uri
+        #
+        # @return [String]
+        def version_from_uri(uri)
+          File.basename(uri.to_s).gsub('_', '.')
+        end
+      end
+
+      include Celluloid
+      include Berkshelf::API::Logging
+
+      V1_API = 'http://cookbooks.opscode.com/api/v1'.freeze
+
+      # @return [String]
+      attr_reader :api_uri
+      # @return [Integer]
+      #   how many retries to attempt on HTTP requests
+      attr_reader :retries
+      # @return [Float]
+      #   time to wait between retries
+      attr_reader :retry_interval
 
       # @param [Faraday::Connection] connection
       #   Optional parameter for setting the connection object
       #   This should only be set manually for testing
-      def initialize
-        @connection = Faraday.new("http://cookbooks.opscode.com") do |c|
-          c.use FaradayMiddleware::ParseJson, content_type: 'application/json'
+      def initialize(uri = V1_API, options = {})
+        options  = { retries: 5, retry_interval: 0.5 }.merge(options)
+        @api_uri = uri
+
+        @connection = Faraday.new(uri) do |c|
+          c.response :parse_json
           c.use Faraday::Adapter::NetHttp
         end
       end
 
       # @return [Array<String>]
       #   A list of cookbook names available on the server
-      def all_cookbooks
-        count = connection.get("/api/v1/cookbooks?start=0&items=0").body["total"]
-        cookbooks = connection.get("/api/v1/cookbooks?start=0&items=#{count}").body["items"]
+      def cookbooks
+        start     = 0
+        count     = connection.get("cookbooks").body["total"]
+        cookbooks = Array.new
+
+        while count > 0
+          cookbooks += connection.get("cookbooks?start=#{start}&items=#{count}").body["items"]
+          start += 100
+          count -= 100
+        end
+
         cookbooks.map { |cb| cb["cookbook_name"] }
       end
 
@@ -28,9 +69,17 @@ module Berkshelf::API
       #
       # @return [Array<String>]
       #   A list of versions of this cookbook available on the server
-      def all_versions(cookbook)
-        versions = connection.get("/api/v1/cookbooks/#{cookbook}").body["versions"]
-        versions.map { |version| version.split("/").last.gsub("_", ".") }
+      def versions(cookbook)
+        response = connection.get("cookbooks/#{cookbook}")
+
+        case response.status
+        when (200..299)
+          response.body['versions'].collect do |version_uri|
+            self.class.version_from_uri(version_uri)
+          end
+        else
+          Array.new
+        end
       end
 
       # @param [String] cookbook
@@ -40,44 +89,58 @@ module Berkshelf::API
       # @param [String] destination
       #   The directory to download the cookbook to
       #
-      # @return [void]
-      def download(cookbook, version, destination)
-        version_data = connection.get("/api/v1/cookbooks/#{cookbook}/versions/#{version.gsub(".", "_")}").body
-        uri = version_data["file"]
-        tgz = StringIO.new(Faraday.get(uri).body)
-        tar = ungzip(tgz)
-        untar(tar, destination)
+      # @return [String]
+      def download(name, version, destination = Dir.mktmpdir)
+        log.info "downloading #{name}(#{version})"
+        if cookbook = find(name, version)
+          archive = stream(cookbook[:file])
+          Archive.extract(archive.path, destination)
+        end
+      ensure
+        archive.unlink unless archive.nil?
+      end
+
+      # @param [String] cookbook
+      #   The name of the cookbook to retrieve
+      # @param [String] version
+      #   The version of the cookbook to retrieve
+      #
+      # @return [Hashie::Mash, nil]
+      def find(name, version)
+        response = connection.get("cookbooks/#{name}/versions/#{self.class.uri_escape_version(version)}")
+
+        case response.status
+        when (200..299)
+          response.body
+        else
+          nil
+        end
+      end
+
+      # Stream the response body of a remote URL to a file on the local file system
+      #
+      # @param [String] target
+      #   a URL to stream the response body from
+      #
+      # @return [Tempfile]
+      def stream(target)
+        local = Tempfile.new('opscode-site-stream')
+        local.binmode
+
+        retryable(tries: retries, on: OpenURI::HTTPError, sleep: retry_interval) do
+          open(target, 'rb', connection.headers) do |remote|
+            local.write(remote.read)
+          end
+        end
+
+        local
+      ensure
+        local.close(false) unless local.nil?
       end
 
       private
 
-        # Shamelessly stolen from
-        # https://gist.github.com/sinisterchipmunk/1335041
-        def ungzip(tarfile)
-          reader = Zlib::GzipReader.new(tarfile)
-          unzipped = StringIO.new(reader.read)
-          reader.close
-          unzipped
-        end
-
-        # Shamelessly stolen from
-        # https://gist.github.com/sinisterchipmunk/1335041
-        def untar(io, destination)
-          Gem::Package::TarReader.new io do |tar|
-            tar.each do |tarfile|
-              destination_file = File.join destination, tarfile.full_name
-              if tarfile.directory?
-                FileUtils.mkdir_p destination_file
-              else
-                destination_directory = File.dirname(destination_file)
-                FileUtils.mkdir_p destination_directory unless File.directory?(destination_directory)
-                File.open destination_file, "wb" do |f|
-                  f.write tarfile.read
-                end
-              end
-            end
-          end
-        end
+        attr_reader :connection
     end
   end
 end

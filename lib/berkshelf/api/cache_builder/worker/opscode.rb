@@ -14,11 +14,12 @@ module Berkshelf::API
         end
 
         def cookbooks
-          all_cookbooks = connection.all_cookbooks
-          slice = options[:get_only] || all_cookbooks.size
-          all_cookbooks = all_cookbooks.take(slice)
-          all_cookbooks.map do |cookbook|
-            versions = connection.all_versions(cookbook)
+          cookbooks = connection.cookbooks
+          slice     = options[:get_only] || cookbooks.size
+          cookbooks = cookbooks.take(slice)
+
+          cookbooks.map do |cookbook|
+            versions = connection.versions(cookbook)
             versions.map { |version| RemoteCookbook.new(cookbook, version) }
           end.flatten
         end
@@ -39,8 +40,14 @@ module Berkshelf::API
           end
 
           def load_metadata(directory, cookbook)
-            metadata_file = File.join(directory, cookbook, "metadata.rb")
-            Ridley::Chef::Cookbook::Metadata.from_file(metadata_file)
+            # The community site does not enforce the name of the cookbook contained in the archive
+            # downloaded and extracted. This will just find the first metadata.json and load it.
+            file     = Dir["#{directory}/**/*/metadata.json"].first
+            metadata = File.read(file)
+            Ridley::Chef::Cookbook::Metadata.from_json(metadata)
+          rescue JSON::ParserError => ex
+            log.warn "Error loading metadata for #{cookbook} from: #{file}"
+            abort MetadataLoadError.new(ex)
           end
       end
     end

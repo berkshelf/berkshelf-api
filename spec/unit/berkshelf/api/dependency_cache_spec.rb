@@ -24,7 +24,7 @@ describe Berkshelf::API::DependencyCache do
         let(:filepath) { nil }
 
         it "raises a SaveNotFoundError" do
-          expect { subject }.to raise_error(Berkshelf::SaveNotFoundError)
+          expect { subject }.to raise_error(Berkshelf::API::SaveNotFoundError)
         end
       end
 
@@ -36,7 +36,7 @@ describe Berkshelf::API::DependencyCache do
         end
 
         it "raises an InvalidSaveError" do
-          expect { subject }.to raise_error(Berkshelf::InvalidSaveError)
+          expect { subject }.to raise_error(Berkshelf::API::InvalidSaveError)
         end
       end
     end

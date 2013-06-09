@@ -20,7 +20,7 @@ describe Berkshelf::API::Mixin::Services do
       before { Berkshelf::API::CacheManager.stop }
 
       it "raises a NotStartedError" do
-        expect { subject }.to raise_error(Berkshelf::NotStartedError)
+        expect { subject }.to raise_error(Berkshelf::API::NotStartedError)
       end
     end
   end

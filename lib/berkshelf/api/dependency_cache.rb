@@ -18,17 +18,17 @@ module Berkshelf::API
       # @param [#to_s] filepath
       #   path to an archived cache
       #
-      # @raise [Berkshelf::SaveNotFoundError]
-      # @raise [Berkshelf::InvalidSaveError]
+      # @raise [Berkshelf::API::SaveNotFoundError]
+      # @raise [Berkshelf::API::InvalidSaveError]
       #
       # @return [DependencyCache]
       def from_file(filepath)
         contents = JSON.parse(File.read(filepath.to_s))
         new(contents)
       rescue Errno::ENOENT => ex
-        raise Berkshelf::SaveNotFoundError.new(ex)
+        raise SaveNotFoundError.new(ex)
       rescue JSON::ParserError => ex
-        raise Berkshelf::InvalidSaveError.new(ex)
+        raise InvalidSaveError.new(ex)
       end
     end
 
@@ -37,7 +37,32 @@ module Berkshelf::API
 
     # @param [Hash] contents
     def initialize(contents = {})
-      @cache = Hashie::Mash.new(contents)
+      @cache = Hash[contents]
+    end
+
+    # @param [String] name
+    # @param [String] version
+    # @param [Ridley::Chef::Cookbook::Metadata] metadata
+    #
+    # @return [Hash]
+    def add(name, version, metadata)
+      @cache[name.to_s] ||= Hash.new
+      @cache[name.to_s][version.to_s] = {
+        platforms: metadata.platforms,
+        dependencies: metadata.dependencies
+      }
+    end
+
+    # @param [String] name
+    # @param [String] version
+    #
+    # @return [Hash]
+    def remove(name, version)
+      @cache[name.to_s].delete(version.to_s)
+      if @cache[name.to_s].empty?
+        @cache.delete(name.to_s)
+      end
+      @cache
     end
 
     # @return [Boolean]
@@ -57,13 +82,11 @@ module Berkshelf::API
 
     # @return [Array<RemoteCookbook>]
     def cookbooks
-      remote_cookbooks = []
-      @cache.keys.each do |cookbook_name|
-        @cache[cookbook_name].keys.each do |version|
-          remote_cookbooks << RemoteCookbook.new(cookbook_name, version)
+      [].tap do |remote_cookbooks|
+        @cache.each_pair do |name, versions|
+          versions.keys.each { |version| remote_cookbooks << RemoteCookbook.new(name, version) }
         end
       end
-      remote_cookbooks
     end
 
     def save(path)
