@@ -6,7 +6,7 @@ module Berkshelf::API
       # @return [Celluloid::Actor(Berkshelf::API::CacheManager)]
       def instance
         unless Berkshelf::API::Application[:cache_manager] && Berkshelf::API::Application[:cache_manager].alive?
-          raise Berkshelf::NotStartedError, "cache manager not running"
+          raise NotStartedError, "cache manager not running"
         end
         Berkshelf::API::Application[:cache_manager]
       end
@@ -25,7 +25,7 @@ module Berkshelf::API
       #   the application. Stop the entire application with {Berkshelf::API::Application.shutdown}
       def stop
         instance.terminate
-      rescue Berkshelf::NotStartedError
+      rescue NotStartedError
         nil
       end
     end

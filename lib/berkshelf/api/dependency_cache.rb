@@ -18,17 +18,17 @@ module Berkshelf::API
       # @param [#to_s] filepath
       #   path to an archived cache
       #
-      # @raise [Berkshelf::SaveNotFoundError]
-      # @raise [Berkshelf::InvalidSaveError]
+      # @raise [Berkshelf::API::SaveNotFoundError]
+      # @raise [Berkshelf::API::InvalidSaveError]
       #
       # @return [DependencyCache]
       def from_file(filepath)
         contents = JSON.parse(File.read(filepath.to_s))
         new(contents)
       rescue Errno::ENOENT => ex
-        raise Berkshelf::SaveNotFoundError.new(ex)
+        raise SaveNotFoundError.new(ex)
       rescue JSON::ParserError => ex
-        raise Berkshelf::InvalidSaveError.new(ex)
+        raise InvalidSaveError.new(ex)
       end
     end
 

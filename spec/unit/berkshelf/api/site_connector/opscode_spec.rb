@@ -3,19 +3,19 @@ require 'spec_helper'
 describe Berkshelf::API::SiteConnector::Opscode do
   let(:connection) { mock("connection") }
   let(:total_response) { stub("total", :body => { "total" => 10 } ) }
-  let(:cookbooks_response) do 
+  let(:cookbooks_response) do
     stub("cookbooks", :body => {
       "items"=> [
-        {"cookbook_name" => "chicken"}, 
+        {"cookbook_name" => "chicken"},
         {"cookbook_name" => "tuna"}
-      ]}) 
+      ]})
   end
-  let(:chicken_versions_response) do 
+  let(:chicken_versions_response) do
     stub("chicken_versions", :body => {
       "versions" => [
         "http://www.example.com/api/v1/cookbooks/chicken/versions/1_0",
         "http://www.example.com/api/v1/cookbooks/chicken/versions/2_0"
-      ]}) 
+      ]})
   end
 
   subject { described_class.new }
@@ -48,7 +48,7 @@ describe Berkshelf::API::SiteConnector::Opscode do
 
   describe "#download" do
     it "should download then ungzip/tar the cookbook" do
-      # I don't like this test, but the code is very procedural and I 
+      # I don't like this test, but the code is very procedural and I
       # don't have a better way to test it
 
       subject.should_receive(:connection).at_least(1).times.and_return(connection)

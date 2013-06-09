@@ -4,16 +4,5 @@ module Berkshelf::API
   class NotStartedError < APIError; end
   class SaveNotFoundError < APIError; end
   class InvalidSaveError < APIError; end
-
-  class UnknownCompressionType < APIError
-    def initialize(destination)
-      @destination = destination
-    end
-
-    def to_s
-      "The file at '#{@destination}' is not a known compression type"
-    end
-  end
-
   class MetadataLoadError < APIError; end
 end

@@ -10,7 +10,7 @@ module Berkshelf::API
       # @return [Celluloid::Actor(Berkshelf::API::CacheBuilder)]
       def instance
         unless Berkshelf::API::Application[:cache_builder] && Berkshelf::API::Application[:cache_builder].alive?
-          raise Berkshelf::NotStartedError, "cache builder not running"
+          raise NotStartedError, "cache builder not running"
         end
         Berkshelf::API::Application[:cache_builder]
       end
