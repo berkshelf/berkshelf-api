@@ -23,11 +23,11 @@ describe Berkshelf::API::SiteConnector::Opscode do
   describe "#all_cookbooks" do
     it "should fetch all the cookbooks and return a list of their names" do
       connection.should_receive(:get).
-        with("/api/v1/cookbooks?start=0&items=0").
+        with("cookbooks?start=0&items=0").
         and_return(total_response)
 
       connection.should_receive(:get).
-        with("/api/v1/cookbooks?start=0&items=10").
+        with("cookbooks?start=0&items=10").
         and_return(cookbooks_response)
 
       subject.should_receive(:connection).at_least(1).times.and_return(connection)
@@ -38,7 +38,7 @@ describe Berkshelf::API::SiteConnector::Opscode do
   describe "#all_versions" do
     it "should call the server for the cookbook provied and return a list of available version number" do
       connection.should_receive(:get).
-        with("/api/v1/cookbooks/chicken").
+        with("cookbooks/chicken").
         and_return(chicken_versions_response)
 
       subject.should_receive(:connection).at_least(1).times.and_return(connection)
@@ -46,25 +46,39 @@ describe Berkshelf::API::SiteConnector::Opscode do
     end
   end
 
+  describe "#find" do
+    let(:name) { "nginx" }
+    let(:version) { "1.4.0" }
+    let(:result) { subject.find(name, version) }
+
+    it "returns the cookbook and version information" do
+      expect(result.cookbook).to eq('http://cookbooks.opscode.com/api/v1/cookbooks/nginx')
+      expect(result.version).to eq('1.4.0')
+    end
+
+    context "when the cookbook is not found" do
+      let(:name) { "not_a_real_cookbook_that_anyone_should_ever_make" }
+
+      it "returns nil" do
+        expect(result).to be_nil
+      end
+    end
+  end
+
   describe "#download" do
+    let(:name) { "chicken" }
+    let(:version) { "1.0.0" }
+    let(:destination) { "location" }
+
     it "should download then ungzip/tar the cookbook" do
-      # I don't like this test, but the code is very procedural and I
-      # don't have a better way to test it
+      response = { file: "http://file" }
+      tempfile = double('tempfile', path: '/some/path', unlink: nil)
 
-      subject.should_receive(:connection).at_least(1).times.and_return(connection)
+      subject.should_receive(:find).with(name, version).and_return(response)
+      subject.should_receive(:stream).with("http://file").and_return(tempfile)
+      Archive.should_receive(:extract).with(tempfile.path, destination)
 
-      connection.should_receive(:get).
-        with("/api/v1/cookbooks/chicken/versions/1_0_0").
-        and_return(stub(:body => {"file" => "foo"}))
-
-      Faraday.should_receive(:get).
-        with("foo").
-        and_return(stub(:body => "bar"))
-
-      subject.should_receive(:ungzip).with(kind_of(StringIO)).and_return("baz")
-      subject.should_receive(:untar).with("baz", "location").and_return(nil)
-
-      subject.download("chicken", "1.0.0", "location")
+      subject.download(name, version, destination)
     end
   end
 end

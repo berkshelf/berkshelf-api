@@ -36,7 +36,7 @@ module Berkshelf::API
         @api_uri = uri
 
         @connection = Faraday.new(uri) do |c|
-          c.use FaradayMiddleware::ParseJson, content_type: 'application/json'
+          c.response :parse_json
           c.use Faraday::Adapter::NetHttp
         end
       end
@@ -69,22 +69,28 @@ module Berkshelf::API
       # @return [String]
       def download(name, version, destination = Dir.mktmpdir)
         log.info "downloading #{name}(#{version})"
-        archive = stream(find(name, version)["file"])
-        Archive.extract(archive.path, destination)
+        if cookbook = find(name, version)
+          archive = stream(cookbook[:file])
+          Archive.extract(archive.path, destination)
+        end
       ensure
         archive.unlink unless archive.nil?
       end
 
+      # @param [String] cookbook
+      #   The name of the cookbook to retrieve
+      # @param [String] version
+      #   The version of the cookbook to retrieve
+      #
+      # @return [Hashie::Mash, nil]
       def find(name, version)
         response = connection.get("cookbooks/#{name}/versions/#{self.class.uri_escape_version(version)}")
 
         case response.status
         when (200..299)
           response.body
-        when 404
-          raise Berkshelf::API::CookbookNotFound, "Cookbook '#{name}' not found at site: '#{api_uri}'"
         else
-          raise Berkshelf::API::CommunitySiteError, "Error finding cookbook '#{name}' (#{version}) at site: '#{api_uri}'"
+          nil
         end
       end
 
