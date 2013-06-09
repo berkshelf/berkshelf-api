@@ -39,8 +39,12 @@ module Berkshelf::API
           end
 
           def load_metadata(directory, cookbook)
-            metadata_file = File.join(directory, cookbook, "metadata.rb")
-            Ridley::Chef::Cookbook::Metadata.from_file(metadata_file)
+            file     = File.join(directory, cookbook, "metadata.json")
+            metadata = File.read(file)
+            Ridley::Chef::Cookbook::Metadata.from_json(metadata)
+          rescue JSON::ParserError => ex
+            log.warn "Error loading metadata for #{cookbook} from: #{file}"
+            abort MetadataLoadError.new(ex)
           end
       end
     end
