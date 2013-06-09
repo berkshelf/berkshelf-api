@@ -9,10 +9,8 @@ module Berkshelf::API
           super
         end
 
-        def archive_name
-          "opscode-site"
-        end
-
+        # @return [Array<RemoteCookbook>]
+        #  The list of cookbooks this builder can find
         def cookbooks
           cookbooks = connection.cookbooks
           slice     = options[:get_only] || cookbooks.size
@@ -24,6 +22,9 @@ module Berkshelf::API
           end.flatten
         end
 
+        # @param [RemoteCookbook] remote
+        #
+        # @return [Ridley::Chef::Cookbook::Metadata]
         def metadata(remote)
           Dir.mktmpdir do |destination|
             connection.download(remote.name, remote.version, destination)

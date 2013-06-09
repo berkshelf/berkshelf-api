@@ -17,8 +17,6 @@ describe Berkshelf::API::CacheBuilder::Worker::Opscode do
     described_class.new
   end
 
-  its(:archive_name) { should eq("opscode-site") }
-
   describe "#cookbooks" do
     it "returns an array of RemoteCookbooks described by the server" do
       expected_value = [

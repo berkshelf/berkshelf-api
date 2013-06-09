@@ -9,11 +9,6 @@ module Berkshelf::API
           super
         end
 
-        # @return [String]
-        def archive_name
-          "opscode-site"
-        end
-
         def stale?
           false
         end

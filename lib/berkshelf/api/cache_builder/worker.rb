@@ -19,13 +19,6 @@ module Berkshelf::API
 
         # @abstract
         #
-        # @return [#to_s]
-        def archive_name
-          raise RuntimeError, "must be implemented"
-        end
-
-        # @abstract
-        #
         # @param [RemoteCookbook] remote
         #
         # @return [Ridley::Chef::Cookbook::Metadata]
