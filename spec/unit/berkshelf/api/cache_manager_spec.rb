@@ -43,7 +43,7 @@ describe Berkshelf::API::CacheManager do
         before { Berkshelf::API::Application.stub(:[]).with(:cache_manager).and_return(nil) }
 
         it "raises a NotStartedError" do
-          expect { subject }.to raise_error(Berkshelf::NotStartedError)
+          expect { subject }.to raise_error(Berkshelf::API::NotStartedError)
         end
       end
     end

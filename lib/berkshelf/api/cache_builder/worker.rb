@@ -48,21 +48,34 @@ module Berkshelf::API
 
           loop do
             @building = true
-            update_cache if stale?
+
+            log.info "#{self} determining if the cache is stale..."
+            if stale?
+              log.info "#{self} cache is stale."
+              log.info "#{self} adding (#{diff[0].length}) items..."
+              log.info "#{self} removing (#{diff[1].length}) items..."
+              defer { update_cache }
+              log.info "#{self} cache updated."
+            else
+              log.info "#{self} cache is up to date."
+            end
 
             sleep INTERVAL
             clear_diff
           end
         end
 
-        # @return [Array<RemoteCookbook>]
+        # @return [Array<Array<RemoteCookbook>, Array<RemoteCookbook>>]
         def diff
           @diff ||= cache_manager.diff(cookbooks)
         end
 
         def update_cache
           created_cookbooks, deleted_cookbooks = diff
-          created_cookbooks.collect { |remote| cache_manager.future(:add, remote.name, remote.version, metadata(remote)) }.map(&:value)
+
+          created_cookbooks.collect do |remote|
+            cache_manager.future(:add, remote.name, remote.version, metadata(remote))
+          end.map(&:value)
           deleted_cookbooks.each { |remote| cache_manager.remove(remote.name, remote.version) }
         end
 

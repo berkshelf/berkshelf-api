@@ -5,15 +5,16 @@ describe Berkshelf::API::CacheBuilder::Worker::Opscode do
   let(:chicken_versions) { ["1.0", "2.0"] }
   let(:tuna_versions) { ["3.0.0", "3.0.1"] }
   let(:connection) do
-    connection = Object.new
-    connection.stub(:all_cookbooks).and_return(cookbooks)
-    connection.stub(:all_versions).with("chicken").and_return(chicken_versions)
-    connection.stub(:all_versions).with("tuna").and_return(tuna_versions)
+    connection = double('connection')
+    connection.stub(:cookbooks).and_return(cookbooks)
+    connection.stub(:versions).with("chicken").and_return(chicken_versions)
+    connection.stub(:versions).with("tuna").and_return(tuna_versions)
     connection
   end
+
   subject do
     Berkshelf::API::CacheManager.start
-    described_class.new()
+    described_class.new
   end
 
   its(:archive_name) { should eq("opscode-site") }
