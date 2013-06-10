@@ -1,6 +1,13 @@
 module Berkshelf::API
   class CacheManager
     class << self
+      attr_writer :cache_file
+
+      # @return [String]
+      def cache_file
+        @cache_file ||= File.expand_path("~/.berkshelf/api-server/cerch")
+      end
+
       # @raise [Celluloid::DeadActorError] if Bootstrap Manager has not been started
       #
       # @return [Celluloid::Actor(Berkshelf::API::CacheManager)]
@@ -40,7 +47,7 @@ module Berkshelf::API
     def initialize
       log.info "Cache Manager starting..."
       @cache = DependencyCache.new
-      load_save if File.exist?(save_file)
+      load_save if File.exist?(self.class.cache_file)
     end
 
     # @param [String] name
@@ -53,7 +60,7 @@ module Berkshelf::API
     end
 
     def load_save
-      @cache = DependencyCache.from_file(save_file)
+      @cache = DependencyCache.from_file(self.class.cache_file)
     end
 
     # @param [String] name
@@ -64,8 +71,10 @@ module Berkshelf::API
       @cache.remove(name, version)
     end
 
-    def save_file
-      File.expand_path("~/.berkshelf/api-server/cerch")
+    def save
+      log.info "Saving the cache to: #{self.class.cache_file}"
+      cache.save(self.class.cache_file)
+      log.info "Cache saved!"
     end
 
     # @param [Array<RemoteCookbook>] cookbooks
@@ -86,9 +95,7 @@ module Berkshelf::API
 
       def finalize_callback
         log.info "Cache Manager shutting down..."
-        log.info "Saving the cache to: #{save_file}"
-        cache.save(save_file)
-        log.info "Cache saved!"
+        self.save
       end
   end
 end
