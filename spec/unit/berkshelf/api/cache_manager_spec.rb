@@ -9,7 +9,7 @@ describe Berkshelf::API::CacheManager do
       context "when a save file exists" do
         before do
           @tempfile = Tempfile.new('berkshelf-api-rspec')
-          described_class.any_instance.stub(:save_file) { @tempfile.path }
+          described_class.stub(:cache_file) { @tempfile.path }
         end
         after { @tempfile.close(true) }
 
@@ -20,7 +20,7 @@ describe Berkshelf::API::CacheManager do
       end
 
       context "when a save file does not exist" do
-        before { described_class.any_instance.stub(save_file: tmp_path.join('does_not_exist').to_s) }
+        before { described_class.stub(cache_file: tmp_path.join('does_not_exist').to_s) }
 
         it "skips loading of the saved cache" do
           described_class.any_instance.should_not_receive(:load_save)

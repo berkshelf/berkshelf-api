@@ -22,6 +22,7 @@ Spork.prefork do
     config.before do
       Celluloid.shutdown
       Celluloid.boot
+      Berkshelf::API::CacheManager.cache_file = tmp_path.join('cerch').to_s
       clean_tmp_path
     end
   end
