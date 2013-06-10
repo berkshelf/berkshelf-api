@@ -64,6 +64,12 @@ module Berkshelf::API
       @cache.remove(name, version)
     end
 
+    def save
+      log.info "Saving the cache to: #{save_file}"
+      cache.save(save_file)
+      log.info "Cache saved!"
+    end
+
     def save_file
       File.expand_path("~/.berkshelf/api-server/cerch")
     end
@@ -86,9 +92,7 @@ module Berkshelf::API
 
       def finalize_callback
         log.info "Cache Manager shutting down..."
-        log.info "Saving the cache to: #{save_file}"
-        cache.save(save_file)
-        log.info "Cache saved!"
+        self.save
       end
   end
 end

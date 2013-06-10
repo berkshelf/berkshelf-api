@@ -45,10 +45,7 @@ module Berkshelf::API
             log.info "#{self} determining if the cache is stale..."
             if stale?
               log.info "#{self} cache is stale."
-              log.info "#{self} adding (#{diff[0].length}) items..."
-              log.info "#{self} removing (#{diff[1].length}) items..."
               update_cache
-              log.info "#{self} cache updated."
             else
               log.info "#{self} cache is up to date."
             end
@@ -66,13 +63,18 @@ module Berkshelf::API
         def update_cache
           created_cookbooks, deleted_cookbooks = diff
 
+          log.info "#{self} adding (#{created_cookbooks.length}) items..."
           created_cookbooks.collect do |remote|
             [ remote, future(:metadata, remote) ]
           end.each do |remote, metadata|
             cache_manager.add(remote.name, remote.version, metadata.value)
           end
 
+          log.info "#{self} removing (#{deleted_cookbooks.length}) items..."
           deleted_cookbooks.each { |remote| cache_manager.remove(remote.name, remote.version) }
+
+          log.info "#{self} cache updated."
+          cache_manager.save
         end
 
         def stale?
