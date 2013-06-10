@@ -5,21 +5,22 @@ module Berkshelf::API
         finalizer :finalize_callback
 
         def initialize(options = {})
-          @connection = Berkshelf::API::SiteConnector::Opscode.pool_link
+          @connection = Berkshelf::API::SiteConnector::Opscode.pool_link(size: 25)
           super
         end
 
         # @return [Array<RemoteCookbook>]
         #  The list of cookbooks this builder can find
         def cookbooks
-          cookbooks = connection.cookbooks
-          slice     = options[:get_only] || cookbooks.size
-          cookbooks = cookbooks.take(slice)
+          cookbook_versions = Array.new
 
-          cookbooks.map do |cookbook|
-            versions = connection.versions(cookbook)
-            versions.map { |version| RemoteCookbook.new(cookbook, version) }
-          end.flatten
+          connection.cookbooks.collect do |cookbook|
+            [ cookbook, connection.future(:versions, cookbook) ]
+          end.each do |cookbook, versions|
+            versions.value.each { |version| cookbook_versions << RemoteCookbook.new(cookbook, version) }
+          end
+
+          cookbook_versions
         end
 
         # @param [RemoteCookbook] remote
