@@ -40,6 +40,8 @@ module Berkshelf::API
     include Celluloid
     include Berkshelf::API::Logging
 
+    SAVE_INTERVAL = 30.0
+
     finalizer :finalize_callback
 
     attr_reader :cache
@@ -48,6 +50,7 @@ module Berkshelf::API
       log.info "Cache Manager starting..."
       @cache = DependencyCache.new
       load_save if File.exist?(self.class.cache_file)
+      every(SAVE_INTERVAL) { save }
     end
 
     # @param [String] name
