@@ -1,3 +1,5 @@
+require 'optparse'
+
 trap 'INT' do
   Berkshelf::API::Application.shutdown
 end
@@ -8,11 +10,11 @@ end
 
 module Berkshelf::API
   class ApplicationSupervisor < Celluloid::SupervisionGroup
-    def initialize(registry)
-      super
+    def initialize(registry, options = {})
+      super(registry)
       supervise_as(:cache_manager, Berkshelf::API::CacheManager)
       supervise_as(:cache_builder, Berkshelf::API::CacheBuilder)
-      supervise_as(:rest_gateway, Berkshelf::API::RESTGateway)
+      supervise_as(:rest_gateway, Berkshelf::API::RESTGateway, options)
     end
   end
 
@@ -29,6 +31,26 @@ module Berkshelf::API
         raise Celluloid::DeadActorError, "application not running"
       end
 
+      # @param [Array] args
+      #
+      # @return [Hash]
+      def parse_options(args)
+        options = Hash.new
+
+        OptionParser.new("Usage: berks-api [options]") do |opts|
+          opts.on("-p", "--port PORT", Integer, "set the listening port") do |v|
+            options[:port] = v
+          end
+
+          opts.on_tail("-h", "--help", "show this message") do
+            puts opts
+            exit
+          end
+        end.parse!(args)
+
+        options.symbolize_keys
+      end
+
       # The Actor registry for Berkshelf::API.
       #
       # @note Berkshelf::API uses it's own registry instead of Celluloid::Registry.root to
@@ -41,9 +63,9 @@ module Berkshelf::API
       end
 
       # Run the application in the foreground (sleep on main thread)
-      def run
+      def run(args = [])
         loop do
-          supervisor = run!
+          supervisor = run!(args)
 
           sleep 0.1 while supervisor.alive?
 
@@ -53,8 +75,9 @@ module Berkshelf::API
         end
       end
 
-      def run!
-        @instance = ApplicationSupervisor.new(registry)
+      def run!(args = [])
+        options   = parse_options(args)
+        @instance = ApplicationSupervisor.new(registry, options)
       end
 
       def shutdown
