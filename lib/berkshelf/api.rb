@@ -8,19 +8,21 @@ require 'ridley'
 require 'tempfile'
 require 'pathname'
 
-module Berkshelf::API
-  require_relative 'api/errors'
-  require_relative 'api/logging'
+module Berkshelf
+  module API
+    require_relative 'api/errors'
+    require_relative 'api/logging'
 
-  autoload :Application, 'berkshelf/api/application'
-  autoload :CacheBuilder, 'berkshelf/api/cache_builder'
-  autoload :CacheManager, 'berkshelf/api/cache_manager'
-  autoload :DependencyCache, 'berkshelf/api/dependency_cache'
-  autoload :Endpoint, 'berkshelf/api/endpoint'
-  autoload :Mixin, 'berkshelf/api/mixin'
-  autoload :RackApp, 'berkshelf/api/rack_app'
-  autoload :RemoteCookbook, 'berkshelf/api/remote_cookbook'
-  autoload :CookbookMetadata, 'berkshelf/api/cookbook_metadata'
-  autoload :RESTGateway, 'berkshelf/api/rest_gateway'
-  autoload :SiteConnector, 'berkshelf/api/site_connector'
+    autoload :Application, 'berkshelf/api/application'
+    autoload :CacheBuilder, 'berkshelf/api/cache_builder'
+    autoload :CacheManager, 'berkshelf/api/cache_manager'
+    autoload :DependencyCache, 'berkshelf/api/dependency_cache'
+    autoload :Endpoint, 'berkshelf/api/endpoint'
+    autoload :Mixin, 'berkshelf/api/mixin'
+    autoload :RackApp, 'berkshelf/api/rack_app'
+    autoload :RemoteCookbook, 'berkshelf/api/remote_cookbook'
+    autoload :CookbookMetadata, 'berkshelf/api/cookbook_metadata'
+    autoload :RESTGateway, 'berkshelf/api/rest_gateway'
+    autoload :SiteConnector, 'berkshelf/api/site_connector'
+  end
 end
