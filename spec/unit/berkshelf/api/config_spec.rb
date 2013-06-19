@@ -18,7 +18,7 @@ describe Berkshelf::API::Config do
 
     it "has the Opscode community site as an endpoint" do
       expect(subject.endpoints.first.type).to eql("opscode")
-      expect(subject.endpoints.first.url).to eql("http://cookbooks.opscode.com/api/v1")
+      expect(subject.endpoints.first.options[:url]).to eql("http://cookbooks.opscode.com/api/v1")
     end
   end
 end
