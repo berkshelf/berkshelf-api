@@ -2,4 +2,4 @@
 $:.push File.expand_path("../../lib", __FILE__)
 require 'berkshelf/api'
 
-Berkshelf::API::Application.run(ARGV)
+Berkshelf::API::SrvCtl.run(ARGV, File.basename(__FILE__))

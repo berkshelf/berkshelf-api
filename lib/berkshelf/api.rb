@@ -26,3 +26,5 @@ module Berkshelf
     autoload :SiteConnector, 'berkshelf/api/site_connector'
   end
 end
+
+require_relative 'api/srv_ctl'
