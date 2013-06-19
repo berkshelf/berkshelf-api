@@ -25,6 +25,10 @@ module Berkshelf::API
 
       def_delegators :registry, :[], :[]=
 
+      def config
+        @config ||= Berkshelf::API::Config.new
+      end
+
       def configure_logger(options = {})
         Logging.init(level: options[:log_level], location: options[:log_location])
       end

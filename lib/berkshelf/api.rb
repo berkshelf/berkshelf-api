@@ -17,6 +17,7 @@ module Berkshelf
     require_relative 'api/application'
     require_relative 'api/cache_builder'
     require_relative 'api/cache_manager'
+    require_relative 'api/config'
     require_relative 'api/dependency_cache'
     require_relative 'api/endpoint'
     require_relative 'api/rack_app'

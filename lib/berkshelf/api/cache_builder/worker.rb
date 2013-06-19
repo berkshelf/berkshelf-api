@@ -2,6 +2,15 @@ module Berkshelf::API
   class CacheBuilder
     module Worker
       class Base
+        class << self
+          # @param [#to_s, nil] type
+          def worker_type(type = nil)
+            return @worker_type if @worker_type
+            @worker_type = type.to_s
+            Worker.register(@worker_type, self)
+          end
+        end
+
         INTERVAL = 5
 
         include Celluloid
@@ -87,6 +96,30 @@ module Berkshelf::API
           def clear_diff
             @diff = nil
           end
+      end
+
+      class << self
+        # @param [#to_s] name
+        #
+        # @return [Worker::Base]
+        def [](name)
+          types[name.to_s]
+        end
+
+        # @param [#to_s] name
+        # @param [Worker::Base] klass
+        def register(name, klass)
+          name = name.to_s
+          if types.has_key?(name)
+            raise RuntimeError, "worker already registered with the name '#{name}'"
+          end
+          types[name] = klass
+        end
+
+        # @return [Hash]
+        def types
+          @types ||= Hash.new
+        end
       end
     end
   end

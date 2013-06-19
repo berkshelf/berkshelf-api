@@ -33,7 +33,10 @@ module Berkshelf::API
       log.info "Cache Builder starting..."
       @worker_registry   = Celluloid::Registry.new
       @worker_supervisor = WorkerSupervisor.new(@worker_registry)
-      @worker_supervisor.supervise(CacheBuilder::Worker::Opscode, eager_build: true)
+
+      Application.config.endpoints.each do |endpoint|
+        @worker_supervisor.supervise(CacheBuilder::Worker[endpoint.type], endpoint.options)
+      end
     end
 
     def build
