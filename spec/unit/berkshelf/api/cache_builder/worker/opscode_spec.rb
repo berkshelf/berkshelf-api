@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheBuilder::Worker::Opscode do
+  describe "ClassMethods" do
+    subject { described_class }
+    its(:worker_type) { should eql("opscode") }
+  end
+
   let(:cookbooks) { ["chicken", "tuna"] }
   let(:chicken_versions) { ["1.0", "2.0"] }
   let(:tuna_versions) { ["3.0.0", "3.0.1"] }

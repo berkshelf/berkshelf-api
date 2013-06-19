@@ -2,6 +2,8 @@ module Berkshelf::API
   class CacheBuilder
     module Worker
       class Opscode < Worker::Base
+        worker_type "opscode"
+
         finalizer :finalize_callback
 
         def initialize(options = {})
