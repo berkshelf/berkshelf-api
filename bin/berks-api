@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 $:.push File.expand_path("../../lib", __FILE__)
-require 'berkshelf/api'
+require 'berkshelf/api/srv_ctl'
 
-Berkshelf::API::Application.run(ARGV)
+Berkshelf::API::SrvCtl.run(ARGV, File.basename(__FILE__))

@@ -26,3 +26,5 @@ module Berkshelf
     require_relative 'api/site_connector'
   end
 end
+
+require_relative 'api/srv_ctl'
