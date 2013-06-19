@@ -25,30 +25,14 @@ module Berkshelf::API
 
       def_delegators :registry, :[], :[]=
 
-      def instance
-        return @instance unless @instance.nil?
-
-        raise Celluloid::DeadActorError, "application not running"
+      def configure_logger(options = {})
+        Logging.init(level: options[:log_level], location: options[:log_location])
       end
 
-      # @param [Array] args
-      #
-      # @return [Hash]
-      def parse_options(args)
-        options = Hash.new
+      def instance
+        return @instance if @instance
 
-        OptionParser.new("Usage: berks-api [options]") do |opts|
-          opts.on("-p", "--port PORT", Integer, "set the listening port") do |v|
-            options[:port] = v
-          end
-
-          opts.on_tail("-h", "--help", "show this message") do
-            puts opts
-            exit
-          end
-        end.parse!(args)
-
-        options.symbolize_keys
+        raise Celluloid::DeadActorError, "application not running"
       end
 
       # The Actor registry for Berkshelf::API.
@@ -63,9 +47,9 @@ module Berkshelf::API
       end
 
       # Run the application in the foreground (sleep on main thread)
-      def run(args = [])
+      def run(options = {})
         loop do
-          supervisor = run!(args)
+          supervisor = run!(options)
 
           sleep 0.1 while supervisor.alive?
 
@@ -75,8 +59,8 @@ module Berkshelf::API
         end
       end
 
-      def run!(args = [])
-        options   = parse_options(args)
+      def run!(options = {})
+        configure_logger(options)
         @instance = ApplicationSupervisor.new(registry, options)
       end
 
