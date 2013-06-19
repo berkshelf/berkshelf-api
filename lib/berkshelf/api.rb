@@ -23,7 +23,6 @@ module Berkshelf
     require_relative 'api/remote_cookbook'
     require_relative 'api/rest_gateway'
     require_relative 'api/site_connector'
+    require_relative 'api/srv_ctl'
   end
 end
-
-require_relative 'api/srv_ctl'
