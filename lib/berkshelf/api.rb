@@ -21,7 +21,6 @@ module Berkshelf
     require_relative 'api/endpoint'
     require_relative 'api/rack_app'
     require_relative 'api/remote_cookbook'
-    require_relative 'api/cookbook_metadata'
     require_relative 'api/rest_gateway'
     require_relative 'api/site_connector'
   end
