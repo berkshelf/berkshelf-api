@@ -1,4 +1,5 @@
 require 'optparse'
+require 'buff/extensions'
 
 module Berkshelf::API
   class SrvCtl
@@ -52,6 +53,7 @@ module Berkshelf::API
     end
 
     def start
+      require 'berkshelf/api'
       Berkshelf::API::Application.run(options)
     end
   end
