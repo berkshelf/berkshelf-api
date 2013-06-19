@@ -2,6 +2,8 @@ module Berkshelf::API
   class CacheBuilder
     module Worker
       class ChefServer < Worker::Base
+        worker_type "chef_server"
+
         finalizer :finalize_callback
 
         def initialize(options = {})
