@@ -26,7 +26,11 @@ module Berkshelf::API
       def_delegators :registry, :[], :[]=
 
       def config
-        @config ||= Berkshelf::API::Config.new
+        @config ||= begin
+          Berkshelf::API::Config.from_file(Berkshelf::API::Config.default_path)
+        rescue
+          Berkshelf::API::Config.new
+        end
       end
 
       def configure_logger(options = {})
