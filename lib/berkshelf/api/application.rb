@@ -1,5 +1,3 @@
-require 'optparse'
-
 trap 'INT' do
   Berkshelf::API::Application.shutdown
 end
