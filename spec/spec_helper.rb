@@ -8,6 +8,8 @@ Spork.prefork do
   Dir[File.join(File.expand_path("../../spec/support/**/*.rb", __FILE__))].each { |f| require f }
 
   RSpec.configure do |config|
+    config.include Berkshelf::RSpec::ChefServer
+
     config.expect_with :rspec do |c|
       c.syntax = :expect
     end
@@ -17,6 +19,7 @@ Spork.prefork do
     config.filter_run focus: true
     config.run_all_when_everything_filtered = true
 
+    config.before(:suite) { Berkshelf::RSpec::ChefServer.start }
     config.before(:all) { Berkshelf::API::Logging.init(location: '/dev/null') }
 
     config.before do
@@ -33,6 +36,10 @@ Spork.prefork do
 
   def tmp_path
     app_root_path.join('spec/tmp')
+  end
+
+  def fixtures_path
+    app_root_path.join('spec/fixtures')
   end
 
   def clean_tmp_path
