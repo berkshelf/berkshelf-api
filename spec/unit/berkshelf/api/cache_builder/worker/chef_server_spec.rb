@@ -13,10 +13,10 @@ describe Berkshelf::API::CacheBuilder::Worker::ChefServer do
 
   describe "#cookbooks" do
     before do
-      chef_cookbook("riot", "1.0.0")
-      chef_cookbook("riot", "2.0.0")
-      chef_cookbook("arena", "3.0.0")
-      chef_cookbook("arena", "3.0.1")
+      chef_cookbook("ruby", "1.0.0")
+      chef_cookbook("ruby", "2.0.0")
+      chef_cookbook("elixir", "3.0.0")
+      chef_cookbook("elixir", "3.0.1")
     end
 
     it "returns an array containing an item for each cookbook on the server" do
