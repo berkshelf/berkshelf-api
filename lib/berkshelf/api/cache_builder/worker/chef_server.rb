@@ -12,8 +12,22 @@ module Berkshelf::API
           super
         end
 
-        def stale?
-          false
+        # @return [Array<RemoteCookbook>]
+        #  The list of cookbooks this builder can find
+        def cookbooks
+          cookbook_versions = Array.new
+          connection.cookbook.all.each do |cookbook, versions|
+            versions.each { |version| cookbook_versions << RemoteCookbook.new(cookbook, version) }
+          end
+          cookbook_versions
+        end
+
+        # @param [RemoteCookbook] remote
+        #
+        # @return [Ridley::Chef::Cookbook::Metadata]
+        def metadata(remote)
+          metadata_hash = connection.cookbook.find(remote.name, remote.version).metadata
+          Ridley::Chef::Cookbook::Metadata.from_hash(metadata_hash)
         end
 
         private
