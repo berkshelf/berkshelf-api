@@ -7,7 +7,8 @@ module Berkshelf::API
         finalizer :finalize_callback
 
         def initialize(options = {})
-          @connection = Ridley::Client.new_link(options)
+          @connection = Ridley::Client.new_link(server_url: options[:url], client_key: options[:client_key],
+            client_name: options[:client_name])
           super
         end
 
