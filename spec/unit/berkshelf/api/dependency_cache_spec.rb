@@ -78,12 +78,30 @@ describe Berkshelf::API::DependencyCache do
     end
   end
 
+  describe "#add" do
+    before { subject.clear }
+
+    it "adds items to the cache" do
+      subject.add("ruby", "1.2.3", double(platforms: nil, dependencies: nil))
+      expect(subject.to_hash).to have(1).item
+    end
+  end
+
   describe "#save" do
     let(:path) { tmp_path.join('cerch.json') }
 
     it "saves the contents of the cache as json to the given path" do
       subject.save(path)
       expect(File.exist?(path)).to be_true
+    end
+  end
+
+  describe "#clear" do
+    before { subject.add("ruby", "1.2.3", double(platforms: nil, dependencies: nil)) }
+
+    it "empties items added to the cache" do
+      subject.clear
+      expect(subject).to be_empty
     end
   end
 end

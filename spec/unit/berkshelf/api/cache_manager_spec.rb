@@ -70,6 +70,19 @@ describe Berkshelf::API::CacheManager do
     pending
   end
 
+  describe "#clear" do
+    it "returns an empty Hash" do
+      result = subject.clear
+      expect(result).to be_a(Hash)
+      expect(result).to be_empty
+    end
+
+    it "empties the cache" do
+      subject.clear
+      expect(subject.cache).to be_empty
+    end
+  end
+
   describe "#diff" do
     let(:known_cookbooks) { [ :chicken_1, :tuna_3 ] }
     let(:cache) { double("cache", :cookbooks => known_cookbooks) }
