@@ -62,6 +62,13 @@ module Berkshelf::API
       @cache.add(name, version, metadata)
     end
 
+    # Clear any items added to the cache
+    #
+    # @return [Hash]
+    def clear
+      @cache.clear
+    end
+
     def load_save
       @cache = DependencyCache.from_file(self.class.cache_file)
     end

@@ -53,6 +53,13 @@ module Berkshelf::API
       }
     end
 
+    # Clear any items added to this instance
+    #
+    # @return [Hash]
+    def clear
+      @cache.clear
+    end
+
     # @param [String] name
     # @param [String] version
     #
