@@ -23,10 +23,10 @@ describe Berkshelf::API::CacheBuilder::Worker::Opscode do
   describe "#cookbooks" do
     it "returns an array of RemoteCookbooks described by the server" do
       expected_value = [
-        Berkshelf::API::RemoteCookbook.new("chicken", "1.0"),
-        Berkshelf::API::RemoteCookbook.new("chicken", "2.0"),
-        Berkshelf::API::RemoteCookbook.new("tuna", "3.0.0"),
-        Berkshelf::API::RemoteCookbook.new("tuna", "3.0.1"),
+        Berkshelf::API::RemoteCookbook.new("chicken", "1.0", described_class.worker_type),
+        Berkshelf::API::RemoteCookbook.new("chicken", "2.0", described_class.worker_type),
+        Berkshelf::API::RemoteCookbook.new("tuna", "3.0.0", described_class.worker_type),
+        Berkshelf::API::RemoteCookbook.new("tuna", "3.0.1", described_class.worker_type)
       ]
 
       connection.should_receive(:future).with(:versions, "chicken").and_return(double(value: chicken_versions))

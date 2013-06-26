@@ -58,6 +58,8 @@ describe Berkshelf::API::CacheManager do
     end
   end
 
+  subject { described_class.new }
+
   describe "#add" do
     pending
   end
@@ -84,61 +86,57 @@ describe Berkshelf::API::CacheManager do
   end
 
   describe "#diff" do
-    let(:known_cookbooks) { [ :chicken_1, :tuna_3 ] }
-    let(:cache) { double("cache", :cookbooks => known_cookbooks) }
-    subject { described_class.new }
+    let(:cookbook_one) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode") }
+    let(:cookbook_two) { Berkshelf::API::RemoteCookbook.new("elixir", "2.0.0", "opscode") }
+    let(:comparison) { Array.new }
+
+    before do
+      subject.add(cookbook_one, double(dependencies: nil, platforms: nil))
+      subject.add(cookbook_two, double(dependencies: nil, platforms: nil))
+
+      @created, @deleted = @diff = subject.diff(comparison)
+    end
+
+    it "returns two items" do
+      expect(@diff).to have(2).items
+    end
 
     context "when there are created and deleted cookbooks" do
+      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "opscode") }
+      let(:comparison) { [ cookbook_one, new_cookbook ] }
+
       it "should return created and deleted cookbooks" do
-        subject.should_receive(:cache).and_return(cache)
-
-        site_cookbooks = [ :tuna_3, :tuna_4 ]
-
-        diff = subject.diff(site_cookbooks)
-        expect(diff.size).to eql(2)
-        expect(diff.first).to eql([:tuna_4])
-        expect(diff.last).to eql([:chicken_1])
+        expect(@created).to eql([new_cookbook])
+        expect(@deleted).to eql([cookbook_two])
       end
     end
 
     context "when there are only created cookbooks" do
+      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "opscode") }
+      let(:comparison) { [ cookbook_one, cookbook_two, new_cookbook ] }
+
       it "should return only created cookbooks" do
-        subject.should_receive(:cache).and_return(cache)
-
-        site_cookbooks = [ :chicken_1, :tuna_3, :tuna_4 ]
-
-        diff = subject.diff(site_cookbooks)
-        expect(diff.size).to eql(2)
-        expect(diff.first).to eql([:tuna_4])
-        expect(diff.last).to be_empty
+        expect(@created).to eql([new_cookbook])
+        expect(@deleted).to be_empty
       end
     end
 
     context "when there are only deleted cookbooks" do
+      let(:comparison) { [ cookbook_one ] }
+
       it "should return only deleted cookbooks" do
-        subject.should_receive(:cache).and_return(cache)
-
-        site_cookbooks = [ :tuna_3 ]
-
-        diff = subject.diff(site_cookbooks)
-        expect(diff.size).to eql(2)
-        expect(diff.first).to be_empty
-        expect(diff.last).to eql([:chicken_1])
+        expect(@created).to be_empty
+        expect(@deleted).to eql([cookbook_two])
       end
     end
 
     context "when there are no differences" do
+      let(:comparison) { [ cookbook_one, cookbook_two ] }
+
       it "should return empty arrays" do
-        subject.should_receive(:cache).and_return(cache)
-
-        site_cookbooks = [ :chicken_1, :tuna_3 ]
-
-        diff = subject.diff(site_cookbooks)
-        expect(diff.size).to eql(2)
-        expect(diff.first).to be_empty
-        expect(diff.last).to be_empty
+        expect(@created).to be_empty
+        expect(@deleted).to be_empty
       end
     end
-
   end
 end
