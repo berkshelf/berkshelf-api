@@ -45,10 +45,12 @@ module Berkshelf::API
     #
     # @return [Hash]
     def add(cookbook, metadata)
+      platforms    = metadata.platforms || Hash.new
+      dependencies = metadata.dependencies || Hash.new
       @cache[cookbook.name.to_s] ||= Hash.new
       @cache[cookbook.name.to_s][cookbook.version.to_s] = {
-        platforms: metadata.platforms,
-        dependencies: metadata.dependencies,
+        platforms: platforms,
+        dependencies: dependencies,
         location_type: cookbook.location_type
       }
     end
@@ -91,7 +93,9 @@ module Berkshelf::API
     def cookbooks
       [].tap do |remote_cookbooks|
         @cache.each_pair do |name, versions|
-          versions.keys.each { |version| remote_cookbooks << RemoteCookbook.new(name, version) }
+          versions.each do |version, metadata|
+            remote_cookbooks << RemoteCookbook.new(name, version, metadata[:location_type])
+          end
         end
       end
     end

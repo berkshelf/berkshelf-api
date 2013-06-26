@@ -89,15 +89,15 @@ module Berkshelf::API
     # @param [Array<RemoteCookbook>] cookbooks
     #   An array of RemoteCookbooks representing all the cookbooks on the indexed site
     #
-    # @return [Array<(Array<RemoteCookbook>, Array<RemoteCookbook>)>]
+    # @return [Array<Array<RemoteCookbook>, Array<RemoteCookbook>>]
     #   A tuple of Arrays of RemoteCookbooks
     #   The first array contains items not in the cache
     #   The second array contains items in the cache, but not in the cookbooks parameter
     def diff(cookbooks)
-      known_cookbooks = cache.cookbooks
+      known_cookbooks   = cache.cookbooks
       created_cookbooks = cookbooks - known_cookbooks
       deleted_cookbooks = known_cookbooks - cookbooks
-      [created_cookbooks, deleted_cookbooks]
+      [ created_cookbooks, deleted_cookbooks ]
     end
 
     private
