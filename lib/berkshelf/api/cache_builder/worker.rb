@@ -76,7 +76,7 @@ module Berkshelf::API
           created_cookbooks.collect do |remote|
             [ remote, future(:metadata, remote) ]
           end.each do |remote, metadata|
-            cache_manager.add(remote.name, remote.version, metadata.value)
+            cache_manager.add(remote, metadata.value)
           end
 
           log.info "#{self} removing (#{deleted_cookbooks.length}) items..."

@@ -40,16 +40,16 @@ module Berkshelf::API
       @cache = Hash[contents]
     end
 
-    # @param [String] name
-    # @param [String] version
+    # @param [RemoteCookbook] cookbook
     # @param [Ridley::Chef::Cookbook::Metadata] metadata
     #
     # @return [Hash]
-    def add(name, version, metadata)
-      @cache[name.to_s] ||= Hash.new
-      @cache[name.to_s][version.to_s] = {
+    def add(cookbook, metadata)
+      @cache[cookbook.name.to_s] ||= Hash.new
+      @cache[cookbook.name.to_s][cookbook.version.to_s] = {
         platforms: metadata.platforms,
-        dependencies: metadata.dependencies
+        dependencies: metadata.dependencies,
+        location_type: cookbook.location_type
       }
     end
 

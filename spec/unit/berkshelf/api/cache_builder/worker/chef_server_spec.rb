@@ -28,5 +28,11 @@ describe Berkshelf::API::CacheBuilder::Worker::ChefServer do
         expect(cookbook).to be_a(Berkshelf::API::RemoteCookbook)
       end
     end
+
+    it "each RemoteCookbook is tagged with a location_type matching the worker_type of the builder" do
+      subject.cookbooks.each do |cookbook|
+        expect(cookbook.location_type).to eql(described_class.worker_type)
+      end
+    end
   end
 end

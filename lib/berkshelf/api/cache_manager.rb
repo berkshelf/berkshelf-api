@@ -53,13 +53,12 @@ module Berkshelf::API
       every(SAVE_INTERVAL) { save }
     end
 
-    # @param [String] name
-    # @param [String] version
+    # @param [RemoteCookbook] cookbook
     # @param [Ridley::Chef::Cookbook::Metadata] metadata
     #
     # @return [Hash]
-    def add(name, version, metadata)
-      @cache.add(name, version, metadata)
+    def add(cookbook, metadata)
+      @cache.add(cookbook, metadata)
     end
 
     # Clear any items added to the cache

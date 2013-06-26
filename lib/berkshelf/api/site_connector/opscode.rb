@@ -89,15 +89,30 @@ module Berkshelf::API
       # @param [String] destination
       #   The directory to download the cookbook to
       #
-      # @return [String]
+      # @return [String, nil]
       def download(name, version, destination = Dir.mktmpdir)
         log.info "downloading #{name}(#{version})"
-        if cookbook = find(name, version)
-          archive = stream(cookbook[:file])
+        if uri = download_uri(name, version)
+          archive = stream(uri)
           Archive.extract(archive.path, destination)
         end
       ensure
         archive.unlink unless archive.nil?
+      end
+
+      # Return the location where a cookbook of the given name and version can be downloaded from
+      #
+      # @param [String] cookbook
+      #   The name of the cookbook
+      # @param [String] version
+      #   The version of the cookbook
+      #
+      # @return [String, nil]
+      def download_uri(name, version)
+        unless cookbook = find(name, version)
+          return nil
+        end
+        cookbook[:file]
       end
 
       # @param [String] cookbook
