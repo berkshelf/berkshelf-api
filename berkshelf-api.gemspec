@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'ridley', '~> 1.2.3'
   spec.add_dependency 'celluloid', '~> 0.14.0'
   spec.add_dependency 'reel', '= 0.4.0.pre'
-  spec.add_dependency 'grape', '>= 0.3.2'
+  spec.add_dependency 'grape', '~> 0.5.0'
   spec.add_dependency 'hashie', '>= 2.0.4'
   spec.add_dependency 'faraday'
   spec.add_dependency 'retryable', '~> 1.3.3'
