@@ -1,6 +1,7 @@
 require 'open-uri'
 require 'retryable'
 require 'archive'
+require 'tempfile'
 
 module Berkshelf::API
   module SiteConnector

@@ -1,3 +1,5 @@
+require 'grape'
+
 module Berkshelf::API
   module Endpoint
     class Base < Grape::API

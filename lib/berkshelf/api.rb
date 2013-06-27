@@ -1,12 +1,8 @@
-require 'grape'
 require 'celluloid'
 require 'hashie'
+require 'ridley'
 require 'faraday'
 require 'json'
-require 'rubygems/package'
-require 'ridley'
-require 'tempfile'
-require 'pathname'
 
 module Berkshelf
   module API
