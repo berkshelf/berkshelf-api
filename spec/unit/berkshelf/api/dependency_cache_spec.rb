@@ -79,10 +79,11 @@ describe Berkshelf::API::DependencyCache do
   end
 
   describe "#add" do
+    let(:cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode") }
     before { subject.clear }
 
     it "adds items to the cache" do
-      subject.add("ruby", "1.2.3", double(platforms: nil, dependencies: nil))
+      subject.add(cookbook, double(platforms: nil, dependencies: nil))
       expect(subject.to_hash).to have(1).item
     end
   end
@@ -97,7 +98,8 @@ describe Berkshelf::API::DependencyCache do
   end
 
   describe "#clear" do
-    before { subject.add("ruby", "1.2.3", double(platforms: nil, dependencies: nil)) }
+    let(:cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode") }
+    before { subject.add(cookbook, double(platforms: nil, dependencies: nil)) }
 
     it "empties items added to the cache" do
       subject.clear
