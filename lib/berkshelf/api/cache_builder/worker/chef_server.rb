@@ -8,20 +8,21 @@ module Berkshelf::API
 
         def initialize(options = {})
           @connection = Ridley::Client.new_link(server_url: options[:url], client_key: options[:client_key],
-            client_name: options[:client_name])
+            client_name: options[:client_name], ssl: { verify: options[:ssl_verify] })
           super
         end
 
         # @return [Array<RemoteCookbook>]
         #  The list of cookbooks this builder can find
         def cookbooks
-          cookbook_versions = Array.new
-          connection.cookbook.all.each do |cookbook, versions|
-            versions.each do |version|
-              cookbook_versions << RemoteCookbook.new(cookbook, version, self.class.worker_type)
+          [].tap do |cookbook_versions|
+            connection.cookbook.all.each do |cookbook, versions|
+              versions.each do |version|
+                cookbook_versions << RemoteCookbook.new(cookbook, version, self.class.worker_type,
+                  @connection.server_url)
+              end
             end
           end
-          cookbook_versions
         end
 
         # @param [RemoteCookbook] remote

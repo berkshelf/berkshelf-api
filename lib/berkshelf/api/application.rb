@@ -38,7 +38,7 @@ module Berkshelf::API
       def instance
         return @instance if @instance
 
-        raise Celluloid::DeadActorError, "application not running"
+        raise NotStartedError, "application not running"
       end
 
       # The Actor registry for Berkshelf::API.
@@ -68,6 +68,13 @@ module Berkshelf::API
       def run!(options = {})
         configure_logger(options)
         @instance = ApplicationSupervisor.new(registry, options)
+      end
+
+      # @return [Boolean]
+      def running?
+        instance.alive?
+      rescue NotStartedError
+        false
       end
 
       def shutdown
