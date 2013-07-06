@@ -29,25 +29,6 @@ describe Berkshelf::API::CacheManager do
       end
     end
 
-    describe "::instance" do
-      subject { described_class.instance }
-      context "when the cache manager is started" do
-        before { described_class.start }
-
-        it "returns the instance of cache manager" do
-          expect(subject).to be_a(described_class)
-        end
-      end
-
-      context "when the cache manager is not started" do
-        before { Berkshelf::API::Application.stub(:[]).with(:cache_manager).and_return(nil) }
-
-        it "raises a NotStartedError" do
-          expect { subject }.to raise_error(Berkshelf::API::NotStartedError)
-        end
-      end
-    end
-
     describe "::start" do
       it "starts and registers a cache manager it with the application" do
         described_class.start

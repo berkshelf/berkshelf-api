@@ -4,29 +4,10 @@ module Berkshelf::API
 
     class WorkerSupervisor < Celluloid::SupervisionGroup; end
 
-    class << self
-      # @raise [Celluloid::DeadActorError] if Cache Builder has not been started
-      #
-      # @return [Celluloid::Actor(Berkshelf::API::CacheBuilder)]
-      def instance
-        unless Berkshelf::API::Application[:cache_builder] && Berkshelf::API::Application[:cache_builder].alive?
-          raise NotStartedError, "cache builder not running"
-        end
-        Berkshelf::API::Application[:cache_builder]
-      end
-
-      # Start the cache builder and add it to the application's registry.
-      #
-      # @note you probably do not want to manually start the cache manager unless you
-      #   are testing the application. Start the entire application with {Berkshelf::API::Application.run}
-      def start
-        instance.async(:build)
-      end
-    end
-
-    include Celluloid
+    include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
 
+    server_name :cache_builder
     finalizer :finalize_callback
 
     def initialize

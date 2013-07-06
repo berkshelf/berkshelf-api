@@ -7,41 +7,14 @@ module Berkshelf::API
       def cache_file
         @cache_file ||= File.expand_path("~/.berkshelf/api-server/cerch")
       end
-
-      # @raise [Celluloid::DeadActorError] if Bootstrap Manager has not been started
-      #
-      # @return [Celluloid::Actor(Berkshelf::API::CacheManager)]
-      def instance
-        unless Berkshelf::API::Application[:cache_manager] && Berkshelf::API::Application[:cache_manager].alive?
-          raise NotStartedError, "cache manager not running"
-        end
-        Berkshelf::API::Application[:cache_manager]
-      end
-
-      # Start the cache manager and add it to the application's registry.
-      #
-      # @note you probably do not want to manually start the cache manager unless you
-      #   are testing the application. Start the entire application with {Berkshelf::API::Application.run}
-      def start
-        Berkshelf::API::Application[:cache_manager] = new
-      end
-
-      # Stop the cache manager if it's running.
-      #
-      # @note you probably don't want to manually stop the cache manager unless you are testing
-      #   the application. Stop the entire application with {Berkshelf::API::Application.shutdown}
-      def stop
-        instance.terminate
-      rescue NotStartedError
-        nil
-      end
     end
 
-    include Celluloid
+    include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
 
     SAVE_INTERVAL = 30.0
 
+    server_name :cache_manager
     finalizer :finalize_callback
 
     attr_reader :cache

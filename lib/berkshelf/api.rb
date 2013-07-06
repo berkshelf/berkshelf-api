@@ -9,6 +9,7 @@ module Berkshelf
     require_relative 'api/errors'
     require_relative 'api/logging'
     require_relative 'api/mixin'
+    require_relative 'api/generic_server'
 
     require_relative 'api/application'
     require_relative 'api/cache_builder'
@@ -18,7 +19,6 @@ module Berkshelf
     require_relative 'api/endpoint'
     require_relative 'api/rack_app'
     require_relative 'api/remote_cookbook'
-    require_relative 'api/rest_gateway'
     require_relative 'api/site_connector'
     require_relative 'api/srv_ctl'
   end
