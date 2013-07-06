@@ -16,7 +16,7 @@ describe Berkshelf::API::Application do
         it "does not start the REST Gateway" do
           options[:disable_http] = true
           run
-          expect(rest_gateway).to be_nil
+          expect { rest_gateway }.to raise_error(Berkshelf::API::NotStartedError)
         end
       end
     end

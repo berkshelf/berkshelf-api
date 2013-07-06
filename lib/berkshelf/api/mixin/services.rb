@@ -13,16 +13,28 @@ module Berkshelf::API
       end
 
       module ClassMethods
-        # @raise [Celluloid::DeadActorError] if the bootstrap manager has not been started
+        # @raise [Berkshelf::API::NotStartedError] if the cache manager has not been started
         #
-        # @return [Celluloid::Actor(Berkshelf::API::CacheManager)]
+        # @return [Berkshelf::API::CacheManager]
         def cache_manager
-          Berkshelf::API::CacheManager.instance
+          app_actor(:cache_manager)
         end
 
+        # @raise [Berkshelf::API::NotStartedError] if the rest gateway has not been started
+        #
+        # @return [Berkshelf::API::RESTGateway]
         def rest_gateway
-          Berkshelf::API::Application[:rest_gateway]
+          app_actor(:rest_gateway)
         end
+
+        private
+
+          def app_actor(id)
+            unless Application[id] && Application[id].alive?
+              raise NotStartedError, "cache manager not running"
+            end
+            Application[id]
+          end
       end
     end
   end
