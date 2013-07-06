@@ -24,7 +24,7 @@ group :development do
       gem 'terminal-notifier-guard', '~> 1.5.3', require: false
     end rescue Errno::ENOENT
   elsif RbConfig::CONFIG['target_os'] =~ /linux/i
-    gem 'libnotify',  '~> 0.7.1', require: false
+    gem 'libnotify', require: false
     gem 'rb-inotify', require: false
   elsif RbConfig::CONFIG['target_os'] =~ /mswin|mingw/i
     gem 'rb-notifu', '>= 0.0.4', require: false
