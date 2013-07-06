@@ -19,6 +19,10 @@ module Berkshelf::API
         def cache_manager
           Berkshelf::API::CacheManager.instance
         end
+
+        def rest_gateway
+          Berkshelf::API::Application[:rest_gateway]
+        end
       end
     end
   end
