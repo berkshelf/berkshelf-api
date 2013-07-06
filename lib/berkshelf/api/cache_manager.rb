@@ -21,9 +21,9 @@ module Berkshelf::API
       # @note you probably don't want to manually stop the cache manager unless you are testing
       #   the application. Stop the entire application with {Berkshelf::API::Application.shutdown}
       def stop
-        instance.terminate
-      rescue NotStartedError
-        nil
+        unless actor = Berkshelf::API::Application[:cache_manager]
+          actor.terminate
+        end
       end
     end
 

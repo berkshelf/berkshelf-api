@@ -15,6 +15,13 @@ module Berkshelf::API
       module ClassMethods
         # @raise [Berkshelf::API::NotStartedError] if the cache manager has not been started
         #
+        # @return [Berkshelf::API::CacheBuilder]
+        def cache_builder
+          app_actor(:cache_builder)
+        end
+
+        # @raise [Berkshelf::API::NotStartedError] if the cache manager has not been started
+        #
         # @return [Berkshelf::API::CacheManager]
         def cache_manager
           app_actor(:cache_manager)
@@ -31,7 +38,7 @@ module Berkshelf::API
 
           def app_actor(id)
             unless Application[id] && Application[id].alive?
-              raise NotStartedError, "cache manager not running"
+              raise NotStartedError, "#{id} not running"
             end
             Application[id]
           end
