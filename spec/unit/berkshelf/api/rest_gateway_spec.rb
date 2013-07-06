@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'berkshelf/api/rest_gateway'
 
 describe Berkshelf::API::RESTGateway do
   describe "ClassMethods" do

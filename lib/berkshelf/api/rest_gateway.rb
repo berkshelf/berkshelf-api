@@ -3,7 +3,7 @@ require 'reel'
 module Berkshelf::API
   class RESTGateway < Reel::Server
     extend Forwardable
-    include Celluloid
+    include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
 
     DEFAULT_OPTIONS = {
@@ -22,6 +22,7 @@ module Berkshelf::API
 
     def_delegator :handler, :rack_app
 
+    server_name :rest_gateway
     finalizer :finalize_callback
 
     # @option options [String] :host ('0.0.0.0')
