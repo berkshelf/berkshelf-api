@@ -13,6 +13,14 @@ A server which indexes cookbooks from various sources and hosts it over a REST A
 
 TODO: Write usage instructions here
 
+## Supported Platforms
+
+Berkshelf-API is tested on Ruby 1.9.3, 2.0.0, and JRuby 1.7+.
+
+Ruby 1.9 mode is required on all interpreters.
+
+Ruby 1.9.1 and 1.9.2 are not officially supported. If you encounter problems, please upgrade to Ruby 2.0 or 1.9.3.
+
 ## Contributing
 
 1. Fork it
