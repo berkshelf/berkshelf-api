@@ -9,6 +9,7 @@ module Berkshelf
     require_relative 'api/errors'
     require_relative 'api/logging'
     require_relative 'api/mixin'
+    require_relative 'api/generic_server'
 
     require_relative 'api/application'
     require_relative 'api/cache_builder'
