@@ -63,6 +63,20 @@ module Berkshelf::API
       @cache.clear
     end
 
+    # Check if the cache knows about the given cookbook version
+    #
+    # @param [#to_s] name
+    # @param [#to_s] version
+    #
+    # @return [Boolean]
+    def has_cookbook?(name, version)
+      unless cookbook = @cache[name.to_s]
+        return false
+      end
+
+      cookbook.has_key?(version.to_s)
+    end
+
     # @param [String] name
     # @param [String] version
     #
