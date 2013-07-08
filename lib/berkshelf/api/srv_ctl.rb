@@ -50,7 +50,8 @@ module Berkshelf
       # @param [Hash] options
       #   @see {Berkshelf::API::Application.run} for the list of valid options
       def initialize(options = {})
-        @options = options
+        @options               = options
+        @options[:eager_build] = true
       end
 
       def start

@@ -12,8 +12,6 @@ module Berkshelf::API
     #   run the application without the rest gateway
     def initialize(registry, options = {})
       super(registry)
-      options = { disable_http: false }.merge(options)
-
       supervise_as(:cache_manager, Berkshelf::API::CacheManager)
       supervise_as(:cache_builder, Berkshelf::API::CacheBuilder)
 
@@ -28,6 +26,7 @@ module Berkshelf::API
     class << self
       extend Forwardable
       include Berkshelf::API::Logging
+      include Berkshelf::API::Mixin::Services
 
       def_delegators :registry, :[], :[]=
 
@@ -87,9 +86,16 @@ module Berkshelf::API
       #
       # @option options [Boolean] :disable_http (false)
       #   run the application without the rest gateway
+      # @option options [Boolean] :eager_build (false)
+      #   automatically begin and loop all cache builders
+      #
+      # @return [Berkshelf::API::Application]
       def run!(options = {})
+        options = { disable_http: false, eager_build: false }.merge(options)
         configure_logger(options)
         @instance = ApplicationSupervisor.new(registry, options)
+        cache_builder.async(:build_loop) if options[:eager_build]
+        @instance
       end
 
       # @return [Boolean]

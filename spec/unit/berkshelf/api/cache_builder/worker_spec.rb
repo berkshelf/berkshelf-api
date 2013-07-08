@@ -39,7 +39,7 @@ describe Berkshelf::API::CacheBuilder::Worker::Base do
   end
 
   let(:cache_manager) { double(:diff => :chicken) }
-  subject { described_class.new(eager_build: false) }
+  subject { described_class.new }
 
   describe "#diff" do
     it "should delegate to the cache_manager to calculate the diff" do

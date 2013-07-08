@@ -11,20 +11,13 @@ module Berkshelf::API
           end
         end
 
-        INTERVAL = 5
-
         include Celluloid
         include Berkshelf::API::Logging
         include Berkshelf::API::Mixin::Services
 
         attr_reader :options
 
-        # @option options [Boolean] :eager_build (true)
-        #   immediately begin building the cache
-        def initialize(options = {})
-          @options = { eager_build: true }.merge(options)
-          async(:build) if @options[:eager_build]
-        end
+        def initialize(options = {}); end
 
         # @abstract
         #
@@ -44,24 +37,17 @@ module Berkshelf::API
         end
 
         def build
-          return if @building
-
           log.info "#{self} building..."
-
-          loop do
-            @building = true
-
-            log.info "#{self} determining if the cache is stale..."
-            if stale?
-              log.info "#{self} cache is stale."
-              update_cache
-            else
-              log.info "#{self} cache is up to date."
-            end
-
-            sleep INTERVAL
-            clear_diff
+          log.info "#{self} determining if the cache is stale..."
+          if stale?
+            log.info "#{self} cache is stale."
+            update_cache
+          else
+            log.info "#{self} cache is up to date."
           end
+
+          log.info "clearing diff"
+          clear_diff
         end
 
         # @return [Array<Array<RemoteCookbook>, Array<RemoteCookbook>>]
