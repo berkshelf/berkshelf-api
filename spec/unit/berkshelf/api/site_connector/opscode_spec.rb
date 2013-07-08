@@ -1,17 +1,17 @@
 require 'spec_helper'
 
 describe Berkshelf::API::SiteConnector::Opscode do
-  let(:connection) { mock("connection") }
-  let(:total_response) { stub("total", status: 200, body: { "total" => 10 } ) }
+  let(:connection) { double("connection") }
+  let(:total_response) { double("total", status: 200, body: { "total" => 10 } ) }
   let(:cookbooks_response) do
-    stub("cookbooks", status: 200, body: {
+    double("cookbooks", status: 200, body: {
       "items"=> [
         {"cookbook_name" => "chicken"},
         {"cookbook_name" => "tuna"}
       ]})
   end
   let(:chicken_versions_response) do
-    stub("chicken_versions", status: 200, body: {
+    double("chicken_versions", status: 200, body: {
       "versions" => [
         "http://www.example.com/api/v1/cookbooks/chicken/versions/1_0",
         "http://www.example.com/api/v1/cookbooks/chicken/versions/2_0"
