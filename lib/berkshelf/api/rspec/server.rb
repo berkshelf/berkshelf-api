@@ -22,7 +22,7 @@ module Berkshelf::API::RSpec
       end
 
       def stop
-        instance.shutdown
+        Berkshelf::API::Application.shutdown
       end
     end
   end
