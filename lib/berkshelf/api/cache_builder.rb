@@ -4,6 +4,8 @@ module Berkshelf::API
 
     class WorkerSupervisor < Celluloid::SupervisionGroup; end
 
+    BUILD_INTERVAL = 5.0
+
     include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
 
@@ -14,14 +16,38 @@ module Berkshelf::API
       log.info "Cache Builder starting..."
       @worker_registry   = Celluloid::Registry.new
       @worker_supervisor = WorkerSupervisor.new(@worker_registry)
+      @building          = false
 
       Application.config.endpoints.each do |endpoint|
         @worker_supervisor.supervise(CacheBuilder::Worker[endpoint.type], endpoint.options)
       end
     end
 
+    # Issue a single build command to all workers
+    #
+    # @return [Array]
     def build
-      @worker_supervisor.actors.map { |actor| actor.async(:build) }
+      workers.collect { |actor| actor.future(:build) }.map(&:value)
+    end
+
+    # Issue a build command to all workers at the scheduled interval
+    #
+    # @param [Fixnum, Float] interval
+    def build_loop(interval = BUILD_INTERVAL)
+      return if @building
+
+      loop do
+        @building = true
+        build
+        sleep BUILD_INTERVAL
+      end
+    end
+
+    # Return the list of running workers
+    #
+    # @return [Array<CacheBuilder::Worker::Base>]
+    def workers
+      @worker_supervisor.actors
     end
 
     private

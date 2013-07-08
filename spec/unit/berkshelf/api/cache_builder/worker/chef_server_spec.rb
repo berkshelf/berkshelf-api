@@ -8,7 +8,7 @@ describe Berkshelf::API::CacheBuilder::Worker::ChefServer do
 
   subject do
     described_class.new(url: "http://localhost:8889", client_name: "reset",
-      client_key: fixtures_path.join("reset.pem"), eager_build: false)
+      client_key: fixtures_path.join("reset.pem"))
   end
 
   describe "#cookbooks" do
@@ -33,6 +33,27 @@ describe Berkshelf::API::CacheBuilder::Worker::ChefServer do
       subject.cookbooks.each do |cookbook|
         expect(cookbook.location_type).to eql(described_class.worker_type)
       end
+    end
+  end
+
+  describe "#build" do
+    before do
+      Berkshelf::API::CacheManager.start
+      chef_cookbook("ruby", "1.0.0")
+      chef_cookbook("ruby", "2.0.0")
+      chef_cookbook("elixir", "3.0.0")
+      chef_cookbook("elixir", "3.0.1")
+    end
+
+    let(:cache) { Berkshelf::API::CacheManager.instance.cache }
+
+    it "adds each item to the cache" do
+      subject.build
+      expect(cache).to have_cookbook("ruby", "1.0.0")
+      expect(cache).to have_cookbook("ruby", "2.0.0")
+      expect(cache).to have_cookbook("elixir", "3.0.0")
+      expect(cache).to have_cookbook("elixir", "3.0.1")
+      expect(cache.cookbooks).to have(4).items
     end
   end
 end
