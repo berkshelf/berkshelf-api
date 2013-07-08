@@ -16,6 +16,7 @@ module Berkshelf::API
 
     server_name :cache_manager
     finalizer :finalize_callback
+    exclusive :add, :clear, :remove, :save
 
     attr_reader :cache
 
