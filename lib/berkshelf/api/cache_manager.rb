@@ -41,12 +41,24 @@ module Berkshelf::API
       @cache.clear
     end
 
+    # Check if the cache knows about the given cookbook version
+    #
+    # @param [#to_s] name
+    # @param [#to_s] version
+    #
+    # @return [Boolean]
+    def has_cookbook?(name, version)
+      @cache.has_cookbook?(name, version)
+    end
+
     def load_save
       @cache = DependencyCache.from_file(self.class.cache_file)
     end
 
-    # @param [String] name
-    # @param [String] version
+    # Remove the cached item matching the given name and version
+    #
+    # @param [#to_s] name
+    # @param [#to_s] version
     #
     # @return [DependencyCache]
     def remove(name, version)
