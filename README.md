@@ -31,7 +31,7 @@ Ruby 1.9.1 and 1.9.2 are not officially supported. If you encounter problems, pl
 
 # Authors and Contributors
 
-* Jamie Winsor (<reset@riotgames.com>)
+* Jamie Winsor (<jamie@vialstudios.com>)
 * Andrew Garson (<agarson@riotgames.com>)
 
 Thank you to all of our [Contributors](https://github.com/RiotGames/berkshelf-api/graphs/contributors), testers, and users.

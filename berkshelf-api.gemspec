@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "berkshelf-api"
   spec.version       = Berkshelf::API::VERSION
   spec.authors       = ["Jamie Winsor", "Andrew Garson"]
-  spec.email         = ["reset@riotgames.com", "agarson@riotgames"]
+  spec.email         = ["jamie@vialstudios.com", "agarson@riotgames"]
   spec.description   = %q{Berkshelf dependency API server}
   spec.summary       = %q{A server which indexes cookbooks from various sources and hosts it over a REST API}
   spec.homepage      = "https://github.com/RiotGames/berkshelf-api"
