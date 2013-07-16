@@ -28,6 +28,10 @@ module Berkshelf
               options[:log_location] = '/dev/null'
             end
 
+            opts.on("-c", "--config FILE", String, "path to a configuration file to use") do |v|
+              options[:config_file] = v
+            end
+
             opts.on_tail("-h", "--help", "show this message") do
               puts opts
               exit
