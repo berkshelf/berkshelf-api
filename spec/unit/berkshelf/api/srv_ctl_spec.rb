@@ -51,6 +51,14 @@ describe Berkshelf::API::SrvCtl do
           expect(subject[:log_level]).to eql("DEBUG")
         end
       end
+
+      context "given -c" do
+        let(:args) { ["-c", "/path/to/config"] }
+
+        it "sets :config_file to the given value" do
+          expect(subject[:config_file]).to eql("/path/to/config")
+        end
+      end
     end
   end
 end

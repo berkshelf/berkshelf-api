@@ -30,12 +30,44 @@ module Berkshelf::API
 
       def_delegators :registry, :[], :[]=
 
+      # @return [Berkshelf::API::Config]
       def config
         @config ||= begin
           Berkshelf::API::Config.from_file(Berkshelf::API::Config.default_path)
         rescue
           Berkshelf::API::Config.new
         end
+      end
+
+      # @param [Berkshelf::API::Config] config
+      def set_config(config)
+        @config = config
+      end
+
+      # Configure the application
+      #
+      # @option options [String] :config_file
+      #   filepath to a configuration file to use
+      # @option options [String, Fixnum] :log_location (STDOUT)
+      # @option options [String, nil] :log_level ("INFO")
+      #   - "DEBUG
+      #   - "INFO"
+      #   - "WARN"
+      #   - "ERROR"
+      #   - "FATAL"
+      #
+      # @raise [Berkshelf::API::ConfigNotFoundError]
+      #
+      # @return [Berkshelf::API::Config]
+      def configure(options = {})
+        unless options[:config_file].nil?
+          Berkshelf::API::Config.from_file(options[:config_file])
+        end
+
+        configure_logger(options)
+        config
+      rescue Buff::Errors::ConfigNotFound => ex
+        raise ConfigNotFoundError, ex
       end
 
       # @option options [String, Fixnum] :log_location (STDOUT)
@@ -102,7 +134,7 @@ module Berkshelf::API
       # @return [Berkshelf::API::Application]
       def run!(options = {})
         options = { disable_http: false, eager_build: false }.merge(options)
-        configure_logger(options)
+        configure(options)
         @instance = ApplicationSupervisor.new(registry, options)
         cache_builder.async(:build_loop) if options[:eager_build]
         @instance
@@ -115,6 +147,10 @@ module Berkshelf::API
         false
       end
 
+      # Shutdown the running instance
+      #
+      # @raise [Berkshelf::API::NotStartedError]
+      #   if there is no running instance
       def shutdown
         @shutdown = true
         instance.terminate

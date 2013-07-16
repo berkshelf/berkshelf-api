@@ -6,6 +6,33 @@ describe Berkshelf::API::Application do
 
     its(:registry) { should be_a(Celluloid::Registry) }
 
+    describe "::configure" do
+      let(:options) { Hash.new }
+      subject(:configure) { described_class.configure(options) }
+      before { @original = described_class.config }
+      after  { described_class.set_config(@original) }
+
+      context "given a value for :config_file" do
+        let(:filepath) { tmp_path.join('rspec-config.json') }
+        before { options[:config_file] = filepath }
+
+        it "sets the configuration from the contents of the file" do
+          generated = Berkshelf::API::Config.new(filepath)
+          generated.endpoints = [ { what: "this" } ]
+          generated.save
+          configure
+
+          expect(described_class.config.endpoints).to have(1).item
+        end
+
+        context "if the file cannot be found or loaded" do
+          it "raises a ConfigNotFoundError" do
+            expect { configure }.to raise_error(Berkshelf::API::ConfigNotFoundError)
+          end
+        end
+      end
+    end
+
     describe "::run!" do
       include Berkshelf::API::Mixin::Services
 
