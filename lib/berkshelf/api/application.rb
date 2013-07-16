@@ -60,8 +60,8 @@ module Berkshelf::API
       #
       # @return [Berkshelf::API::Config]
       def configure(options = {})
-        if options[:config_file]
-          set_config Berkshelf::API::Config.from_file(options[:config_file])
+        unless options[:config_file].nil?
+          Berkshelf::API::Config.from_file(options[:config_file])
         end
 
         configure_logger(options)
