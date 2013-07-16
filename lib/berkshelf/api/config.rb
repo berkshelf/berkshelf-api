@@ -9,6 +9,10 @@ module Berkshelf::API
       end
     end
 
+    attribute 'home_path',
+      type: String,
+      default: File.expand_path("~/.berkshelf/api-server")
+
     attribute 'endpoints',
       type: Array,
       default: [
