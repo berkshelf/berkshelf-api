@@ -26,7 +26,7 @@ module Berkshelf::API
     finalizer :finalize_callback
 
     # @option options [String] :host ('0.0.0.0')
-    # @option options [Integer] :port (26100)
+    # @option options [Integer] :port (26200)
     # @option options [Boolean] :quiet (false)
     # @option options [Integer] :workers (10)
     def initialize(options = {})
