@@ -49,6 +49,16 @@ module Berkshelf::API
         Logging.init(level: options[:log_level], location: options[:log_location])
       end
 
+      # @return [String]
+      def home_path
+        ENV['BERKSHELF_API_PATH'] || config.home_path
+      end
+
+      # Retrieve the running instance of the Application
+      #
+      # @raise [Berkshelf::API::NotStartedError]
+      #
+      # @return [Berkshelf::API::Application]
       def instance
         return @instance if @instance
 

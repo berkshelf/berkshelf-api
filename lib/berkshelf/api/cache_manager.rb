@@ -1,11 +1,9 @@
 module Berkshelf::API
   class CacheManager
     class << self
-      attr_writer :cache_file
-
       # @return [String]
       def cache_file
-        @cache_file ||= File.expand_path("~/.berkshelf/api-server/cerch")
+        File.join(Application.home_path, "cerch")
       end
     end
 
