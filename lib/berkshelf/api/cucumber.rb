@@ -2,7 +2,7 @@ require_relative 'rspec'
 
 World(Berkshelf::API::RSpec)
 
-Given(/^the Berkshelf API server cache is up to date$/) do
+Given(/^the Berkshelf API server's cache is up to date$/) do
   cache_builder.build
 end
 
