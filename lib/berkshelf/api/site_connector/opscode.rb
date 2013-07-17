@@ -39,11 +39,11 @@ module Berkshelf::API
       # @param [Faraday::Connection] connection
       #   Optional parameter for setting the connection object
       #   This should only be set manually for testing
-      def initialize(uri = V1_API, options = {})
-        options  = { retries: 5, retry_interval: 0.5 }.merge(options)
-        @api_uri = uri
+      def initialize(options = {})
+        options  = { url: V1_API, retries: 5, retry_interval: 0.5 }.merge(options)
+        @api_uri = options[:url]
 
-        @connection = Faraday.new(uri) do |c|
+        @connection = Faraday.new(@api_uri) do |c|
           c.response :parse_json
           c.use Faraday::Adapter::NetHttp
         end
