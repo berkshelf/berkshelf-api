@@ -7,7 +7,7 @@ module Berkshelf::API
         finalizer :finalize_callback
 
         def initialize(options = {})
-          @connection = Berkshelf::API::SiteConnector::Opscode.pool_link(size: 25)
+          @connection = Berkshelf::API::SiteConnector::Opscode.pool_link(size: 25, args: [ options ])
           super
         end
 
