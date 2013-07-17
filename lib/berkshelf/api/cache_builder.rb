@@ -27,7 +27,13 @@ module Berkshelf::API
     #
     # @return [Array]
     def build
-      workers.collect { |actor| actor.future(:build) }.map(&:value)
+      workers.collect { |actor| actor.future(:build) }.map do |f|
+        begin
+          f.value
+        rescue => ex
+          log.error ex
+        end
+      end
     end
 
     # Issue a build command to all workers at the scheduled interval
