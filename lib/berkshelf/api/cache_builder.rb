@@ -19,7 +19,8 @@ module Berkshelf::API
       @building          = false
 
       Application.config.endpoints.each do |endpoint|
-        @worker_supervisor.supervise(CacheBuilder::Worker[endpoint.type], endpoint.options)
+        endpoint_options = endpoint.options.to_hash.deep_symbolize_keys
+        @worker_supervisor.supervise(CacheBuilder::Worker[endpoint.type], endpoint_options)
       end
     end
 
@@ -27,7 +28,11 @@ module Berkshelf::API
     #
     # @return [Array]
     def build
-      workers.collect { |actor| actor.future(:build) }.map(&:value)
+      workers.collect { |actor| actor.future(:build) }.map do |f|
+        begin
+          f.value
+        rescue; end
+      end
     end
 
     # Issue a build command to all workers at the scheduled interval
