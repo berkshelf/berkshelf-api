@@ -19,7 +19,8 @@ module Berkshelf::API
       @building          = false
 
       Application.config.endpoints.each do |endpoint|
-        @worker_supervisor.supervise(CacheBuilder::Worker[endpoint.type], endpoint.options)
+        endpoint_options = endpoint.options.to_hash.deep_symbolize_keys
+        @worker_supervisor.supervise(CacheBuilder::Worker[endpoint.type], endpoint_options)
       end
     end
 
@@ -30,9 +31,7 @@ module Berkshelf::API
       workers.collect { |actor| actor.future(:build) }.map do |f|
         begin
           f.value
-        rescue => ex
-          log.error ex
-        end
+        rescue; end
       end
     end
 
