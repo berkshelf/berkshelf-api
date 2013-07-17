@@ -21,6 +21,38 @@ Ruby 1.9 mode is required on all interpreters.
 
 Ruby 1.9.1 and 1.9.2 are not officially supported. If you encounter problems, please upgrade to Ruby 2.0 or 1.9.3.
 
+## Configuring Endpoints
+
+Which endpoints to index can be configured by editing the JSON configuration file (by default at: `~/.berkshelf/api-server/config.json`).
+
+### Opscode Community Site
+
+  {
+    "endpoints": [
+      {
+        type: "opscode",
+        options: {
+          url: 'http://cookbooks.opscode.com/api/v1'
+        }
+      }
+    ]
+  }
+
+### Chef Server
+
+  {
+    "endpoints": [
+      {
+        "type": "chef_server",
+        "options": {
+          "url": "https://api.opscode.com/organizations/vialstudios",
+          "client_name": "berkshelf",
+          "client_key": "/etc/berkshelf/api-server/client.pem"
+        }
+      }
+    ]
+  }
+
 ## Contributing
 
 1. Fork it
