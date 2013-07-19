@@ -2,6 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/berkshelf-api.png)](http://badge.fury.io/rb/berkshelf-api)
 [![Build Status](https://secure.travis-ci.org/RiotGames/berkshelf-api.png?branch=master)](http://travis-ci.org/RiotGames/berkshelf-api)
 [![Dependency Status](https://gemnasium.com/RiotGames/berkshelf-api.png?travis)](https://gemnasium.com/RiotGames/berkshelf-api)
+[![Code Climate](https://codeclimate.com/github/RiotGames/berkshelf-api.png)](https://codeclimate.com/github/RiotGames/berkshelf-api)
 
 A server which indexes cookbooks from various sources and hosts it over a REST API
 
