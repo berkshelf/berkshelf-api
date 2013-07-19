@@ -32,9 +32,9 @@ You may configure the endpoints to index by editing the JSON configuration file 
 {
   "endpoints": [
     {
-      type: "opscode",
-      options: {
-        url: 'http://cookbooks.opscode.com/api/v1'
+      "type": "opscode",
+      "options": {
+        "url": "http://cookbooks.opscode.com/api/v1"
       }
     }
   ]
