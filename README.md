@@ -24,35 +24,39 @@ Ruby 1.9.1 and 1.9.2 are not officially supported. If you encounter problems, pl
 
 ## Configuring Endpoints
 
-Which endpoints to index can be configured by editing the JSON configuration file (by default at: `~/.berkshelf/api-server/config.json`).
+You may configure the endpoints to index by editing the JSON configuration file (default: `~/.berkshelf/api-server/config.json`).
 
 ### Opscode Community Site
 
-  {
-    "endpoints": [
-      {
-        type: "opscode",
-        options: {
-          url: 'http://cookbooks.opscode.com/api/v1'
-        }
+````json
+{
+  "endpoints": [
+    {
+      type: "opscode",
+      options: {
+        url: 'http://cookbooks.opscode.com/api/v1'
       }
-    ]
-  }
+    }
+  ]
+}
+```
 
 ### Chef Server
 
-  {
-    "endpoints": [
-      {
-        "type": "chef_server",
-        "options": {
-          "url": "https://api.opscode.com/organizations/vialstudios",
-          "client_name": "berkshelf",
-          "client_key": "/etc/berkshelf/api-server/client.pem"
-        }
+```json
+{
+  "endpoints": [
+    {
+      "type": "chef_server",
+      "options": {
+        "url": "https://api.opscode.com/organizations/vialstudios",
+        "client_name": "berkshelf",
+        "client_key": "/etc/berkshelf/api-server/client.pem"
       }
-    ]
-  }
+    }
+  ]
+}
+```
 
 ## Contributing
 
