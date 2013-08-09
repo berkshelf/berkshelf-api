@@ -116,7 +116,10 @@ module Berkshelf::API
         loop do
           supervisor = run!(options)
 
-          sleep 0.1 while supervisor.alive?
+          while supervisor.alive?
+            sleep 0.1
+            instance.terminate if @shutdown
+          end
 
           break if @shutdown
 
@@ -153,7 +156,6 @@ module Berkshelf::API
       #   if there is no running instance
       def shutdown
         @shutdown = true
-        instance.terminate
       end
     end
   end
