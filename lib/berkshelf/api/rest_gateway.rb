@@ -56,6 +56,7 @@ module Berkshelf::API
       attr_reader :handler
 
       def finalize_callback
+        shutdown
         pool.terminate if pool && pool.alive?
       end
   end
