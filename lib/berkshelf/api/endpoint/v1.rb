@@ -12,7 +12,12 @@ module Berkshelf::API
 
       desc "list all known cookbooks"
       get 'universe' do
-        cache_manager.cache
+        if cache_manager.warmed?
+          cache_manager.cache
+        else
+          header "Retry-After", 600
+          status 503
+        end
       end
     end
   end

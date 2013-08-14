@@ -8,6 +8,7 @@ module Berkshelf::API
 
     include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
+    include Berkshelf::API::Mixin::Services
 
     server_name :cache_builder
     finalizer :finalize_callback
@@ -33,6 +34,7 @@ module Berkshelf::API
           f.value
         rescue; end
       end
+      cache_manager.set_warmed
     end
 
     # Issue a build command to all workers at the scheduled interval
