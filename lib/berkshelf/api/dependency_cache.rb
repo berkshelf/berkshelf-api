@@ -38,11 +38,11 @@ module Berkshelf::API
     extend Forwardable
     def_delegators :@cache, :[], :[]=
 
-      # @param [Hash] contents
-      def initialize(contents = {})
-        @warmed = false
-        @cache = Hash[contents]
-      end
+    # @param [Hash] contents
+    def initialize(contents = {})
+      @warmed = false
+      @cache = Hash[contents]
+    end
 
     # @param [RemoteCookbook] cookbook
     # @param [Ridley::Chef::Cookbook::Metadata] metadata
