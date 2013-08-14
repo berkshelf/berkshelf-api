@@ -46,7 +46,7 @@ module Berkshelf::API
       loop do
         @building = true
         build
-        sleep BUILD_INTERVAL
+        sleep interval
       end
     end
 
