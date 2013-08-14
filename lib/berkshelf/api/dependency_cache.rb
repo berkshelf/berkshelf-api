@@ -12,6 +12,9 @@ module Berkshelf::API
   #     }
   #   }
   class DependencyCache
+
+    include Berkshelf::API::Logging
+
     class << self
       # Read an archived cache and re-instantiate it
       #
@@ -35,10 +38,11 @@ module Berkshelf::API
     extend Forwardable
     def_delegators :@cache, :[], :[]=
 
-    # @param [Hash] contents
-    def initialize(contents = {})
-      @cache = Hash[contents]
-    end
+      # @param [Hash] contents
+      def initialize(contents = {})
+        @warmed = false
+        @cache = Hash[contents]
+      end
 
     # @param [RemoteCookbook] cookbook
     # @param [Ridley::Chef::Cookbook::Metadata] metadata
@@ -118,6 +122,14 @@ module Berkshelf::API
     def save(path)
       FileUtils.mkdir_p(File.dirname(path))
       File.open(path, 'w+') { |f| f.write(self.to_json) }
+    end
+
+    def warmed?
+      @warmed
+    end
+
+    def set_warmed
+      @warmed = true
     end
   end
 end

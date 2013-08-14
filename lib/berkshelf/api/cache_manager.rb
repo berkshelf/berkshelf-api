@@ -9,6 +9,9 @@ module Berkshelf::API
 
     include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
+    
+    extend Forwardable
+    def_delegators :@cache, :warmed?, :set_warmed
 
     SAVE_INTERVAL = 30.0
 
@@ -73,7 +76,7 @@ module Berkshelf::API
     # @param [Array<RemoteCookbook>] cookbooks
     #   An array of RemoteCookbooks representing all the cookbooks on the indexed site
     #
-    # @return [Array<Array<RemoteCookbook>, Array<RemoteCookbook>>]
+    # @return [Array(Array<RemoteCookbook>, Array<RemoteCookbook>)]
     #   A tuple of Arrays of RemoteCookbooks
     #   The first array contains items not in the cache
     #   The second array contains items in the cache, but not in the cookbooks parameter
