@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheBuilder do
+
+  before { Berkshelf::API::CacheManager.start }
   let(:instance) { described_class.new }
 
   describe "#build" do
