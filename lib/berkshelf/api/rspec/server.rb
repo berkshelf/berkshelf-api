@@ -18,7 +18,10 @@ module Berkshelf::API::RSpec
       def start(options = {})
         options = options.reverse_merge(port: 26210, log_location: "/dev/null", endpoints: [])
         Berkshelf::API::Application.config.endpoints = options[:endpoints]
-        Berkshelf::API::Application.run!(options) unless running?
+        unless running?
+          Berkshelf::API::Application.run!(options)
+          cache_builder.build
+        end
       end
 
       def stop
