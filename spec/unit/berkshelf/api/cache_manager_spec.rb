@@ -72,10 +72,10 @@ describe Berkshelf::API::CacheManager do
     let(:comparison) { Array.new }
 
     before do
-      subject.add(cookbook_one, double(dependencies: nil, platforms: nil))
-      subject.add(cookbook_two, double(dependencies: nil, platforms: nil))
+      subject.send(:add, cookbook_one, double(dependencies: nil, platforms: nil))
+      subject.send(:add, cookbook_two, double(dependencies: nil, platforms: nil))
 
-      @created, @deleted = @diff = subject.diff(comparison)
+      @created, @deleted = @diff = subject.send(:diff, comparison)
     end
 
     it "returns two items" do
