@@ -9,7 +9,7 @@ module Berkshelf::API
 
     include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
-    
+
     extend Forwardable
     def_delegators :@cache, :warmed?, :set_warmed
 
