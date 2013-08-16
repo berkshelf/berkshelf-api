@@ -1,12 +1,11 @@
 module Berkshelf::API
-  class RemoteCookbook < Struct.new(:name, :version, :location_type, :location_path); end
+  class RemoteCookbook < Struct.new(:name, :version, :location_type, :location_path)
+    def hash
+      "#{name}|#{version}".hash
+    end
 
-  def hash
-    "#{name}|#{version}".hash
+    def eql?(other)
+      self.hash == other.hash
+    end
   end
-
-  def eql?(other)
-    self.hash == other.hash
-  end
-
 end
