@@ -36,52 +36,6 @@ module Berkshelf::API
           raise RuntimeError, "must be implemented"
         end
 
-        def build
-          log.info "#{self} building..."
-          log.info "#{self} determining if the cache is stale..."
-          if stale?
-            log.info "#{self} cache is stale."
-            update_cache
-          else
-            log.info "#{self} cache is up to date."
-          end
-
-          log.info "clearing diff"
-          clear_diff
-        end
-
-        # @return [Array<Array<RemoteCookbook>, Array<RemoteCookbook>>]
-        def diff
-          @diff ||= cache_manager.diff(cookbooks)
-        end
-
-        def update_cache
-          created_cookbooks, deleted_cookbooks = diff
-
-          log.info "#{self} adding (#{created_cookbooks.length}) items..."
-          created_cookbooks.collect do |remote|
-            [ remote, future(:metadata, remote) ]
-          end.each do |remote, metadata|
-            cache_manager.add(remote, metadata.value)
-          end
-
-          log.info "#{self} removing (#{deleted_cookbooks.length}) items..."
-          deleted_cookbooks.each { |remote| cache_manager.remove(remote.name, remote.version) }
-
-          log.info "#{self} cache updated."
-          cache_manager.save
-        end
-
-        def stale?
-          created_cookbooks, deleted_cookbooks = diff
-          created_cookbooks.any? || deleted_cookbooks.any?
-        end
-
-        private
-
-          def clear_diff
-            @diff = nil
-          end
       end
 
       class << self

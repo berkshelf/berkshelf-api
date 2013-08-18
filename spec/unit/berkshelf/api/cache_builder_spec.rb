@@ -9,11 +9,13 @@ describe Berkshelf::API::CacheBuilder do
     subject(:build) { instance.build }
     let(:workers) { [ double('worker') ] }
     let(:future) { double('future', value: nil) }
+    let(:cache_manager) { double('cache_manager') }
 
     before { instance.stub(workers: workers) }
 
-    it "sends a #build message to each worker" do
-      workers.each { |worker| worker.should_receive(:future).with(:build).and_return(future) }
+    it "asks the cache_manager to process all of its actors" do
+      instance.stub(:cache_manager).and_return(cache_manager)
+      cache_manager.should_receive(:process_workers).with(instance.workers).and_return(future)
       build
     end
   end

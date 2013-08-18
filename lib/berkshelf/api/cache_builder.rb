@@ -25,16 +25,8 @@ module Berkshelf::API
       end
     end
 
-    # Issue a single build command to all workers
-    #
-    # @return [Array]
     def build
-      workers.collect { |actor| actor.future(:build) }.map do |f|
-        begin
-          f.value
-        rescue; end
-      end
-      cache_manager.set_warmed
+      cache_manager.process_workers(workers)
     end
 
     # Issue a build command to all workers at the scheduled interval
