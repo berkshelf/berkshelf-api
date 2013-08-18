@@ -28,8 +28,15 @@ module Berkshelf::API
       every(SAVE_INTERVAL) { save }
     end
 
+    # Loops through a list of workers and merges their cookbook sets into the cache
+    #
+    # @param [Array<Berkshelf::API::CacheBuilder::Worker::Base>] The workers for this cache
+    #
+    # @return void
     def process_workers(workers)
-      workers.collect { |worker| self.future(:process_worker, worker) }.map do |f|
+      [workers].flatten)
+      .collect { |worker| self.future(:process_worker, worker) }
+      .each do |f|
         begin
           f.value
         rescue; end
@@ -102,14 +109,13 @@ module Berkshelf::API
         log.info "Cache saved!"
       end
 
-
       # @param [RemoteCookbook] cookbook
       # @param [Ridley::Chef::Cookbook::Metadata] metadata
       #
       # @return [Hash]
       def add(cookbook, metadata)
         log.debug "#{self} adding (#{cookbook.name}, #{cookbook.version})"
-        @cache.add(cookbook, metadata)
+        cache.add(cookbook, metadata)
       end
 
       # Remove the cached item matching the given name and version
@@ -120,7 +126,7 @@ module Berkshelf::API
       # @return [DependencyCache]
       def remove(name, version)
         log.debug "#{self} removing (#{name}, #{version})"
-        @cache.remove(name, version)
+        cache.remove(name, version)
       end
 
       # @param [Array<RemoteCookbook>] cookbooks
