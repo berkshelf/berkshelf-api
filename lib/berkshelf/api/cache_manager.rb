@@ -34,7 +34,7 @@ module Berkshelf::API
     #
     # @return void
     def process_workers(workers)
-      [workers].flatten)
+      [workers].flatten
       .collect { |worker| self.future(:process_worker, worker) }
       .each do |f|
         begin
