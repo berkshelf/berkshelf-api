@@ -17,7 +17,7 @@ module Berkshelf::API
 
     server_name :cache_manager
     finalizer :finalize_callback
-    exclusive :merge
+    exclusive :merge, :add, :remove
 
     attr_reader :cache
 
@@ -26,6 +26,26 @@ module Berkshelf::API
       @cache = DependencyCache.new
       load_save if File.exist?(self.class.cache_file)
       every(SAVE_INTERVAL) { save }
+    end
+
+    # @param [RemoteCookbook] cookbook
+    # @param [Ridley::Chef::Cookbook::Metadata] metadata
+    #
+    # @return [Hash]
+    def add(cookbook, metadata)
+      log.debug "#{self} adding (#{cookbook.name}, #{cookbook.version})"
+      cache.add(cookbook, metadata)
+    end
+
+    # Remove the cached item matching the given name and version
+    #
+    # @param [#to_s] name
+    # @param [#to_s] version
+    #
+    # @return [DependencyCache]
+    def remove(name, version)
+      log.debug "#{self} removing (#{name}, #{version})"
+      cache.remove(name, version)
     end
 
     # Loops through a list of workers and merges their cookbook sets into the cache
@@ -107,26 +127,6 @@ module Berkshelf::API
         log.info "Saving the cache to: #{self.class.cache_file}"
         cache.save(self.class.cache_file)
         log.info "Cache saved!"
-      end
-
-      # @param [RemoteCookbook] cookbook
-      # @param [Ridley::Chef::Cookbook::Metadata] metadata
-      #
-      # @return [Hash]
-      def add(cookbook, metadata)
-        log.debug "#{self} adding (#{cookbook.name}, #{cookbook.version})"
-        cache.add(cookbook, metadata)
-      end
-
-      # Remove the cached item matching the given name and version
-      #
-      # @param [#to_s] name
-      # @param [#to_s] version
-      #
-      # @return [DependencyCache]
-      def remove(name, version)
-        log.debug "#{self} removing (#{name}, #{version})"
-        cache.remove(name, version)
       end
 
       # @param [Array<RemoteCookbook>] cookbooks
