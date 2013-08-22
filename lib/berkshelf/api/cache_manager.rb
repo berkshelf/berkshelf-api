@@ -19,6 +19,7 @@ module Berkshelf::API
     finalizer :finalize_callback
     exclusive :merge, :add, :remove
 
+    # @return [DependencyCache]
     attr_reader :cache
 
     def initialize
@@ -50,21 +51,26 @@ module Berkshelf::API
 
     # Loops through a list of workers and merges their cookbook sets into the cache
     #
-    # @param [Array<Berkshelf::API::CacheBuilder::Worker::Base>] The workers for this cache
+    # @param [Array<CacheBuilder::Worker::Base>] workers
+    #   The workers for this cache
     #
-    # @return void
+    # @return [Boolean]
     def process_workers(workers)
-      [workers].flatten
-      .collect { |worker| self.future(:process_worker, worker) }
-      .each do |f|
+      Array(workers).flatten.collect do |worker|
+        self.future(:process_worker, worker)
+      end.each do |f|
         begin
           f.value
-        rescue; end
+        rescue
+          # We don't want crashing workers to crash the CacheManager. Crashes are logged so just
+          # ignore these exceptions.
+        end
       end
 
       self.set_warmed
     end
 
+    # @param [CacheBuilder::Worker::Base] worker
     def process_worker(worker)
       log.info "processing #{worker}"
       remote_cookbooks = worker.cookbooks

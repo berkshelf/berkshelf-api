@@ -12,9 +12,6 @@ module Berkshelf::API
   #     }
   #   }
   class DependencyCache
-
-    include Berkshelf::API::Logging
-
     class << self
       # Read an archived cache and re-instantiate it
       #
@@ -35,13 +32,14 @@ module Berkshelf::API
       end
     end
 
+    include Berkshelf::API::Logging
     extend Forwardable
     def_delegators :@cache, :[], :[]=
 
     # @param [Hash] contents
     def initialize(contents = {})
       @warmed = false
-      @cache = Hash[contents]
+      @cache  = Hash[contents]
     end
 
     # @param [RemoteCookbook] cookbook
@@ -103,6 +101,8 @@ module Berkshelf::API
       @cache.to_hash
     end
 
+    # @param [Hash] options
+    #
     # @return [String]
     def to_json(options = {})
       JSON.generate(to_hash, options)
