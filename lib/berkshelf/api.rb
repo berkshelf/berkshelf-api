@@ -1,3 +1,4 @@
+require 'berkshelf/api/version'
 require 'celluloid'
 require 'hashie'
 require 'ridley'
