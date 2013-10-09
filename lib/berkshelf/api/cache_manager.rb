@@ -56,17 +56,24 @@ module Berkshelf::API
     #
     # @return [Boolean]
     def process_workers(workers)
-      Array(workers).flatten.collect do |worker|
-        self.future(:process_worker, worker)
-      end.each do |f|
-        begin
-          f.value
-        rescue
-          # We don't want crashing workers to crash the CacheManager. Crashes are logged so just
-          # ignore these exceptions.
+      # If the cache has been warmed already, we want to spawn
+      # workers for all the endpoints concurrently. However, if the
+      # cache is cold we want to run sequentially, so higher priority
+      # endpoints can work before lower priority, avoiding duplicate
+      # downloads.
+      # We don't want crashing workers to crash the CacheManager.
+      # Crashes are logged so just ignore the exceptions
+      if warmed?
+        Array(workers).flatten.collect do |worker|
+          self.future(:process_worker, worker)
+        end.each do |f|
+          f.value rescue nil
+        end
+      else
+        Array(workers).flatten.each do |worker|
+          process_worker(worker) rescue nil
         end
       end
-
       self.set_warmed
     end
 
