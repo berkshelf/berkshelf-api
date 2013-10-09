@@ -79,6 +79,10 @@ module Berkshelf::API
       log.debug "#{created_cookbooks.size} cookbooks to be added to the cache from #{worker}"
       log.debug "#{deleted_cookbooks.size} cookbooks to be removed from the cache from #{worker}"
 
+      # Process metadata in chunks - Ridley cookbook resource uses a
+      # task_class TaskThread, which means each future gets its own
+      # thread. If we have many (>2000) cookbooks we can easily
+      # exhaust the available threads on the system.
       created_cookbooks_with_metadata = []
       until created_cookbooks.empty?
         work = created_cookbooks.slice!(0,500)
