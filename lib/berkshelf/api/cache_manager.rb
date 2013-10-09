@@ -79,14 +79,20 @@ module Berkshelf::API
       log.debug "#{created_cookbooks.size} cookbooks to be added to the cache from #{worker}"
       log.debug "#{deleted_cookbooks.size} cookbooks to be removed from the cache from #{worker}"
 
-      created_cookbooks.map! do |remote|
-        [ remote, worker.future(:metadata, remote) ]
-      end.map! do |remote, metadata|
-        [remote, metadata.value]
+      created_cookbooks_with_metadata = []
+      until created_cookbooks.empty?
+        work = created_cookbooks.slice!(0,500)
+        log.info "processing metadata for #{work.size} cookbooks with #{created_cookbooks.size} remaining on #{worker}"
+        work.map! do |remote|
+          [ remote, worker.future(:metadata, remote) ]
+        end.map! do |remote, metadata|
+          [remote, metadata.value]
+        end
+        created_cookbooks_with_metadata += work
       end
 
       log.info "about to merge cookbooks"
-      merge(created_cookbooks, deleted_cookbooks)
+      merge(created_cookbooks_with_metadata, deleted_cookbooks)
       log.info "#{self} cache updated."
     end
 
