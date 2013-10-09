@@ -79,14 +79,24 @@ module Berkshelf::API
       log.debug "#{created_cookbooks.size} cookbooks to be added to the cache from #{worker}"
       log.debug "#{deleted_cookbooks.size} cookbooks to be removed from the cache from #{worker}"
 
-      created_cookbooks.map! do |remote|
-        [ remote, worker.future(:metadata, remote) ]
-      end.map! do |remote, metadata|
-        [remote, metadata.value]
+      # Process metadata in chunks - Ridley cookbook resource uses a
+      # task_class TaskThread, which means each future gets its own
+      # thread. If we have many (>2000) cookbooks we can easily
+      # exhaust the available threads on the system.
+      created_cookbooks_with_metadata = []
+      until created_cookbooks.empty?
+        work = created_cookbooks.slice!(0,500)
+        log.info "processing metadata for #{work.size} cookbooks with #{created_cookbooks.size} remaining on #{worker}"
+        work.map! do |remote|
+          [ remote, worker.future(:metadata, remote) ]
+        end.map! do |remote, metadata|
+          [remote, metadata.value]
+        end
+        created_cookbooks_with_metadata += work
       end
 
       log.info "about to merge cookbooks"
-      merge(created_cookbooks, deleted_cookbooks)
+      merge(created_cookbooks_with_metadata, deleted_cookbooks)
       log.info "#{self} cache updated."
     end
 
