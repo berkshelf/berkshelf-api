@@ -82,7 +82,7 @@ module Berkshelf::API
       log.info "processing #{worker}"
       remote_cookbooks = worker.cookbooks
       log.info "found #{remote_cookbooks.size} cookbooks from #{worker}"
-      created_cookbooks, deleted_cookbooks = diff(remote_cookbooks)
+      created_cookbooks, deleted_cookbooks = diff(remote_cookbooks, worker.priority)
       log.debug "#{created_cookbooks.size} cookbooks to be added to the cache from #{worker}"
       log.debug "#{deleted_cookbooks.size} cookbooks to be removed from the cache from #{worker}"
 
@@ -154,15 +154,16 @@ module Berkshelf::API
 
       # @param [Array<RemoteCookbook>] cookbooks
       #   An array of RemoteCookbooks representing all the cookbooks on the indexed site
-      #
+      # @param [Integer] worker_priority
+      #   The priority/ID of the endpoint that is running
       # @return [Array(Array<RemoteCookbook>, Array<RemoteCookbook>)]
       #   A tuple of Arrays of RemoteCookbooks
       #   The first array contains items not in the cache
       #   The second array contains items in the cache, but not in the cookbooks parameter
-      def diff(cookbooks)
-        known_cookbooks   = cache.cookbooks
+      def diff(cookbooks, worker_priority)
+        known_cookbooks   = cache.cookbooks.select { |c| c.priority <= worker_priority }
         created_cookbooks = cookbooks - known_cookbooks
-        deleted_cookbooks = known_cookbooks - cookbooks
+        deleted_cookbooks = (known_cookbooks - cookbooks).select { |c| c.priority == worker_priority }
         [ created_cookbooks, deleted_cookbooks ]
       end
 
