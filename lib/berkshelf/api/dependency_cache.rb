@@ -115,7 +115,7 @@ module Berkshelf::API
       [].tap do |remote_cookbooks|
         @cache.each_pair do |name, versions|
           versions.each do |version, metadata|
-            remote_cookbooks << RemoteCookbook.new(name, version, metadata[:location_type], metadata[:location_path], metadata[:endpoint_priority])
+            remote_cookbooks << RemoteCookbook.new(name, version, metadata['location_type'], metadata['location_path'], metadata['endpoint_priority'])
           end
         end
       end
