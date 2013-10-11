@@ -1,4 +1,5 @@
 require 'buff/config/json'
+require 'digest/sha1'
 
 module Berkshelf::API
   class Config < Buff::Config::JSON
@@ -24,5 +25,9 @@ module Berkshelf::API
           }
         }
       ]
+
+    def endpoints_checksum
+      Digest::SHA1.hexdigest(endpoints.collect {|x| x.to_hash }.to_s)
+    end
   end
 end
