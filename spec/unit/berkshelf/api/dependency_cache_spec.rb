@@ -67,6 +67,13 @@ describe Berkshelf::API::DependencyCache do
 
   subject { described_class.new(contents) }
 
+  context "when a new DependencyCache is created" do
+    it "should allow indifferent access to items in the cache" do
+      expect(subject[:chicken]).to be_a(Hash)
+      expect(subject[:chicken][:'1.0'][:dependencies]).to be_a(Hash)
+    end
+  end
+
   describe "#cookbooks" do
     it "should return a list of RemoteCookbooks" do
       expected_value = [

@@ -6,6 +6,7 @@ module Berkshelf::API
   #   {
   #     "cookbook_name" => {
   #       "x.y.z" => {
+  #         :endpoint_priority => 1,
   #         :dependencies => { "cookbook_name" => "constraint" },
   #         :platforms => { "platform" => "constraint" }
   #       }
@@ -39,7 +40,12 @@ module Berkshelf::API
     # @param [Hash] contents
     def initialize(contents = {})
       @warmed = false
-      @cache  = Hash[contents]
+      @cache  = Hash[contents].with_indifferent_access
+      if @cache['endpoints_checksum'] && (@cache['endpoints_checksum'] != Application.config.endpoints_checksum)
+        log.warn "Endpoints in config have changed - invalidating cache"
+        @cache.clear
+      end
+      @cache.delete('endpoints_checksum')
     end
 
     # @param [RemoteCookbook] cookbook
@@ -51,6 +57,7 @@ module Berkshelf::API
       dependencies = metadata.dependencies || Hash.new
       @cache[cookbook.name.to_s] ||= Hash.new
       @cache[cookbook.name.to_s][cookbook.version.to_s] = {
+        endpoint_priority: cookbook.priority,
         platforms: platforms,
         dependencies: dependencies,
         location_type: cookbook.location_type,
@@ -105,7 +112,9 @@ module Berkshelf::API
     #
     # @return [String]
     def to_json(options = {})
-      JSON.generate(to_hash, options)
+      output = to_hash
+      output['endpoints_checksum'] = Application.config.endpoints_checksum
+      JSON.generate(output, options)
     end
 
     # @return [Array<RemoteCookbook>]
@@ -113,7 +122,7 @@ module Berkshelf::API
       [].tap do |remote_cookbooks|
         @cache.each_pair do |name, versions|
           versions.each do |version, metadata|
-            remote_cookbooks << RemoteCookbook.new(name, version, metadata[:location_type], metadata[:location_path])
+            remote_cookbooks << RemoteCookbook.new(name, version, metadata[:location_type], metadata[:location_path], metadata[:endpoint_priority])
           end
         end
       end

@@ -16,8 +16,11 @@ module Berkshelf::API
         include Berkshelf::API::Mixin::Services
 
         attr_reader :options
+        attr_reader :priority
 
-        def initialize(options = {}); end
+        def initialize(options = {})
+          @priority = options[:priority]
+        end
 
         # @abstract
         #

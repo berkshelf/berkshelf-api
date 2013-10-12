@@ -19,9 +19,9 @@ module Berkshelf::API
       @worker_supervisor = WorkerSupervisor.new(@worker_registry)
       @building          = false
 
-      Application.config.endpoints.each do |endpoint|
+      Application.config.endpoints.each_with_index do |endpoint, index|
         endpoint_options = endpoint.options.to_hash.deep_symbolize_keys
-        @worker_supervisor.supervise(CacheBuilder::Worker[endpoint.type], endpoint_options)
+        @worker_supervisor.supervise(CacheBuilder::Worker[endpoint.type], endpoint_options.merge(priority: index))
       end
     end
 

@@ -19,7 +19,7 @@ module Berkshelf::API
             connection.cookbook.all.each do |cookbook, versions|
               versions.each do |version|
                 cookbook_versions << RemoteCookbook.new(cookbook, version, self.class.worker_type,
-                  @connection.server_url)
+                  @connection.server_url, priority)
               end
             end
           end
