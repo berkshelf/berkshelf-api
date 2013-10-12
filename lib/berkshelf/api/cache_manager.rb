@@ -11,7 +11,7 @@ module Berkshelf::API
     include Berkshelf::API::Logging
 
     extend Forwardable
-    def_delegators :@cache, :warmed?, :set_warmed
+    def_delegators :@cache, :warmed?, :set_warmed, :clear
 
     SAVE_INTERVAL = 30.0
 
@@ -105,13 +105,6 @@ module Berkshelf::API
       log.info "about to merge cookbooks"
       merge(created_cookbooks_with_metadata, deleted_cookbooks)
       log.info "#{self} cache updated."
-    end
-
-    # Clear any items added to the cache
-    #
-    # @return [Hash]
-    def clear
-      @cache.clear
     end
 
     # Check if the cache knows about the given cookbook version
