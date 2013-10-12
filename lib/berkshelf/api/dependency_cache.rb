@@ -41,6 +41,11 @@ module Berkshelf::API
     def initialize(contents = {})
       @warmed = false
       @cache  = Hash[contents].with_indifferent_access
+      if @cache['endpoints_checksum'] && (@cache['endpoints_checksum'] != Application.config.endpoints_checksum)
+        log.warn "Endpoints in config have changed - invalidating cache"
+        @cache.clear
+      end
+      @cache.delete('endpoints_checksum')
     end
 
     # @param [RemoteCookbook] cookbook
@@ -107,7 +112,9 @@ module Berkshelf::API
     #
     # @return [String]
     def to_json(options = {})
-      JSON.generate(to_hash, options)
+      output = to_hash
+      output['endpoints_checksum'] = Application.config.endpoints_checksum
+      JSON.generate(output, options)
     end
 
     # @return [Array<RemoteCookbook>]
