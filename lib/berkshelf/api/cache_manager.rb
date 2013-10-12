@@ -140,9 +140,11 @@ module Berkshelf::API
       end
 
       def save
-        log.info "Saving the cache to: #{self.class.cache_file}"
-        cache.save(self.class.cache_file)
-        log.info "Cache saved!"
+        if warmed?
+          log.info "Saving the cache to: #{self.class.cache_file}"
+          cache.save(self.class.cache_file)
+          log.info "Cache saved!"
+        end
       end
 
       # @param [Array<RemoteCookbook>] cookbooks
