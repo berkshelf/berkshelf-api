@@ -113,7 +113,7 @@ module Berkshelf::API
     # @return [String]
     def to_json(options = {})
       output = to_hash
-      output['endpoints_checksum'] = Application.config.endpoints_checksum
+      output['endpoints_checksum'] = Application.config.endpoints_checksum if options[:saving]
       JSON.generate(output, options)
     end
 
@@ -130,7 +130,7 @@ module Berkshelf::API
 
     def save(path)
       FileUtils.mkdir_p(File.dirname(path))
-      File.open(path, 'w+') { |f| f.write(self.to_json) }
+      File.open(path, 'w+') { |f| f.write(self.to_json(saving: true)) }
     end
 
     def warmed?
