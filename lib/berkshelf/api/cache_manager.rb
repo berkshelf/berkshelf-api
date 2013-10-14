@@ -11,7 +11,7 @@ module Berkshelf::API
     include Berkshelf::API::Logging
 
     extend Forwardable
-    def_delegators :@cache, :warmed?, :set_warmed
+    def_delegators :@cache, :warmed?, :set_warmed, :clear
 
     SAVE_INTERVAL = 30.0
 
@@ -56,17 +56,24 @@ module Berkshelf::API
     #
     # @return [Boolean]
     def process_workers(workers)
-      Array(workers).flatten.collect do |worker|
-        self.future(:process_worker, worker)
-      end.each do |f|
-        begin
-          f.value
-        rescue
-          # We don't want crashing workers to crash the CacheManager. Crashes are logged so just
-          # ignore these exceptions.
+      # If the cache has been warmed already, we want to spawn
+      # workers for all the endpoints concurrently. However, if the
+      # cache is cold we want to run sequentially, so higher priority
+      # endpoints can work before lower priority, avoiding duplicate
+      # downloads.
+      # We don't want crashing workers to crash the CacheManager.
+      # Crashes are logged so just ignore the exceptions
+      if warmed?
+        Array(workers).flatten.collect do |worker|
+          self.future(:process_worker, worker)
+        end.each do |f|
+          f.value rescue nil
+        end
+      else
+        Array(workers).flatten.each do |worker|
+          process_worker(worker) rescue nil
         end
       end
-
       self.set_warmed
     end
 
@@ -75,7 +82,7 @@ module Berkshelf::API
       log.info "processing #{worker}"
       remote_cookbooks = worker.cookbooks
       log.info "found #{remote_cookbooks.size} cookbooks from #{worker}"
-      created_cookbooks, deleted_cookbooks = diff(remote_cookbooks)
+      created_cookbooks, deleted_cookbooks = diff(remote_cookbooks, worker.priority)
       log.debug "#{created_cookbooks.size} cookbooks to be added to the cache from #{worker}"
       log.debug "#{deleted_cookbooks.size} cookbooks to be removed from the cache from #{worker}"
 
@@ -98,13 +105,6 @@ module Berkshelf::API
       log.info "about to merge cookbooks"
       merge(created_cookbooks_with_metadata, deleted_cookbooks)
       log.info "#{self} cache updated."
-    end
-
-    # Clear any items added to the cache
-    #
-    # @return [Hash]
-    def clear
-      @cache.clear
     end
 
     # Check if the cache knows about the given cookbook version
@@ -140,22 +140,25 @@ module Berkshelf::API
       end
 
       def save
-        log.info "Saving the cache to: #{self.class.cache_file}"
-        cache.save(self.class.cache_file)
-        log.info "Cache saved!"
+        if warmed?
+          log.info "Saving the cache to: #{self.class.cache_file}"
+          cache.save(self.class.cache_file)
+          log.info "Cache saved!"
+        end
       end
 
       # @param [Array<RemoteCookbook>] cookbooks
       #   An array of RemoteCookbooks representing all the cookbooks on the indexed site
-      #
+      # @param [Integer] worker_priority
+      #   The priority/ID of the endpoint that is running
       # @return [Array(Array<RemoteCookbook>, Array<RemoteCookbook>)]
       #   A tuple of Arrays of RemoteCookbooks
       #   The first array contains items not in the cache
       #   The second array contains items in the cache, but not in the cookbooks parameter
-      def diff(cookbooks)
-        known_cookbooks   = cache.cookbooks
+      def diff(cookbooks, worker_priority)
+        known_cookbooks   = cache.cookbooks.select { |c| c.priority <= worker_priority }
         created_cookbooks = cookbooks - known_cookbooks
-        deleted_cookbooks = known_cookbooks - cookbooks
+        deleted_cookbooks = (known_cookbooks - cookbooks).select { |c| c.priority == worker_priority }
         [ created_cookbooks, deleted_cookbooks ]
       end
 

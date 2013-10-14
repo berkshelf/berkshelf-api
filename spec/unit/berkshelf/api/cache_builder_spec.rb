@@ -30,12 +30,51 @@ describe Berkshelf::API::CacheBuilder do
       end
     end
 
-    it "has one worker started by default" do
-      expect(workers).to have(1).item
+    context "when no workers are explicitly configured" do
+      it "has one worker started by default" do
+        expect(workers).to have(1).item
+      end
+
+      it "has an opscode worker started by default" do
+        expect(workers.first).to be_a(described_class::Worker::Opscode)
+      end
     end
 
-    it "has an opscode worker started by default" do
-      expect(workers.first).to be_a(described_class::Worker::Opscode)
+    context "when there are multiple workers" do
+      let(:endpoint_array) { [ first_worker, second_worker ] }
+      let(:first_worker) { double(options: endpoint_options.dup.merge(priority: 0), type: 'chicken') }
+      let(:second_worker) { double(options: endpoint_options.dup.merge(priority: 1), type: 'tuna') }
+      let(:endpoint_options) do
+        {
+          "url" => "www.fake.com",
+          "client_name" => "fake",
+          "client_key" => "/path/to/fake.key"
+        }
+      end
+      let(:dummy_endpoint_klass) do
+        Class.new do
+          attr_reader :options
+          include Celluloid
+
+          def initialize(options = {})
+            @options = options
+          end
+        end
+      end
+
+      before do
+        Berkshelf::API::Application.config.stub(:endpoints).and_return(endpoint_array)
+        Berkshelf::API::CacheBuilder::Worker.stub(:[]).and_return(dummy_endpoint_klass, dummy_endpoint_klass)
+      end
+
+      it "has two workers" do
+        expect(workers).to have(2).items
+      end
+
+      it "keeps the ordering" do
+        expect(workers.first.options[:priority]).to be(0)
+        expect(workers.last.options[:priority]).to be(1)
+      end
     end
   end
 end

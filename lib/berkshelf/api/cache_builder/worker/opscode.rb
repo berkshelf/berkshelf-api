@@ -19,7 +19,7 @@ module Berkshelf::API
               [ cookbook, connection.future(:versions, cookbook) ]
             end.each do |cookbook, versions|
               versions.value.each do |version|
-                cookbook_versions << RemoteCookbook.new(cookbook, version, self.class.worker_type, @connection.api_uri)
+                cookbook_versions << RemoteCookbook.new(cookbook, version, self.class.worker_type, @connection.api_uri, priority)
               end
             end
           end

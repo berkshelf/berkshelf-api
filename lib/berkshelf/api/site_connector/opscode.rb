@@ -92,7 +92,7 @@ module Berkshelf::API
       #
       # @return [String, nil]
       def download(name, version, destination = Dir.mktmpdir)
-        log.info "downloading #{name}(#{version})"
+        log.debug "downloading #{name}(#{version})"
         if uri = download_uri(name, version)
           archive = stream(uri)
           Archive.extract(archive.path, destination)
