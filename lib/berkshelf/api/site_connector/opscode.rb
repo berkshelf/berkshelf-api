@@ -36,9 +36,8 @@ module Berkshelf::API
       #   time to wait between retries
       attr_reader :retry_interval
 
-      # @param [Faraday::Connection] connection
-      #   Optional parameter for setting the connection object
-      #   This should only be set manually for testing
+      # @param [Hash] options
+      #   Optional parameters for configuration of retry settings and URL
       def initialize(options = {})
         options  = { url: V1_API, retries: 5, retry_interval: 0.5 }.merge(options)
         @api_uri = options[:url]
@@ -144,7 +143,7 @@ module Berkshelf::API
         local.binmode
 
         retryable(tries: retries, on: OpenURI::HTTPError, sleep: retry_interval) do
-          open(target, 'rb', connection.headers) do |remote|
+          open(target, 'rb') do |remote|
             local.write(remote.read)
           end
         end
