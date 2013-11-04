@@ -75,7 +75,7 @@ You may configure the endpoints to index by editing the JSON configuration file 
     {
       "type": "chef_server",
       "options": {
-        "url": "https://api.opscode.com/organizations/vialstudios",
+        "url": "https://api.opscode.com/organizations/riotgames",
         "client_name": "berkshelf",
         "client_key": "/etc/berkshelf/api-server/client.pem"
       }
