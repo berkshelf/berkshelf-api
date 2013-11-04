@@ -38,7 +38,7 @@ A server which indexes cookbooks from various sources and hosts it over a REST A
 ## Configuration File
 
 * `home_path` [String] Location where the api-server should store its cache (e.g. /opt/berkshelf-api-server) Default: ~/.berkshelf/api-server
-* `endpoints` [Array] Configuration hashes to define what endpoints should be cached. (e.g. See [Configuring Endpoints](https://github.com/RiotGames/berkshelf-api/#configuring-endpoints))
+* `endpoints` [Array] Configuration hashes to define what endpoints should be cached. (e.g. See [Configuring Endpoints](#configuring-endpoints))
 
 ## Supported Platforms
 
