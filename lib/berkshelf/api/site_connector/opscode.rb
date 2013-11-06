@@ -83,6 +83,10 @@ module Berkshelf::API
         end
       end
 
+      # Download the cookbook with the given name and version to the destination. The directory
+      # containing the extracted contents will be returned on success. On failure, nil will
+      # be returned.
+      #
       # @param [String] cookbook
       #   The name of the cookbook to download
       # @param [String] version
@@ -94,8 +98,13 @@ module Berkshelf::API
       def download(name, version, destination = Dir.mktmpdir)
         log.debug "downloading #{name}(#{version})"
         if uri = download_uri(name, version)
-          archive = stream(uri)
-          Archive.extract(archive.path, destination)
+          begin
+            archive = stream(uri)
+            Archive.extract(archive.path, destination)
+          rescue => ex
+            log.warn "error downloading/extracting #{name} (#{version}): #{ex}"
+            nil
+          end
         end
       ensure
         archive.unlink unless archive.nil?

@@ -30,8 +30,9 @@ module Berkshelf::API
         # @return [Ridley::Chef::Cookbook::Metadata]
         def metadata(remote)
           Dir.mktmpdir do |destination|
-            connection.download(remote.name, remote.version, destination)
-            load_metadata(destination, remote.name)
+            if connection.download(remote.name, remote.version, destination)
+              load_metadata(destination, remote.name)
+            end
           end
         end
 
