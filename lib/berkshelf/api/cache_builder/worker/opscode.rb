@@ -29,7 +29,7 @@ module Berkshelf::API
         #
         # @return [Ridley::Chef::Cookbook::Metadata]
         def metadata(remote)
-          Dir.mktmpdir do |destination|
+          Dir.mktmpdir('metadata') do |destination|
             if connection.download(remote.name, remote.version, destination)
               load_metadata(destination, remote.name)
             end
@@ -47,7 +47,9 @@ module Berkshelf::API
           def load_metadata(directory, cookbook)
             # The community site does not enforce the name of the cookbook contained in the archive
             # downloaded and extracted. This will just find the first metadata.json and load it.
-            file     = Dir["#{directory}/**/*/metadata.json"].first
+            file = Dir["#{directory}/**/*/metadata.json"].first
+            return nil if file.nil?
+
             metadata = File.read(file)
             Ridley::Chef::Cookbook::Metadata.from_json(metadata)
           rescue JSON::ParserError => ex

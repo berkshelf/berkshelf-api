@@ -101,13 +101,14 @@ module Berkshelf::API
           begin
             archive = stream(uri)
             Archive.extract(archive.path, destination)
+            destination
           rescue => ex
             log.warn "error downloading/extracting #{name} (#{version}): #{ex}"
             nil
+          ensure
+            archive.unlink unless archive.nil?
           end
         end
-      ensure
-        archive.unlink unless archive.nil?
       end
 
       # Return the location where a cookbook of the given name and version can be downloaded from
