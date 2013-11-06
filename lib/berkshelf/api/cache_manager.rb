@@ -97,9 +97,10 @@ module Berkshelf::API
         work.map! do |remote|
           [ remote, worker.future(:metadata, remote) ]
         end.map! do |remote, metadata|
-          [remote, metadata.value]
+          metadata.value ? [remote, metadata.value] : nil
         end
-        created_cookbooks_with_metadata += work
+
+        created_cookbooks_with_metadata += work.compact
       end
 
       log.info "about to merge cookbooks"
