@@ -25,9 +25,12 @@ module Berkshelf::API
           end
         end
 
+        # Return the metadata of the given RemoteCookbook. If the metadata could not be found or parsed
+        # nil is returned.
+        #
         # @param [RemoteCookbook] remote
         #
-        # @return [Ridley::Chef::Cookbook::Metadata]
+        # @return [Ridley::Chef::Cookbook::Metadata, nil]
         def metadata(remote)
           Dir.mktmpdir('metadata') do |destination|
             if connection.download(remote.name, remote.version, destination)
