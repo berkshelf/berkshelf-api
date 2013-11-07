@@ -14,7 +14,7 @@ A server which indexes cookbooks from various sources and hosts it over a REST A
 
 ### Help
 
-    $ berks-api help -h
+    $ berks-api -h
     Usage: berks-api [options]
         -p, --port PORT                  set the listening port
         -v, --verbose                    run with verbose output
