@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jamie@vialstudios.com", "agarson@riotgames"]
   spec.description   = %q{Berkshelf dependency API server}
   spec.summary       = %q{A server which indexes cookbooks from various sources and hosts it over a REST API}
-  spec.homepage      = "https://github.com/RiotGames/berkshelf-api"
+  spec.homepage      = "https://github.com/berkshelf/berkshelf-api"
   spec.license       = "Apache 2.0"
 
   spec.files         = `git ls-files`.split($/)
