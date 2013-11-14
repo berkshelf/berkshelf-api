@@ -1,8 +1,8 @@
 # Berkshelf::API
 [![Gem Version](https://badge.fury.io/rb/berkshelf-api.png)](http://badge.fury.io/rb/berkshelf-api)
-[![Build Status](https://secure.travis-ci.org/RiotGames/berkshelf-api.png?branch=master)](http://travis-ci.org/RiotGames/berkshelf-api)
-[![Dependency Status](https://gemnasium.com/RiotGames/berkshelf-api.png?travis)](https://gemnasium.com/RiotGames/berkshelf-api)
-[![Code Climate](https://codeclimate.com/github/RiotGames/berkshelf-api.png)](https://codeclimate.com/github/RiotGames/berkshelf-api)
+[![Build Status](https://secure.travis-ci.org/berkshelf/berkshelf-api.png?branch=master)](http://travis-ci.org/berkshelf/berkshelf-api)
+[![Dependency Status](https://gemnasium.com/berkshelf/berkshelf-api.png?travis)](https://gemnasium.com/berkshelf/berkshelf-api)
+[![Code Climate](https://codeclimate.com/github/berkshelf/berkshelf-api.png)](https://codeclimate.com/github/berkshelf/berkshelf-api)
 
 A server which indexes cookbooks from various sources and hosts it over a REST API
 
@@ -71,4 +71,4 @@ You may configure the endpoints to index by editing the JSON configuration file 
 * Jamie Winsor (<jamie@vialstudios.com>)
 * Andrew Garson (<agarson@riotgames.com>)
 
-Thank you to all of our [Contributors](https://github.com/RiotGames/berkshelf-api/graphs/contributors), testers, and users.
+Thank you to all of our [Contributors](https://github.com/berkshelf/berkshelf-api/graphs/contributors), testers, and users.
