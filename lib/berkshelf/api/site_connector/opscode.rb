@@ -1,4 +1,4 @@
-require 'open-uri'
+require 'httpclient'
 require 'retryable'
 require 'archive'
 require 'tempfile'
@@ -26,6 +26,7 @@ module Berkshelf::API
       include Berkshelf::API::Logging
 
       V1_API = 'http://cookbooks.opscode.com/api/v1'.freeze
+      RETRYABLE_ERRORS = [HTTPClient::BadResponseError, HTTPClient::TimeoutError]
 
       # @return [String]
       attr_reader :api_uri
@@ -36,9 +37,8 @@ module Berkshelf::API
       #   time to wait between retries
       attr_reader :retry_interval
 
-      # @param [Faraday::Connection] connection
-      #   Optional parameter for setting the connection object
-      #   This should only be set manually for testing
+      # @param [Hash] options
+      #   Optional parameters for configuration of retry settings and URL
       def initialize(options = {})
         options  = { url: V1_API, retries: 5, retry_interval: 0.5 }.merge(options)
         @api_uri = options[:url]
@@ -47,6 +47,9 @@ module Berkshelf::API
           c.response :parse_json
           c.use Faraday::Adapter::NetHttp
         end
+
+        @httpclient = HTTPClient.new
+        @httpclient.receive_timeout = 300
       end
 
       # @return [Array<String>]
@@ -153,9 +156,9 @@ module Berkshelf::API
         local = Tempfile.new('opscode-site-stream')
         local.binmode
 
-        retryable(tries: retries, on: OpenURI::HTTPError, sleep: retry_interval) do
-          open(target, 'rb', connection.headers) do |remote|
-            local.write(remote.read)
+        retryable(tries: retries, on: RETRYABLE_ERRORS, sleep: retry_interval) do
+          @httpclient.get_content(target) do |content|
+            local.write(content)
           end
         end
 
