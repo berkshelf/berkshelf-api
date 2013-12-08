@@ -32,9 +32,9 @@ module Berkshelf::API
                     else
                       log.warn "There is a conflicting tag name for: #{repo.name}, Tag: #{tag.name}, does not match the metadata version #{cookbook_metadata.version}"
                     end
-                  rescue Solve::Errors::InvalidVersionFormat => e
+                  rescue Solve::Errors::InvalidVersionFormat
                     log.debug "Ignoring tag #{tag.name} for: #{repo.name} as it doesn not conform to semver"
-                  rescue Octokit::NotFound => e
+                  rescue Octokit::NotFound
                     log.debug "Ignoring tag #{tag.name} for: #{repo.name} as it doesnt seem to have a metadata.rb"
                   end
                 else
