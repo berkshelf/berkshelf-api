@@ -54,8 +54,12 @@ module Berkshelf::API
         def metadata(remote)
           cookbook_metadata = Ridley::Chef::Cookbook::Metadata.new
           metadata_content  = Base64.decode64(@connection.contents("#{@organization}/#{remote.name}", path: 'metadata.rb', ref: "v#{remote.version}").content)
-          cookbook_metadata.instance_eval(metadata_content)
-          cookbook_metadata
+          begin
+            cookbook_metadata.instance_eval(metadata_content)
+            cookbook_metadata
+          rescue Exception
+            nil
+          end
         end
       end
     end
