@@ -9,7 +9,7 @@ module Berkshelf::API
         worker_type "github"
 
         def initialize(options = {})
-          @connection = Octokit::Client.new :access_token => options[:access_token]
+          @connection   = Octokit::Client.new(access_token: options[:access_token])
           @organization = options[:organization]
           super
         end
@@ -24,7 +24,7 @@ module Berkshelf::API
                   begin
                     version = Solve::Version.new(match[:version])
                     cookbook_metadata = Ridley::Chef::Cookbook::Metadata.new
-                    metadata_content = Base64.decode64(@connection.contents(repo.full_name, :path => 'metadata.rb', :ref => tag.name).content)
+                    metadata_content = Base64.decode64(@connection.contents(repo.full_name, path: 'metadata.rb', ref: tag.name).content)
                     cookbook_metadata.instance_eval(metadata_content)
                     if cookbook_metadata.version == match[:version]
                       cookbook_versions << RemoteCookbook.new(repo.name, cookbook_metadata.version, self.class.worker_type, repo.full_name, priority)
@@ -53,9 +53,9 @@ module Berkshelf::API
         # @return [Ridley::Chef::Cookbook::Metadata, nil]
         def metadata(remote)
           cookbook_metadata = Ridley::Chef::Cookbook::Metadata.new
-          metadata_content = Base64.decode64(@connection.contents("#{@organization}/#{remote.name}", :path => 'metadata.rb', :ref => "v#{remote.version}").content)
+          metadata_content  = Base64.decode64(@connection.contents("#{@organization}/#{remote.name}", path: 'metadata.rb', ref: "v#{remote.version}").content)
           cookbook_metadata.instance_eval(metadata_content)
-          return cookbook_metadata
+          cookbook_metadata
         end
       end
     end
