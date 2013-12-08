@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'retryable', '~> 1.3.3'
   spec.add_dependency 'archive', '= 0.0.2'
   spec.add_dependency 'buff-config', '~> 0.1'
-  spec.add_dependency 'octokit'
+  spec.add_dependency 'octokit', '~> 2.6'
   spec.add_dependency 'solve'
 
   spec.add_development_dependency 'bundler', '~> 1.3'
