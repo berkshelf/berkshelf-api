@@ -56,6 +56,23 @@ You may configure the endpoints to index by editing the JSON configuration file 
 }
 ```
 
+### Github Organization
+Github limits the rate of requests to their API if not authenticated. For this reason the access_token option
+is required.
+
+```json
+{
+  "endpoints": [
+    {
+      "type": "github",
+      "options": {
+        "organization": "opscode-cookbooks",
+        "access_token": ""
+      }
+    }
+  ]
+}
+```
 ## Contributing
 
 1. Fork it
