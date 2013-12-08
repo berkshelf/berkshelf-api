@@ -11,7 +11,7 @@ module Berkshelf::API
         def initialize(options = {})
           @connection   = Octokit::Client.new(access_token: options[:access_token])
           @organization = options[:organization]
-          super
+          super(options)
         end
 
         # @return [Array<RemoteCookbook>]
