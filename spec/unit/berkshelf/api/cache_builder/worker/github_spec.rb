@@ -40,17 +40,16 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
   end
 
   subject do
-    Octokit::Client = double("Octokit::Client")
     expect(Octokit::Client).to receive(:new) { connection }
-    described_class.new(organization: "opscode-cookbooks",
-        access_token: "asdf")
+    described_class.new(organization: "opscode-cookbooks", access_token: "asdf")
   end
 
   describe "#cookbooks" do
     before do
       expect(connection).to receive(:organization_repositories) { repos }
       expect(connection).to receive(:tags) { [good_tag, bad_tag] }
-      expect(connection).to receive(:contents).with("opscode-cookbooks/apt", {:path=>"metadata.rb", :ref=>"v1.0.0"}) { contents }
+      expect(connection).to receive(:contents).with("opscode-cookbooks/apt",
+        { path: "metadata.rb", ref: "v1.0.0"}) { contents }
     end
 
     it "returns an array containing an item for each valid cookbook on the server" do

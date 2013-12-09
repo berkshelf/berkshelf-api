@@ -38,7 +38,6 @@ module Berkshelf::API
         def cookbooks
           raise RuntimeError, "must be implemented"
         end
-
       end
 
       class << self
