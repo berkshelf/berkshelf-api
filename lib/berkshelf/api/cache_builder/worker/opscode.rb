@@ -6,6 +6,8 @@ module Berkshelf::API
 
         finalizer :finalize_callback
 
+        # @param [Hash] options
+        #   see {API::SiteConnector::Opscode.new} for options
         def initialize(options = {})
           @connection = Berkshelf::API::SiteConnector::Opscode.pool_link(size: 25, args: [ options ])
           super

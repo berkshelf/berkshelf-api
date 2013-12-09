@@ -36,9 +36,12 @@ module Berkshelf::API
       #   time to wait between retries
       attr_reader :retry_interval
 
-      # @param [Faraday::Connection] connection
-      #   Optional parameter for setting the connection object
-      #   This should only be set manually for testing
+      # @option options [String] :url ({V1_API})
+      #   url of community site
+      # @option options [Integer] :retries (5)
+      #   how many download retry attempts to make
+      # @option options [Float] :retry_interval (0.5)
+      #   how long to wait before retrying again
       def initialize(options = {})
         options  = { url: V1_API, retries: 5, retry_interval: 0.5 }.merge(options)
         @api_uri = options[:url]
