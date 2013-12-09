@@ -57,6 +57,7 @@ You may configure the endpoints to index by editing the JSON configuration file 
 ```
 
 ### Github Organization
+
 Github limits the rate of requests to their API if not authenticated. For this reason the access_token option
 is required.
 
@@ -73,6 +74,7 @@ is required.
   ]
 }
 ```
+
 ## Contributing
 
 1. Fork it
