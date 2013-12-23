@@ -117,6 +117,15 @@ module Berkshelf::API
       JSON.generate(output, options)
     end
 
+    # @param [Hash] options
+    #
+    # @return [String]
+    def to_msgpack(options = {})
+      output = to_hash
+      output['endpoints_checksum'] = Application.config.endpoints_checksum if options[:saving]
+      MessagePack.pack(output)
+    end
+
     # @return [Array<RemoteCookbook>]
     def cookbooks
       [].tap do |remote_cookbooks|

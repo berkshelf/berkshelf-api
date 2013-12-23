@@ -6,6 +6,7 @@ describe Berkshelf::API::Endpoint::V1 do
 
   let(:app) { described_class.new }
   let(:cache_warm) { false }
+  let(:rack_env) { Hash.new }
 
   before do
     Berkshelf::API::CacheManager.start
@@ -15,14 +16,34 @@ describe Berkshelf::API::Endpoint::V1 do
   subject { last_response }
 
   describe "GET /universe" do
-    before { get '/universe' }
+    before { get '/universe', {}, rack_env }
     let(:app_cache) { cache_manager.cache }
 
     context "the cache has been warmed" do
       let(:cache_warm) { true }
+      context "the default format is json" do
+        subject { last_response }
+        let(:app_cache) { cache_manager.cache }
 
-      its(:status) { should be(200) }
-      its(:body) { should eq(app_cache.to_json) }
+        its(:status) { should be(200) }
+        its(:body) { should eq(app_cache.to_json) }
+      end
+      context "the user requests json" do
+        subject { last_response }
+        let(:app_cache) { cache_manager.cache }
+        let(:rack_env) { { 'HTTP_ACCEPT' => 'application/json' } }
+
+        its(:status) { should be(200) }
+        its(:body) { should eq(app_cache.to_json) }
+      end
+      context "the user requests msgpack" do
+        subject { last_response }
+        let(:app_cache) { cache_manager.cache }
+        let(:rack_env) { { 'HTTP_ACCEPT' => 'application/x-msgpack' } }
+
+        its(:status) { should be(200) }
+        its(:body) { should eq(app_cache.to_msgpack) }
+      end
     end
 
     context "the cache is still warming" do

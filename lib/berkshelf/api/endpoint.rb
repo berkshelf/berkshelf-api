@@ -1,4 +1,5 @@
 require 'grape'
+require 'grape-msgpack'
 
 module Berkshelf::API
   module Endpoint
