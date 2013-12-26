@@ -3,6 +3,10 @@
 * Enhancements
   * Added Github cache builder and Github endpoint. You can now add Github organization's as endpoints and the cache builder will crawl each repository looking for repositories which contain SemVer tags and raw cookbook metadata.
 
+* Bug Fixes
+  * Fix cache builder crashes when builder encounters a cookbook with invalid or missing metadata.
+  * Invalid cookbooks won't be added to cache.
+
 # 1.0.0
 
 * Prioritize Cache Builders so their entries do not clobber one another
