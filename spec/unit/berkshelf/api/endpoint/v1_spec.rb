@@ -28,4 +28,20 @@ describe Berkshelf::API::Endpoint::V1 do
       its(:headers) { should have_key("Retry-After") }
     end
   end
+
+  describe "GET /status" do
+    subject { last_response }
+
+    context "the cache has been warmed" do
+      before { cache_manager.set_warmed; get '/status'  }
+      its(:status) { should be(200) }
+      its(:body) { should eq({status: 'ok', version: Berkshelf::API::VERSION, cache_status: 'ok'}.to_json) }
+    end
+
+    context "the cache is still warming" do
+      before { get '/status' }
+      its(:status) { should be(200) }
+      its(:body) { should eq({status: 'ok', version: Berkshelf::API::VERSION, cache_status: 'warming'}.to_json) }
+    end
+  end
 end

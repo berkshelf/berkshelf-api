@@ -19,6 +19,11 @@ module Berkshelf::API
           status 503
         end
       end
+
+      desc "health check"
+      get 'status' do
+        {status: 'ok', version: Berkshelf::API::VERSION, cache_status: cache_manager.warmed? ? 'ok' : 'warming'}
+      end
     end
   end
 end
