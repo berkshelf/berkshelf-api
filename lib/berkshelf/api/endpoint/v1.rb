@@ -26,7 +26,7 @@ module Berkshelf::API
           status: 'ok',
           version: Berkshelf::API::VERSION,
           cache_status: cache_manager.warmed? ? 'ok' : 'warming',
-          uptime: Time.now - Application.start_time,
+          uptime: Time.now.utc - Application.start_time,
         }
       end
     end

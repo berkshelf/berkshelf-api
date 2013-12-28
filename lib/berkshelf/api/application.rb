@@ -114,7 +114,7 @@ module Berkshelf::API
       # @option options [Boolean] :disable_http (false)
       #   run the application without the rest gateway
       def run(options = {})
-        @start_time = Time.now
+        @start_time = Time.now.utc
         loop do
           supervisor = run!(options)
 
