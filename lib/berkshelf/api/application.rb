@@ -28,6 +28,7 @@ module Berkshelf::API
       include Berkshelf::API::Logging
       include Berkshelf::API::Mixin::Services
 
+      attr_reader :start_time
       def_delegators :registry, :[], :[]=
 
       # @return [Berkshelf::API::Config]
@@ -113,6 +114,7 @@ module Berkshelf::API
       # @option options [Boolean] :disable_http (false)
       #   run the application without the rest gateway
       def run(options = {})
+        @start_time = Time.now.utc
         loop do
           supervisor = run!(options)
 

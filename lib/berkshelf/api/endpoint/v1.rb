@@ -22,7 +22,12 @@ module Berkshelf::API
 
       desc "health check"
       get 'status' do
-        {status: 'ok', version: Berkshelf::API::VERSION, cache_status: cache_manager.warmed? ? 'ok' : 'warming'}
+        {
+          status: 'ok',
+          version: Berkshelf::API::VERSION,
+          cache_status: cache_manager.warmed? ? 'ok' : 'warming',
+          uptime: Time.now.utc - Application.start_time,
+        }
       end
     end
   end
