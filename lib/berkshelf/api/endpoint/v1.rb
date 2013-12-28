@@ -19,6 +19,11 @@ module Berkshelf::API
           status 503
         end
       end
+
+      desc "health check"
+      get 'status' do
+        {status: 'ok', version: Berkshelf::API::VERSION}
+      end
     end
   end
 end
