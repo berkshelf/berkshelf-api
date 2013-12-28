@@ -28,4 +28,13 @@ describe Berkshelf::API::Endpoint::V1 do
       its(:headers) { should have_key("Retry-After") }
     end
   end
+
+  describe "GET /status" do
+    before { get '/status' }
+
+    subject { last_response }
+
+    its(:status) { should be(200) }
+    its(:body) { should eq({status: 'ok', version: Berkshelf::API::VERSION}.to_json) }
+  end
 end
