@@ -30,11 +30,18 @@ describe Berkshelf::API::Endpoint::V1 do
   end
 
   describe "GET /status" do
-    before { get '/status' }
-
     subject { last_response }
 
-    its(:status) { should be(200) }
-    its(:body) { should eq({status: 'ok', version: Berkshelf::API::VERSION}.to_json) }
+    context "the cache has been warmed" do
+      before { cache_manager.set_warmed; get '/status'  }
+      its(:status) { should be(200) }
+      its(:body) { should eq({status: 'ok', version: Berkshelf::API::VERSION, cache_status: 'ok'}.to_json) }
+    end
+
+    context "the cache is still warming" do
+      before { get '/status' }
+      its(:status) { should be(200) }
+      its(:body) { should eq({status: 'ok', version: Berkshelf::API::VERSION, cache_status: 'warming'}.to_json) }
+    end
   end
 end
