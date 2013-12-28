@@ -1,3 +1,8 @@
+# master
+
+* Enhancements
+  * Added /status endpoint to REST API
+
 # 1.1.0
 
 * Enhancements
