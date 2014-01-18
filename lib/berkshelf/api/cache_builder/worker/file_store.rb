@@ -19,7 +19,7 @@ module Berkshelf::API
         def cookbooks
           [].tap do |cookbook_versions|
             @path.each_child do |dir|
-              next unless dir.directory?
+              next unless dir.cookbook?
               begin
                 cookbook = Ridley::Chef::Cookbook.from_path(dir)
                 cookbook_versions << RemoteCookbook.new(cookbook.cookbook_name, cookbook.version,
@@ -47,10 +47,8 @@ module Berkshelf::API
           #
           # @return [Ridley::Chef::Cookbook::Metadata, nil]
           def load_metadata(path)
-            metadata_content  = File.read(File.join(path, Ridley::Chef::Cookbook::Metadata::RAW_FILE_NAME))
-            cookbook_metadata = Ridley::Chef::Cookbook::Metadata.new
-            cookbook_metadata.instance_eval(metadata_content)
-            cookbook_metadata
+            cookbook = Ridley::Chef::Cookbook.from_path(path)
+            cookbook.metadata
           rescue => ex
             nil
           end
