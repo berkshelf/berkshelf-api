@@ -1,7 +1,19 @@
 # master
 
 * Enhancements
+  *
+
+* Bug Fixes
+  *
+
+# 1.1.1
+
+* Enhancements
   * Added /status endpoint to REST API
+
+* Bug Fixes
+  * Github cache builder will autopaginate to get all repos
+  * Fix dependency issues with Faraday
 
 # 1.1.0
 
