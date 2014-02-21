@@ -3,7 +3,7 @@ module Berkshelf::API
     class V1 < Endpoint::Base
       helpers Berkshelf::API::Mixin::Services
       version 'v1', using: :header, vendor: 'berkshelf'
-      format :json
+      default_format :json
 
       rescue_from Grape::Exceptions::Validation do |e|
         body = JSON.generate({status: e.status, message: e.message, param: e.param})
