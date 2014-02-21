@@ -8,9 +8,14 @@ A server which indexes cookbooks from various sources and hosts it over a REST A
 
     $ gem install berkshelf-api
 
-## Usage
+## Running the server
 
-TODO: Write usage instructions here
+    $ berks-api
+    I, [2014-02-21T12:05:07.639699 #43671]  INFO -- : Cache Manager starting...
+    I, [2014-02-21T12:05:07.639883 #43671]  INFO -- : Loading save from /Users/reset/.berkshelf/api-server/cerch
+    I, [2014-02-21T12:05:07.640462 #43671]  INFO -- : Cache contains 0 items
+    I, [2014-02-21T12:05:07.641021 #43671]  INFO -- : Cache Builder starting...
+    I, [2014-02-21T12:05:07.723779 #43671]  INFO -- : REST Gateway listening on 0.0.0.0:26200
 
 ## Supported Platforms
 
