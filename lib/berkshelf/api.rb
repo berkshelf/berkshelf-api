@@ -5,6 +5,8 @@ require 'ridley'
 require 'faraday'
 require 'json'
 
+require_relative 'api/core_ext'
+
 module Berkshelf
   module API
     require_relative 'api/errors'

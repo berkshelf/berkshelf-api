@@ -1,0 +1,6 @@
+name             "example_cookbook"
+maintainer       "Josiah Kiehl"
+maintainer_email "jkiehl@riotgames.com"
+license          "DO WHAT YOU WANT CAUSE A PIRATE IS FREE"
+description      "Installs/Configures example_cookbook"
+version          "0.5.0"

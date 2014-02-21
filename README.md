@@ -75,6 +75,23 @@ is required.
 }
 ```
 
+### FileStore directory
+
+A local directory containing cookbooks.
+
+```json
+{
+  "endpoints": [
+    {
+      "type": "file_store",
+      "options": {
+        "path": "/Users/chef/code/cookbooks"
+      }
+    }
+  ]
+}
+```
+
 ## Contributing
 
 1. Fork it
