@@ -10,7 +10,33 @@ A server which indexes cookbooks from various sources and hosts it over a REST A
 
 ## Usage
 
-TODO: Write usage instructions here
+### Help
+
+    $ berks-api -h
+    Usage: berks-api [options]
+        -p, --port PORT                  set the listening port
+        -v, --verbose                    run with verbose output
+        -d, --debug                      run with debug output
+        -q, --quiet                      silence output
+        -c, --config FILE                path to a configuration file to use
+        -h, --help                       show this message
+
+### Start a default berkshelf-api server
+
+    $ berks-api
+    I, [2013-11-04T15:00:39.352139 #6762]  INFO -- : Cache Manager starting...
+    I, [2013-11-04T15:00:39.352337 #6762]  INFO -- : Loading save from /Users/teemo/.berkshelf/api-server/cerch
+    I, [2013-11-04T15:00:39.352724 #6762]  INFO -- : Cache contains 0 items
+    I, [2013-11-04T15:00:39.353334 #6762]  INFO -- : Cache Builder starting...
+    I, [2013-11-04T15:00:39.550990 #6762]  INFO -- : REST Gateway listening on 0.0.0.0:26200
+    I, [2013-11-04T15:00:39.595797 #6762]  INFO -- : processing #<Berkshelf::API::CacheBuilder::Worker::Opscode:0x007fd19d0ddf10>
+    I, [2013-11-04T15:01:12.927892 #6762]  INFO -- : found 4477 cookbooks from #<Berkshelf::API::CacheBuilder::Worker::Opscode:0x007fd19d0ddf10>
+    I, [2013-11-04T15:01:12.935696 #6762]  INFO -- : processing metadata for 500 cookbooks with 3977 remaining on #<Berkshelf::API::CacheBuilder::Worker::Opscode:0x007fd19d0ddf10>
+
+## Configuration File
+
+* `home_path` [String] Location where the api-server should store its cache (e.g. /opt/berkshelf-api-server) Default: ~/.berkshelf/api-server
+* `endpoints` [Array] Configuration hashes to define what endpoints should be cached. (e.g. See [Configuring Endpoints](#configuring-endpoints))
 
 ## Supported Platforms
 
@@ -47,7 +73,7 @@ You may configure the endpoints to index by editing the JSON configuration file 
     {
       "type": "chef_server",
       "options": {
-        "url": "https://api.opscode.com/organizations/vialstudios",
+        "url": "https://api.opscode.com/organizations/riotgames",
         "client_name": "berkshelf",
         "client_key": "/etc/berkshelf/api-server/client.pem"
       }
