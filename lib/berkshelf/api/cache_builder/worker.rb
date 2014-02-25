@@ -22,6 +22,15 @@ module Berkshelf::API
           @priority = options[:priority]
         end
 
+        # @param [String] data
+        #   any string to append to the worker_type
+        # @return [String]
+        def to_s(data = nil)
+          string = self.class.worker_type.dup
+          string << ": #{data}" if data
+          string
+        end
+
         # @abstract
         #
         # @param [RemoteCookbook] remote

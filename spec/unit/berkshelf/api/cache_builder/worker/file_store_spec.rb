@@ -10,6 +10,8 @@ describe Berkshelf::API::CacheBuilder::Worker::FileStore do
     described_class.new(path: fixtures_path.join("cookbooks"))
   end
 
+  it_behaves_like "a human-readable string"
+
   describe "#cookbooks" do
     it "returns an array containing an item for each valid cookbook on the server" do
       expect(subject.cookbooks).to have(1).items

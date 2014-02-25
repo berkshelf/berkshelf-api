@@ -14,6 +14,11 @@ module Berkshelf::API
           super(options)
         end
 
+        # @return [String]
+        def to_s
+          super(path)
+        end
+
         # @return [Array<RemoteCookbook>]
         #  The list of cookbooks this builder can find
         def cookbooks
