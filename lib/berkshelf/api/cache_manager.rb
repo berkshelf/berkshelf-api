@@ -79,9 +79,9 @@ module Berkshelf::API
 
     # @param [CacheBuilder::Worker::Base] worker
     def process_worker(worker)
-      log.info "processing #{worker}"
+      log.info "Processing #{worker}"
       remote_cookbooks = worker.cookbooks
-      log.info "found #{remote_cookbooks.size} cookbooks from #{worker}"
+      log.info "Found #{remote_cookbooks.size} cookbooks from #{worker}"
       created_cookbooks, deleted_cookbooks = diff(remote_cookbooks, worker.priority)
       log.debug "#{created_cookbooks.size} cookbooks to be added to the cache from #{worker}"
       log.debug "#{deleted_cookbooks.size} cookbooks to be removed from the cache from #{worker}"
@@ -93,7 +93,7 @@ module Berkshelf::API
       created_cookbooks_with_metadata = []
       until created_cookbooks.empty?
         work = created_cookbooks.slice!(0,500)
-        log.info "processing metadata for #{work.size} cookbooks with #{created_cookbooks.size} remaining on #{worker}"
+        log.info "Processing metadata for #{work.size} cookbooks with #{created_cookbooks.size} remaining on #{worker}"
         work.map! do |remote|
           [ remote, worker.future(:metadata, remote) ]
         end.map! do |remote, metadata|
@@ -103,7 +103,7 @@ module Berkshelf::API
         created_cookbooks_with_metadata += work.compact
       end
 
-      log.info "about to merge cookbooks"
+      log.info "About to merge cookbooks"
       merge(created_cookbooks_with_metadata, deleted_cookbooks)
       log.info "#{self} cache updated."
     end
