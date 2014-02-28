@@ -77,7 +77,7 @@ a Github Enterprise server within your own organization
         "access_token": "",
         "api_endpoint": "https://github.enterprise.local/api/v3",
         "web_endpoint": "https://github.enterprise.local",
-        "sll_verify": true
+        "ssl_verify": true
       }
     }
   ]
