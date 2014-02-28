@@ -23,7 +23,7 @@ module Berkshelf::API
     attr_reader :cache
 
     def initialize
-      log.info "Cache Manager starting..."
+      log.info "#{self} starting..."
       @cache = DependencyCache.new
       load_save if File.exist?(self.class.cache_file)
       every(SAVE_INTERVAL) { save }
@@ -122,6 +122,11 @@ module Berkshelf::API
       log.info "Loading save from #{self.class.cache_file}"
       @cache = DependencyCache.from_file(self.class.cache_file)
       log.info "Cache contains #{@cache.cookbooks.size} items"
+    end
+
+    # @return [String]
+    def to_s
+      "Cache manager"
     end
 
     private

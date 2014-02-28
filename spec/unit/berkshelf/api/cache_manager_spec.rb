@@ -41,6 +41,8 @@ describe Berkshelf::API::CacheManager do
 
   subject { described_class.new }
 
+  it_behaves_like "a human-readable string"
+
   describe "#add" do
     pending
   end
