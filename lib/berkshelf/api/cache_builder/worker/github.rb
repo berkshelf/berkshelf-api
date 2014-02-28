@@ -17,7 +17,9 @@ module Berkshelf::API
         #   authentication token for accessing the Github organization. This is necessary
         #   since Github throttles unauthenticated API requests
         def initialize(options = {})
-          @connection   = Octokit::Client.new(access_token: options[:access_token], auto_paginate: true)
+          @connection   = Octokit::Client.new(access_token: options[:access_token], auto_paginate: true,
+            api_endpoint: options[:api_endpoint], web_endpoint: options[:web_endpoint],
+            connection_options: {ssl: {verify: options[:ssl_verify].nil? ? true : options[:ssl_verify]}})
           @organization = options[:organization]
           super(options)
         end
