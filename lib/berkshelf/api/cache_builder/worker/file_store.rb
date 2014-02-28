@@ -16,7 +16,7 @@ module Berkshelf::API
 
         # @return [String]
         def to_s
-          super(path)
+          friendly_name(path)
         end
 
         # @return [Array<RemoteCookbook>]
