@@ -64,7 +64,8 @@ You may configure the endpoints to index by editing the JSON configuration file 
 ### Github Organization
 
 Github limits the rate of requests to their API if not authenticated. For this reason the access_token option
-is required.
+is required. The api_endpoint, web_endpoint and ssl_verify options are only needed when you want to point to
+a Github Enterprise server within your own organization
 
 ```json
 {
@@ -73,7 +74,10 @@ is required.
       "type": "github",
       "options": {
         "organization": "opscode-cookbooks",
-        "access_token": ""
+        "access_token": "",
+        "api_endpoint": "https://github.enterprise.local/api/v3",
+        "web_endpoint": "https://github.enterprise.local",
+        "ssl_verify": true
       }
     }
   ]
