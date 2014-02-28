@@ -11,6 +11,8 @@ describe Berkshelf::API::CacheBuilder::Worker::ChefServer do
       client_key: fixtures_path.join("reset.pem"))
   end
 
+  it_behaves_like "a human-readable string"
+
   describe "#cookbooks" do
     before do
       chef_cookbook("ruby", "1.0.0")

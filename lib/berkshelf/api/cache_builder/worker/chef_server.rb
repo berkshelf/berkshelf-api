@@ -6,6 +6,9 @@ module Berkshelf::API
 
         finalizer :finalize_callback
 
+        # @return [String]
+        attr_reader :url
+
         # @option options [String] :url
         #   the URL of the target Chef Server
         # @option options [String] :client_name
@@ -15,9 +18,15 @@ module Berkshelf::API
         # @option options [Boolean] :ssl_verify
         #   turn ssl verification off if you have an unsigned SSL certificate
         def initialize(options = {})
-          @connection = Ridley::Client.new_link(server_url: options[:url], client_key: options[:client_key],
+          @url = options[:url]
+          @connection = Ridley::Client.new_link(server_url: url, client_key: options[:client_key],
             client_name: options[:client_name], ssl: { verify: options[:ssl_verify] })
           super
+        end
+
+        # @return [String]
+        def to_s
+          friendly_name(url)
         end
 
         # @return [Array<RemoteCookbook>]

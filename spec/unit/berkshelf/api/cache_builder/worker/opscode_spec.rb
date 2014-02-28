@@ -20,6 +20,8 @@ describe Berkshelf::API::CacheBuilder::Worker::Opscode do
     described_class.new
   end
 
+  it_behaves_like "a human-readable string"
+
   describe "#cookbooks" do
     let(:location_type) { described_class.worker_type }
     let(:location_path) { Berkshelf::API::SiteConnector::Opscode::V1_API}

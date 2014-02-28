@@ -99,14 +99,14 @@ module Berkshelf::API
       #
       # @return [String, nil]
       def download(name, version, destination = Dir.mktmpdir)
-        log.debug "downloading #{name}(#{version})"
+        log.debug "Downloading #{name}(#{version})"
         if uri = download_uri(name, version)
           begin
             archive = stream(uri)
             Archive.extract(archive.path, destination)
             destination
           rescue => ex
-            log.warn "error downloading/extracting #{name} (#{version}): #{ex}"
+            log.warn "Error downloading/extracting #{name} (#{version}): #{ex}"
             nil
           ensure
             archive.unlink unless archive.nil?

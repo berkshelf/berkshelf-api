@@ -44,6 +44,8 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
     described_class.new(organization: "opscode-cookbooks", access_token: "asdf")
   end
 
+  it_behaves_like "a human-readable string"
+
   describe "#cookbooks" do
     before do
       expect(connection).to receive(:organization_repositories) { repos }

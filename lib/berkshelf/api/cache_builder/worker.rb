@@ -22,6 +22,11 @@ module Berkshelf::API
           @priority = options[:priority]
         end
 
+        # @return [String]
+        def to_s
+          friendly_name
+        end
+
         # @abstract
         #
         # @param [RemoteCookbook] remote
@@ -38,6 +43,17 @@ module Berkshelf::API
         def cookbooks
           raise RuntimeError, "must be implemented"
         end
+
+        private
+
+          # @param [String] data
+          #   any string to append to the worker_type
+          # @return [String]
+          def friendly_name(data = nil)
+            string = self.class.worker_type.dup
+            string << ": #{data}" if data
+            string
+          end
       end
 
       class << self
