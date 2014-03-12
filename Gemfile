@@ -6,7 +6,6 @@ group :development do
   gem 'coolline'
   gem 'fuubar'
   gem 'redcarpet', platforms: :ruby
-  gem 'rspec'
   gem 'yard'
 
   gem 'guard'
@@ -33,7 +32,7 @@ group :development do
   end
 end
 
-group :test do
+group :development, :test do
   gem 'rack-test'
   gem 'rspec'
   gem 'spork'
