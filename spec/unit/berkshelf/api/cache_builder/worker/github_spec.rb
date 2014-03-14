@@ -48,7 +48,6 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
     before do
       expect(connection).to receive(:organization_repositories) { repos }
       expect(connection).to receive(:tags) { [good_tag, bad_tag] }
-      expect(connection).to receive(:web_endpoint) { "https://github.com" }
       expect(connection).to receive(:contents).with("opscode-cookbooks/apt",
         { path: "metadata.rb", ref: "v1.0.0"}) { contents }
     end
