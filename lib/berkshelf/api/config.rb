@@ -6,14 +6,14 @@ module Berkshelf::API
     class << self
       # @return [String]
       def default_path
-        home_path = ENV['BERKSHELF_API_PATH'] || "~/.berkshelf/api-server"
+        home_path = ENV['BERKSHELF_API_PATH'] || "#{ENV['HOME']}/.berkshelf/api-server"
         File.expand_path(File.join(home_path, "config.json"))
       end
     end
 
     attribute 'home_path',
       type: String,
-      default: File.expand_path("~/.berkshelf/api-server")
+      default: File.expand_path("#{ENV['HOME']}/.berkshelf/api-server")
 
     attribute 'endpoints',
       type: Array,
