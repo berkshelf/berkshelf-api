@@ -27,7 +27,7 @@ Ruby 1.9.1 and 1.9.2 are not officially supported. If you encounter problems, pl
 
 ## Configuring Endpoints
 
-You may configure the endpoints to index by editing the JSON configuration file (default: `~/.berkshelf/api-server/config.json`).
+You may configure the endpoints to index by editing the JSON configuration file (default: `#{ENV['HOME']}/.berkshelf/api-server/config.json`).
 
 ### Opscode Community Site
 
