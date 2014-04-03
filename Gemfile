@@ -11,7 +11,6 @@ group :development do
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-spork', platforms: :ruby
-  gem 'guard-yard'
 
   require 'rbconfig'
 
