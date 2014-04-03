@@ -19,13 +19,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = ">= 1.9.3"
 
-  spec.add_dependency 'ridley', '~> 2.0'
+  spec.add_dependency 'ridley', '~> 2.6'
   spec.add_dependency 'celluloid', '~> 0.15'
   spec.add_dependency 'reel', '>= 0.4.0'
   spec.add_dependency 'grape', '~> 0.6'
   spec.add_dependency 'grape-msgpack', '~> 0.1'
   spec.add_dependency 'hashie', '>= 2.0.4'
-  spec.add_dependency 'faraday', '~> 0.8.0'
+  spec.add_dependency 'faraday', '~> 0.9.0'
   spec.add_dependency 'retryable', '~> 1.3.3'
   spec.add_dependency 'archive', '= 0.0.5'
   spec.add_dependency 'buff-config', '~> 0.1'
