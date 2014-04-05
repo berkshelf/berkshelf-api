@@ -20,8 +20,9 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 1.9.3"
 
   spec.add_dependency 'ridley', '~> 3.0.0.rc1'
-  spec.add_dependency 'celluloid', '~> 0.15'
+  spec.add_dependency 'celluloid', '~> 0.16.0.pre'
   spec.add_dependency 'reel', '>= 0.4.0'
+  spec.add_dependency 'http', '~> 0.5.0' # explicitly lock because reel's is too lax
   spec.add_dependency 'grape', '~> 0.6'
   spec.add_dependency 'grape-msgpack', '~> 0.1'
   spec.add_dependency 'hashie', '>= 2.0.4'
