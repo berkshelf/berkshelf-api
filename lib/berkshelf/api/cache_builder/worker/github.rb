@@ -1,5 +1,5 @@
 require 'octokit'
-require 'solve'
+require 'semverse'
 require 'net/http'
 
 module Berkshelf::API
@@ -46,7 +46,7 @@ module Berkshelf::API
                       log.warn "Version found in metadata for #{repo.name} (#{tag.name}) does not " +
                         "match the tag. Got #{cookbook_metadata.version}."
                     end
-                  rescue Solve::Errors::InvalidVersionFormat
+                  rescue Semverse::InvalidVersionFormat
                     log.debug "Ignoring tag #{tag.name} for: #{repo.name}. Does not conform to semver."
                   rescue Octokit::NotFound
                     log.debug "Ignoring tag #{tag.name} for: #{repo.name}. No raw metadata found."
