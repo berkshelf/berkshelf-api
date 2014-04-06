@@ -4,11 +4,11 @@ gemspec
 
 group :development do
   gem 'coolline'
-  gem 'fuubar'
+  gem 'fuubar', '~> 1.1'
   gem 'redcarpet', platforms: :ruby
   gem 'yard'
 
-  gem 'guard'
+  gem 'guard', '~> 1.8'
   gem 'guard-rspec'
   gem 'guard-spork', platforms: :ruby
 
@@ -33,6 +33,6 @@ end
 
 group :development, :test do
   gem 'rack-test'
-  gem 'rspec'
-  gem 'spork'
+  gem 'rspec', '~> 2.13'
+  gem 'spork', '~> 0.9'
 end
