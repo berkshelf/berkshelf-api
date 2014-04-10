@@ -1,12 +1,10 @@
 # encoding: utf-8
 $:.push File.expand_path("../lib", __FILE__)
-$:.push File.expand_path("../tasks", __FILE__)
 
 require 'bundler'
 require 'bundler/setup'
 require 'thor'
 require 'berkshelf-api'
-require 'build_gem'
 require 'octokit'
 
 class Default < Thor
@@ -39,7 +37,6 @@ class Default < Thor
   def package
     say "packaging..."
     empty_directory PKG_DIR
-    invoke "gem:build"
     inside(File.dirname(__FILE__)) do
       run "bundle package --all"
       files = `git ls-files | grep -v spec`.split("\n")
@@ -56,12 +53,6 @@ class Default < Thor
   desc "release", "release the packaged software to Github"
   def release
     say "releasing..."
-    begin
-      invoke "gem:release"
-    rescue => ex
-      raise ex unless ex.message.scan(/Repushing of gem versions is not allowed/).any?
-    end
-
     begin
       release = github_client.create_release(repository, version)
     rescue Octokit::UnprocessableEntity
@@ -93,6 +84,6 @@ class Default < Thor
     end
 
     def version
-      @version ||= `git describe`.chomp
+      "v#{Berkshelf::API::VERSION}"
     end
 end
