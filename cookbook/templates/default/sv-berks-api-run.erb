@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export PATH=/opt/chef/embedded/bin:$PATH
+export HOME=<%= node[:berkshelf_api][:home] %>
+
+exec 2>&1
+exec bundle exec <%= node[:berkshelf_api][:bin_path] %> -p <%= node[:berkshelf_api][:port] %> -c <%= node[:berkshelf_api][:config_path] %>
