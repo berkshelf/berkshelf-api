@@ -1,39 +1,94 @@
 # encoding: utf-8
 $:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path("../tasks", __FILE__)
 
 require 'bundler'
 require 'bundler/setup'
 require 'thor'
 require 'berkshelf-api'
+require 'build_gem'
+require 'octokit'
 
 class Default < Thor
-  require 'thor/rake_compat'
+  include Thor::Actions
+  namespace "build"
+  default_task :all
 
-  include Thor::RakeCompat
-  Bundler::GemHelper.install_tasks
+  GITHUB_ORG_REGEX = /(git\@github.com\:|https\:\/\/github.com\/)(.+).git/.freeze
+  PKG_DIR          = File.expand_path("../pkg", __FILE__).freeze
+  VENDOR_DIR       = File.expand_path("../vendor", __FILE__).freeze
+  PROJECT_DIR      = File.dirname(__FILE__)
 
-  desc "build", "Build berkshelf-api-#{Berkshelf::API::VERSION}.gem into the pkg directory"
-  def build
-    Rake::Task["build"].execute
+  desc "all", "clean, package, and release to Github"
+  def all
+    clean
+    package
+    release
   end
 
-  desc "install", "Build and install berkshelf-api-#{Berkshelf::API::VERSION}.gem into system gems"
-  def install
-    Rake::Task["install"].execute
-  end
-
-  desc "release", "Create tag v#{Berkshelf::API::VERSION} and build and push berkshelf-api-#{Berkshelf::API::VERSION}.gem to Rubygems"
-  def release
-    Rake::Task["release"].execute
-  end
-
-  class Spec < Thor
-    namespace :spec
-    default_task :all
-
-    desc "all", "run all tests"
-    def all
-      exec "rspec --color --format=documentation spec"
+  desc "clean", "clean the packaging directory"
+  def clean
+    say "cleaning..."
+    [ PKG_DIR, VENDOR_DIR ].each do |dir|
+      FileUtils.rm_rf(dir)
+      FileUtils.mkdir_p(dir)
     end
   end
+
+  desc "package", "package the software for release"
+  def package
+    say "packaging..."
+    empty_directory PKG_DIR
+    invoke "gem:build"
+    inside(File.dirname(__FILE__)) do
+      run "bundle package --all"
+      files = `git ls-files | grep -v spec`.split("\n")
+      run("tar -czf #{archive_out} #{files.join(' ')} vendor")
+    end
+  end
+
+  method_option :github_token,
+    type: :string,
+    default: ENV["GITHUB_TOKEN"],
+    required: true,
+    aliases: "-t",
+    banner: "TOKEN"
+  desc "release", "release the packaged software to Github"
+  def release
+    say "releasing..."
+    invoke "gem:release"
+
+    begin
+      release = github_client.create_release(repository, version)
+    rescue Octokit::UnprocessableEntity
+      release = github_client.releases(repository).find { |release| release[:tag_name] == version }
+    end
+
+    say "Uploading #{File.basename(archive_out)} to Github..."
+    github_client.upload_asset(release[:url], archive_out, name: "berkshelf-api.tar.gz",
+      content_type: "application/x-tar")
+  end
+
+  private
+
+    def archive_out
+      File.join(PKG_DIR, "berkshelf-api-#{version}.tar.gz")
+    end
+
+    def github_client
+      @github_client ||= Octokit::Client.new(access_token: options[:github_token])
+    end
+
+    def repository
+      @repository ||= extract_repository
+    end
+
+    def extract_repository
+      _, repository = `git remote show origin | grep Push`.scan(GITHUB_ORG_REGEX).first
+      repository
+    end
+
+    def version
+      @version ||= `git describe`.chomp
+    end
 end
