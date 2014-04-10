@@ -1,10 +1,10 @@
-# master
+# 1.2.0
 
 * Enhancements
-  *
+  * Loosen constraints and bump versions of various gems
 
 * Bug Fixes
-  *
+  * Fix issue with default configuration where home path was not being set
 
 # 1.1.1
 
