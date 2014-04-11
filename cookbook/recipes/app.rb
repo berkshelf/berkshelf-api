@@ -70,4 +70,7 @@ execute "berkshelf-api-bundle-install" do
   not_if "cd #{node[:berkshelf_api][:deploy_path]} && /opt/chef/embedded/bin/bundle check"
 end
 
-runit_service "berks-api"
+runit_service "berks-api" do
+  sv_timeout 30
+  action :enable
+end
