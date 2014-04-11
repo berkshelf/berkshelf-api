@@ -53,6 +53,8 @@ class Default < Thor
   desc "release", "release the packaged software to Github"
   def release
     say "releasing..."
+    tag_version { run("git push --tags") } unless already_tagged?
+
     begin
       release = github_client.create_release(repository, version)
     rescue Octokit::UnprocessableEntity
@@ -85,5 +87,22 @@ class Default < Thor
 
     def version
       "v#{Berkshelf::API::VERSION}"
+    end
+
+    def already_tagged?
+      if `git tag`.split(/\n/).include?(version)
+        say "Tag #{version} has already been created."
+        true
+      end
+    end
+
+    def tag_version
+      run "git tag -a -m \"Version #{version}\" #{version}"
+      say "Tagged #{version}."
+      yield if block_given?
+    rescue
+      error "Untagging #{version} due to error."
+      sh_with_code "git tag -d #{version}"
+      raise
     end
 end
