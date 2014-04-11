@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'ridley',         '~> 3.0'
 gem 'celluloid',      '~> 0.16.0.pre'
+gem 'celluloid-io',   '~> 0.16.0.pre'
 gem 'reel',           '>= 0.4.0'
 gem 'http',           '~> 0.5.0' # explicitly lock because reel's is too lax
 gem 'grape',          '~> 0.6'
