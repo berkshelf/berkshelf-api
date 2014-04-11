@@ -6,6 +6,7 @@ require 'bundler/setup'
 require 'thor'
 require 'berkshelf-api'
 require 'octokit'
+require 'berkflow/thor_tasks'
 
 class Default < Thor
   include Thor::Actions
@@ -64,6 +65,7 @@ class Default < Thor
     say "Uploading #{File.basename(archive_out)} to Github..."
     github_client.upload_asset(release[:url], archive_out, name: "berkshelf-api.tar.gz",
       content_type: "application/x-tar")
+    invoke Berkflow::ThorTasks, "release", [], berksfile: File.join(PROJECT_DIR, "cookbook", "Berksfile")
   end
 
   private
