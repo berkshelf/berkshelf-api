@@ -1,5 +1,6 @@
 # encoding: utf-8
 $:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path("../tasks", __FILE__)
 
 require 'bundler'
 require 'bundler/setup'
@@ -7,6 +8,7 @@ require 'thor'
 require 'berkshelf-api'
 require 'octokit'
 require 'berkflow/thor_tasks'
+require 'build_gem'
 
 class Default < Thor
   include Thor::Actions
@@ -55,7 +57,11 @@ class Default < Thor
   desc "release", "release the packaged software to Github"
   def release
     say "releasing..."
-    invoke "gem:release"
+    begin
+      invoke "gem:release"
+    rescue => ex
+      raise ex unless ex.message.scan(/Repushing of gem versions is not allowed/).any?
+    end
 
     begin
       release = github_client.create_release(repository, version)
