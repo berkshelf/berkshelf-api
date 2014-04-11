@@ -66,7 +66,7 @@ execute "berkshelf-api-bundle-install" do
   user node[:berkshelf_api][:owner]
   group node[:berkshelf_api][:group]
   cwd node[:berkshelf_api][:deploy_path]
-  command "/opt/chef/embedded/bin/bundle install --deployment"
+  command "/opt/chef/embedded/bin/bundle install --deployment --without development test"
   not_if "cd #{node[:berkshelf_api][:deploy_path]} && /opt/chef/embedded/bin/bundle check"
 end
 
