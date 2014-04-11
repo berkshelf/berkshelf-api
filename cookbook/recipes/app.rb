@@ -58,16 +58,16 @@ libarchive_file "berkshelf-api.tar.gz" do
   group node[:berkshelf_api][:group]
 
   action :extract
-  notifies :run, "execute[berkshelf-api-bundle-install]"
   notifies :restart, "runit_service[berks-api]"
   only_if { ::File.exist?(asset.asset_path) }
 end
 
 execute "berkshelf-api-bundle-install" do
+  user node[:berkshelf_api][:owner]
+  group node[:berkshelf_api][:group]
   cwd node[:berkshelf_api][:deploy_path]
-  environment "PATH" => "/opt/chef/embedded/bin"
-  command "bundle install"
-  action :run
+  command "/opt/chef/embedded/bin/bundle install --deployment"
+  not_if "cd #{node[:berkshelf_api][:deploy_path]} && /opt/chef/embedded/bin/bundle check"
 end
 
 runit_service "berks-api"
