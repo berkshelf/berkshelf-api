@@ -35,6 +35,12 @@ end
 
 group node[:berkshelf_api][:group]
 
+directory node[:berkshelf_api][:home] do
+  owner node[:berkshelf_api][:owner]
+  group node[:berkshelf_api][:group]
+  recursive true
+end
+
 file node[:berkshelf_api][:config_path] do
   content JSON.generate(node[:berkshelf_api][:config].to_hash)
 end
@@ -52,8 +58,16 @@ libarchive_file "berkshelf-api.tar.gz" do
   group node[:berkshelf_api][:group]
 
   action :extract
+  notifies :run, "execute[berkshelf-api-bundle-install]"
   notifies :restart, "runit_service[berks-api]"
   only_if { ::File.exist?(asset.asset_path) }
+end
+
+execute "berkshelf-api-bundle-install" do
+  cwd node[:berkshelf_api][:deploy_path]
+  environment "PATH" => "/opt/chef/embedded/bin"
+  command "bundle install"
+  action :run
 end
 
 runit_service "berks-api"
