@@ -6,8 +6,9 @@ require 'bundler'
 require 'bundler/setup'
 require 'thor'
 require 'berkshelf-api'
-require 'build_gem'
 require 'octokit'
+require 'berkflow/thor_tasks'
+require 'build_gem'
 
 class Default < Thor
   include Thor::Actions
@@ -56,7 +57,11 @@ class Default < Thor
   desc "release", "release the packaged software to Github"
   def release
     say "releasing..."
-    invoke "gem:release"
+    begin
+      invoke "gem:release"
+    rescue => ex
+      raise ex unless ex.message.scan(/Repushing of gem versions is not allowed/).any?
+    end
 
     begin
       release = github_client.create_release(repository, version)
@@ -67,6 +72,7 @@ class Default < Thor
     say "Uploading #{File.basename(archive_out)} to Github..."
     github_client.upload_asset(release[:url], archive_out, name: "berkshelf-api.tar.gz",
       content_type: "application/x-tar")
+    invoke Berkflow::ThorTasks, "release", [], berksfile: File.join(PROJECT_DIR, "cookbook", "Berksfile")
   end
 
   private
@@ -89,6 +95,6 @@ class Default < Thor
     end
 
     def version
-      @version ||= `git describe`.chomp
+      "v#{Berkshelf::API::VERSION}"
     end
 end
