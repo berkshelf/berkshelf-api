@@ -2,18 +2,16 @@ DEPENDENCIES
   berkshelf-api
     path: .
     metadata: true
-  github
-    path: ../../cookbooks/github
 
 GRAPH
   apt (2.3.8)
   berkshelf-api (1.2.0)
-    github (>= 0.2.0)
+    github (~> 0.2)
     libarchive (~> 0.3)
     nginx (>= 1.7.0)
     runit (>= 0.0.0)
   build-essential (2.0.0)
-  github (0.2.0)
+  github (0.2.1)
     libarchive (>= 0.0.0)
   libarchive (0.3.0)
   nginx (1.8.0)
