@@ -22,11 +22,10 @@ default[:berkshelf_api][:release]        = "v#{Berkshelf::API::Chef.cookbook_ver
 default[:berkshelf_api][:owner]          = "berkshelf"
 default[:berkshelf_api][:group]          = "berkshelf"
 default[:berkshelf_api][:home]           = "/etc/berkshelf/api-server"
-default[:berkshelf_api][:deploy_path]    = "/opt/berkshelf-api/releases/#{node[:berkshelf_api][:release]}"
+default[:berkshelf_api][:deploy_path]    = "/opt/berkshelf-api/#{node[:berkshelf_api][:release]}"
 default[:berkshelf_api][:port]           = 26200
 default[:berkshelf_api][:proxy_port]     = 80
 default[:berkshelf_api][:host]           = node[:fqdn]
-default[:berkshelf_api][:install_method] = :package
 default[:berkshelf_api][:config_path]    = "#{node[:berkshelf_api][:home]}/config.json"
 default[:berkshelf_api][:config]         = {
   home_path: node[:berkshelf_api][:home]
