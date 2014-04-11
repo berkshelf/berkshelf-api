@@ -16,6 +16,8 @@ gem 'octokit',        '~> 2.6'
 gem 'semverse',       '~> 1.0'
 
 group :development do
+  gem 'berkshelf', github: "berkshelf/berkshelf"
+  gem 'berkflow', github: "reset/berkflow"
   gem 'thor',      '~> 0.18'
   gem 'chef-zero', '~> 1.5'
   gem 'coolline'
