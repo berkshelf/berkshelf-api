@@ -43,7 +43,7 @@ class Default < Thor
     invoke "gem:build"
     inside(File.dirname(__FILE__)) do
       run "bundle package --all"
-      files = `git ls-files | grep -v spec`.split("\n")
+      files = `git ls-files | grep -v spec/`.split("\n")
       run("tar -czf #{archive_out} #{files.join(' ')} vendor")
     end
   end
