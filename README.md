@@ -6,6 +6,42 @@ A server which indexes cookbooks from various sources and hosts it over a REST A
 
 ## Installation
 
+The API server can be installed in two ways; from a Chef Cookbook (recommended) and from a Rubygem.
+
+### Cookbook install
+
+#### Basic
+
+1. Select a [release](https://github.com/berkshelf/berkshelf-api/releases) and download it's cookbooks artifact (`cookbooks.tar.gz`).
+2. Upload the cookbooks to your Chef Server if you're using Chef Client or just give them to Chef Solo if that's your thing.
+3. Add "recipe[berkshelf-api::default]" to your node's run_list and run Chef.
+
+#### Express
+
+Install and configure [Chef/Knife](https://github.com/opscode/chef) and [Berkflow](https://github.com/reset/berkflow) on your machine.
+
+Create an environment
+
+    $ knife environment create berks-api-production -d
+
+Bootstrap a server into that environment
+
+    $ knife ec2 server create -I ami-22e08b12 -f t1.micro -E berks-api-production -r "recipe[organization-base::default]" -G ssh-admin,http-https --ssh-user ubuntu
+
+Install the cookbooks into your environment
+
+    $ blo in https://github.com/berkshelf/berkshelf-api/releases/download/v1.2.1/cookbooks.tar.gz
+
+Add the recipe to your new node's run_list
+
+    $ knife node run_list add i-c8cd9ac1 "recipe[berkshelf-api::default]"
+
+Update the machine you bootstrapped to the latest version of Berkshelf-API
+
+    $ blo up berks-api-production berkshelf-api 1.2.1
+
+### Gem install
+
     $ gem install berkshelf-api
 
 ## Running the server
@@ -22,8 +58,6 @@ A server which indexes cookbooks from various sources and hosts it over a REST A
 Berkshelf-API is tested on Ruby 1.9.3, 2.0.0, and JRuby 1.7+.
 
 Ruby 1.9 mode is required on all interpreters.
-
-Ruby 1.9.1 and 1.9.2 are not officially supported. If you encounter problems, please upgrade to Ruby 2.0 or 1.9.3.
 
 ## Configuring Endpoints
 
@@ -100,14 +134,6 @@ A local directory containing cookbooks.
   ]
 }
 ```
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
 
 # Authors and Contributors
 
