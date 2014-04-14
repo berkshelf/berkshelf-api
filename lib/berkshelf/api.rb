@@ -26,3 +26,5 @@ module Berkshelf
     require_relative 'api/srv_ctl'
   end
 end
+
+Celluloid.logger.level = Logger::ERROR
