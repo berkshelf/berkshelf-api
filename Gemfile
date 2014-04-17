@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'berkshelf', github: "berkshelf/berkshelf"
   gem 'berkflow', github: "reset/berkflow"
   gem 'thor',      '~> 0.18'
   gem 'chef-zero', '~> 1.5'

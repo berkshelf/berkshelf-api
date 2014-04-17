@@ -1,7 +1,7 @@
 require 'reel'
 
 module Berkshelf::API
-  class RESTGateway < Reel::Server
+  class RESTGateway < Reel::Server::HTTP
     extend Forwardable
     include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
