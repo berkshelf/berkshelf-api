@@ -1,3 +1,12 @@
+# 1.2.2
+
+* Enhancements
+  * Bump to Reel 0.5
+  * Set Celluloid log level to ERROR
+
+* Bug Fixes
+  * Include full URL to Github location in items cached by Github builder
+
 # 1.2.0
 
 * Enhancements
