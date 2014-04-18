@@ -8,6 +8,8 @@ module Berkshelf::API
       class Github < Worker::Base
         worker_type "github"
 
+        include Logging
+
         # @return [String]
         attr_reader :organization
 
@@ -21,6 +23,15 @@ module Berkshelf::API
             api_endpoint: options[:api_endpoint], web_endpoint: options[:web_endpoint],
             connection_options: {ssl: {verify: options[:ssl_verify].nil? ? true : options[:ssl_verify]}})
           @organization = options[:organization]
+
+          log.warn "You have configured a GitHub endpoint to index the #{@organization} organization."
+          log.warn "Using unfinalized artifacts, such as cookbooks retrieved from Git, to satisfiy your"
+          log.warn "dependencies is *STRONGLY FROWNED UPON* and potentially *DANGEROUS*."
+          log.warn ""
+          log.warn "Please consider setting up a release process for the cookbooks you wish to retrieve from this"
+          log.warn "GitHub organization where the cookbook is uploaded into a Hosted Chef organization, an internal"
+          log.warn "Chef Server, or the community site, and then replace this endpoint with a chef_server endpoint."
+
           super(options)
         end
 

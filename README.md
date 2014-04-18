@@ -95,11 +95,13 @@ You may configure the endpoints to index by editing the JSON configuration file 
 }
 ```
 
-### Github Organization
+### GitHub Organization
 
-Github limits the rate of requests to their API if not authenticated. For this reason the access_token option
+> WARNING: Using the GitHub endpoint is *STRONGLY FROWNED UPON* and potentially *DANGEROUS*. Please consider setting up a proper release process for the cookbooks you wish to index instead where they are uploaded to the community site or a Chef Server and use the chef_server endpoint instead.
+
+GitHub limits the rate of requests to their API if not authenticated. For this reason the access_token option
 is required. The api_endpoint, web_endpoint and ssl_verify options are only needed when you want to point to
-a Github Enterprise server within your own organization
+a GitHub Enterprise server within your own organization
 
 ```json
 {
