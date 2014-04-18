@@ -1,3 +1,8 @@
+# master
+
+* Enhancements
+  * Added warning messages to startup when using github/file_store endpoints
+
 # 1.2.2
 
 * Enhancements

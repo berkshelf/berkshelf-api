@@ -4,6 +4,8 @@ module Berkshelf::API
       class FileStore < Worker::Base
         worker_type "file_store"
 
+        include Logging
+
         # @return [String]
         attr_reader :path
 
@@ -11,6 +13,13 @@ module Berkshelf::API
         #   the directory to search for local cookbooks
         def initialize(options = {})
           @path = Pathname(options[:path])
+          log.warn "You have configured a FileStore endpoint to index the contents of #{@path}."
+          log.warn "Using unfinalized artifacts, which this path may contain, to satisfiy your"
+          log.warn "dependencies is *STRONGLY FROWNED UPON* and potentially *DANGEROUS*."
+          log.warn ""
+          log.warn "Please consider setting up a release process for the cookbooks you wish to retrieve from this"
+          log.warn "filepathe where the cookbook is uploaded into a Hosted Chef organization, an internal"
+          log.warn "Chef Server, or the community site, and then replace this endpoint with a chef_server endpoint."
           super(options)
         end
 
