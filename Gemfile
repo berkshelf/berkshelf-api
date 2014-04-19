@@ -4,6 +4,7 @@ gemspec
 
 group :development do
   gem 'berkflow', github: "reset/berkflow"
+  gem 'berkshelf', github: "berkshelf/berkshelf"
   gem 'thor',      '~> 0.18'
   gem 'chef-zero', '~> 1.5'
   gem 'coolline'

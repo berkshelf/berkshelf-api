@@ -1,7 +1,11 @@
-# master
+# 1.3.0
 
 * Enhancements
   * Added warning messages to startup when using github/file_store endpoints
+  * Bump Octokit dependency to ~> 3.0
+
+* Bug Fix
+  * Fixed issue with GH indexing where there were a high number of repositories in an organization
 
 # 1.2.2
 
