@@ -11,7 +11,6 @@ long_description "Installs/Configures a berkshelf-api server"
 version          Berkshelf::API::VERSION
 
 supports "ubuntu"
-supports "centos"
 
 depends "runit"
 depends "nginx",           ">= 1.7.0"
