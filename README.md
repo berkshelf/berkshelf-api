@@ -12,7 +12,7 @@ The API server can be installed in two ways; from a Chef Cookbook (recommended) 
 
 #### Basic
 
-1. Select a [release](https://github.com/berkshelf/berkshelf-api/releases) and download it's cookbooks artifact (`cookbooks.tar.gz`).
+1. Select a [release](https://github.com/berkshelf/berkshelf-api/releases) and download its cookbooks artifact (`cookbooks.tar.gz`).
 2. Upload the cookbooks to your Chef Server if you're using Chef Client or just give them to Chef Solo if that's your thing.
 3. Add "recipe[berkshelf-api::default]" to your node's run_list and run Chef.
 
@@ -30,7 +30,7 @@ Bootstrap a server into that environment
 
 Install the cookbooks into your environment
 
-    $ blo in https://github.com/berkshelf/berkshelf-api/releases/download/v1.2.1/cookbooks.tar.gz
+    $ blo in https://github.com/berkshelf/berkshelf-api/releases/download/v1.3.1/cookbooks.tar.gz
 
 Add the recipe to your new node's run_list
 
@@ -57,15 +57,16 @@ And add your configuration to the `node[:berkshelf_api][:config]` attribute
         }
       ]
     }
+    "host":"your.fqdn.here"
   }
 }
 ```
 
-> See the configuration section below for a complete list of config options
+> See configuration endpoints below for a complete list of supported endpoints, and the [api cookbook readme](https://github.com/berkshelf/berkshelf-api/tree/master/cookbook) for all configuration options.
 
 Update the machine you bootstrapped to the latest version of Berkshelf-API
 
-    $ blo up berks-api-production berkshelf-api 1.2.1
+    $ blo up berks-api-production berkshelf-api 1.3.1
 
 ### Gem install
 
@@ -88,7 +89,7 @@ Ruby 1.9 mode is required on all interpreters.
 
 ## Configuring Endpoints
 
-You may configure the endpoints to index by editing the JSON configuration file (default: `#{ENV['HOME']}/.berkshelf/api-server/config.json`).
+You may configure the endpoints to index by editing the JSON configuration file (default: `#{ENV['HOME']}/.berkshelf/api-server/config.json`). This
 
 ### Opscode Community Site
 
