@@ -89,7 +89,7 @@ Ruby 1.9 mode is required on all interpreters.
 
 ## Configuring Endpoints
 
-You may configure the endpoints to index by editing the JSON configuration file (default: `#{ENV['HOME']}/.berkshelf/api-server/config.json`). This
+You may configure the endpoints to index by editing the JSON configuration file (default: `#{ENV['HOME']}/.berkshelf/api-server/config.json`).
 
 ### Opscode Community Site
 
