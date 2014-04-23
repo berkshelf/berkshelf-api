@@ -17,19 +17,10 @@
 # limitations under the License.
 #
 
-node.set[:'build-essential'][:compile_time] = true
-include_recipe "build-essential::default"
+include_recipe "libarchive::default"
 include_recipe "runit"
 
 chef_gem "bundler"
-
-if platform_family?("rhel")
-  package "libarchive"
-  package "libarchive-devel"
-else
-  package "libarchive#{node[:platform_version].split('.')[0].chomp('0')}"
-  package "libarchive-dev"
-end
 
 user node[:berkshelf_api][:owner] do
   home node[:berkshelf_api][:home]
