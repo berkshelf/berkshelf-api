@@ -36,6 +36,33 @@ Add the recipe to your new node's run_list
 
     $ knife node run_list add i-c8cd9ac1 "recipe[berkshelf-api::default]"
 
+Edit the environment to configure the API server
+
+    $ knife environment edit berks-api-production
+
+And add your configuration to the `node[:berkshelf_api][:config]` attribute
+
+```json
+"default_attributes": {
+  "berkshelf_api": {
+    "config": {
+      "endpoints": [
+        {
+          "type": "chef_server",
+          "options": {
+            "url": "https://api.opscode.com/organizations/vialstudios",
+            "client_key": "/etc/berkshelf/api-server/client.pem",
+            "client_name": "berkshelf"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+> See the configuration section below for a complete list of config options
+
 Update the machine you bootstrapped to the latest version of Berkshelf-API
 
     $ blo up berks-api-production berkshelf-api 1.2.1

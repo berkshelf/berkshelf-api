@@ -1,3 +1,8 @@
+# 1.3.1
+
+* Enhancements
+  * Fix cookbook issue when installing on `> Ubuntu 12.04`
+
 # 1.3.0
 
 * Enhancements
