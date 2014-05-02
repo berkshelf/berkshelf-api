@@ -4,6 +4,8 @@ Installs/Configures a berkshelf-api server
 
 ## Supported Platforms
 
+  * Redhat
+  * CentOS
   * Ubuntu
 
 ## Attributes
