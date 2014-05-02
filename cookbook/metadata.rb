@@ -10,9 +10,12 @@ description      "Installs/Configures a berkshelf-api server"
 long_description "Installs/Configures a berkshelf-api server"
 version          Berkshelf::API::VERSION
 
-supports "ubuntu"
+%w{ redhat centos ubuntu }.each do |os|
+  supports os
+end
 
 depends "runit"
+depends "build-essential", ">= 2.0.2"
 depends "nginx",           ">= 1.7.0"
 depends "libarchive",      "~> 0.4"
 depends "github",          "~> 0.2"
