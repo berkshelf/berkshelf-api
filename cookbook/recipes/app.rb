@@ -22,17 +22,17 @@ include_recipe "runit"
 
 chef_gem "bundler"
 
-user node[:berkshelf_api][:owner] do
-  home node[:berkshelf_api][:home]
-end
-
-group node[:berkshelf_api][:group]
-
 directory node[:berkshelf_api][:home] do
   owner node[:berkshelf_api][:owner]
   group node[:berkshelf_api][:group]
   recursive true
 end
+
+user node[:berkshelf_api][:owner] do
+  home node[:berkshelf_api][:home]
+end
+
+group node[:berkshelf_api][:group]
 
 file node[:berkshelf_api][:config_path] do
   content JSON.generate(node[:berkshelf_api][:config].to_hash)
