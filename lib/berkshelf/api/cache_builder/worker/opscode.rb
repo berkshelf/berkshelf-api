@@ -53,13 +53,30 @@ module Berkshelf::API
             # The community site does not enforce the name of the cookbook contained in the archive
             # downloaded and extracted. This will just find the first metadata.json and load it.
             file = Dir["#{directory}/**/*/metadata.json"].first
-            return nil if file.nil?
 
-            metadata = File.read(file)
-            Ridley::Chef::Cookbook::Metadata.from_json(metadata)
-          rescue JSON::ParserError => ex
-            log.warn "Error loading metadata for #{cookbook} from: #{file}"
-            abort MetadataLoadError.new(ex)
+            if file
+              begin
+                metadata = File.read(file)
+                return Ridley::Chef::Cookbook::Metadata.from_json(metadata)
+              rescue JSON::ParserError => ex
+                log.warn "Error loading metadata for #{cookbook} from: #{file}"
+                abort MetadataLoadError.new(ex)
+              end
+            else
+              # look for metadata.rb
+              rb_file = Dir["#{directory}/**/*/#{ Ridley::Chef::Cookbook::Metadata::RAW_FILE_NAME }"].first
+
+              if rb_file
+                log.debug "Using metadata from .rb file: #{rb_file}"
+                metadata = File.read(rb_file)
+                cookbook_metadata = Ridley::Chef::Cookbook::Metadata.new
+                cookbook_metadata.instance_eval(metadata)
+
+                return cookbook_metadata
+              else
+                return nil
+              end
+            end
           end
       end
     end
