@@ -165,6 +165,11 @@ A local directory containing cookbooks.
 }
 ```
 
+## Getting Help
+
+* If you have an issue: report it on the [issue tracker](https://github.com/berkshelf/berkshelf/issues)
+* If you have a question: visit the #chef or #berkshelf channel on irc.freenode.net
+
 # Authors and Contributors
 
 * Jamie Winsor (<jamie@vialstudios.com>)
