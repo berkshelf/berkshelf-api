@@ -56,7 +56,7 @@ And add your configuration to the `node[:berkshelf_api][:config]` attribute
           }
         }
       ]
-    }
+    },
     "host":"your.fqdn.here"
   }
 }
