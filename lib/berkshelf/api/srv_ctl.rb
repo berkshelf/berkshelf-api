@@ -12,6 +12,10 @@ module Berkshelf
           options = Hash.new
 
           OptionParser.new("Usage: #{filename} [options]") do |opts|
+            opts.on("-h", "--host HOST", String, "set the listening address") do |h|
+              options[:host] = h
+            end
+            
             opts.on("-p", "--port PORT", Integer, "set the listening port") do |v|
               options[:port] = v
             end
