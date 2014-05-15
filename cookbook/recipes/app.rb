@@ -30,6 +30,7 @@ end
 
 user node[:berkshelf_api][:owner] do
   home node[:berkshelf_api][:home]
+  system true
 end
 
 group node[:berkshelf_api][:group]
