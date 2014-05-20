@@ -67,7 +67,7 @@ Installs/Configures a berkshelf-api server
   </tr>
   <tr>
     <td><tt>[:berkshelf_api][:host]</tt></td>
-    <td>Integer</td>
+    <td>String</td>
     <td>Proxy's hostname</td>
     <td><tt>{fqdn}</tt></td>
   </tr>
