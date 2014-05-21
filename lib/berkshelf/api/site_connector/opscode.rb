@@ -60,9 +60,15 @@ module Berkshelf::API
         cookbooks = Array.new
 
         while count > 0
-          cookbooks += connection.get("cookbooks?start=#{start}&items=#{count}").body["items"]
-          start += 100
-          count -= 100
+          req = connection.get("cookbooks?start=#{start}&items=#{count}")
+          chunk = req.body["items"]
+          if chunk
+            cookbooks += chunk
+            start += 100
+            count -= 100
+          else
+            log.warn "Didn't get any cookbooks - #{req.body}"
+          end
         end
 
         cookbooks.map { |cb| cb["cookbook_name"] }
