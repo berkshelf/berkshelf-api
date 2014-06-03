@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: berkshelf-api
+# Cookbook Name:: berkshelf-api-server
 # Libraries:: berkshelf_api
 #
 # Copyright (C) 2013-2014 Jamie Winsor
@@ -27,7 +27,7 @@ module Berkshelf
         #
         # @return [String]
         def cookbook_version(context)
-          context.cookbook_collection["berkshelf-api"].version
+          context.cookbook_collection["berkshelf-api-server"].version
         end
       end
     end

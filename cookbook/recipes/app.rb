@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: berkshelf
+# Cookbook Name:: berkshelf-api-server
 # Recipe:: app
 #
 # Copyright (C) 2013-2014 Jamie Winsor
