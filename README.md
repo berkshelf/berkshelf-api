@@ -14,7 +14,7 @@ The API server can be installed in two ways; from a Chef Cookbook (recommended) 
 
 1. Select a [release](https://github.com/berkshelf/berkshelf-api/releases) and download its cookbooks artifact (`cookbooks.tar.gz`).
 2. Upload the cookbooks to your Chef Server if you're using Chef Client or just give them to Chef Solo if that's your thing.
-3. Add "recipe[berkshelf-api::default]" to your node's run_list and run Chef.
+3. Add "recipe[berkshelf-api-server::default]" to your node's run_list and run Chef.
 
 #### Express
 
@@ -34,7 +34,7 @@ Install the cookbooks into your environment
 
 Add the recipe to your new node's run_list
 
-    $ knife node run_list add i-c8cd9ac1 "recipe[berkshelf-api::default]"
+    $ knife node run_list add i-c8cd9ac1 "recipe[berkshelf-api-server::default]"
 
 Edit the environment to configure the API server
 
@@ -66,7 +66,7 @@ And add your configuration to the `node[:berkshelf_api][:config]` attribute
 
 Update the machine you bootstrapped to the latest version of Berkshelf-API
 
-    $ blo up berks-api-production berkshelf-api 1.3.1
+    $ blo up berks-api-production berkshelf-api-server latest
 
 ### Gem install
 

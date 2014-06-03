@@ -1,4 +1,4 @@
-# berkshelf-api-cookbook
+# berkshelf-api-server cookbook
 
 Installs/Configures a berkshelf-api server
 
@@ -87,15 +87,15 @@ Installs/Configures a berkshelf-api server
 
 ## Usage
 
-### berkshelf::default
+### berkshelf-api-server::default
 
 Installs the Berkshelf API server and HTTP Proxy on your node
 
-### berkshelf::app
+### berkshelf-api-server::app
 
 Installs and configures a Berkshelf API server on your node
 
-### berkshelf::http_proxy
+### berkshelf-api-server::http_proxy
 
 Installs and configures an HTTP proxy for the Berkshelf API server on your node
 

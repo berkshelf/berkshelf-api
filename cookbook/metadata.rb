@@ -2,7 +2,7 @@ lib = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'berkshelf/api/version'
 
-name             "berkshelf-api"
+name             "berkshelf-api-server"
 maintainer       "Jamie Winsor"
 maintainer_email "jamie@vialstudios.com"
 license          "Apache 2.0"

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: berkshelf-api
+# Cookbook Name:: berkshelf-api-server
 # Recipe:: default
 #
 # Copyright (C) 2013-2014 Jamie Winsor
@@ -17,5 +17,5 @@
 # limitations under the License.
 #
 
-include_recipe "berkshelf-api::app"
-include_recipe "berkshelf-api::http_proxy"
+include_recipe "berkshelf-api-server::app"
+include_recipe "berkshelf-api-server::http_proxy"

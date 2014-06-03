@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: berkshelf-api
+# Cookbook Name:: berkshelf-api-server
 # Recipe:: http_proxy
 #
 # Copyright (C) 2013-2014 Jamie Winsor

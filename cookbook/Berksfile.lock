@@ -1,11 +1,12 @@
 DEPENDENCIES
-  berkshelf-api
+  berkshelf-api-server
     path: .
     metadata: true
 
 GRAPH
   apt (2.3.8)
-  berkshelf-api (1.3.1)
+  berkshelf-api-server (1.3.1)
+    build-essential (>= 2.0.2)
     github (~> 0.2)
     libarchive (~> 0.4)
     nginx (>= 1.7.0)
