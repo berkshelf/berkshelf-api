@@ -33,7 +33,7 @@ GIT
 PATH
   remote: .
   specs:
-    berkshelf-api (1.3.1)
+    berkshelf-api (1.4.0)
       archive (= 0.0.6)
       buff-config (~> 1.0)
       celluloid (~> 0.16.0.pre)
