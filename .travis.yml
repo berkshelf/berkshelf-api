@@ -12,7 +12,7 @@ notifications:
 env: USE_SYSTEM_GECODE=1
 bundler_args: --jobs 7
 before_install:
-  - sudo apt-get install -qq libarchive12 libarchive-dev
+  - sudo apt-get install -qq libarchive12 libarchive-dev libgecode-dev
 before_script:
   - git config --global user.email "ci@berkshelf.com"
   - git config --global user.name "Berkshelf"
