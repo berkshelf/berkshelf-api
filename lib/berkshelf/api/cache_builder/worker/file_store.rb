@@ -18,7 +18,7 @@ module Berkshelf::API
           log.warn "dependencies is *STRONGLY FROWNED UPON* and potentially *DANGEROUS*."
           log.warn ""
           log.warn "Please consider setting up a release process for the cookbooks you wish to retrieve from this"
-          log.warn "filepathe where the cookbook is uploaded into a Hosted Chef organization, an internal"
+          log.warn "filepath where the cookbook is uploaded into a Hosted Chef organization, an internal"
           log.warn "Chef Server, or the community site, and then replace this endpoint with a chef_server endpoint."
           super(options)
         end
