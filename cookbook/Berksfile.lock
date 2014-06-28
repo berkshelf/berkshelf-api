@@ -14,7 +14,7 @@ GRAPH
   bluepill (2.3.1)
     rsyslog (>= 0.0.0)
   build-essential (2.0.2)
-  github (0.2.1)
+  github (0.3.0)
     libarchive (>= 0.0.0)
   libarchive (0.4.0)
     build-essential (~> 2.0)
