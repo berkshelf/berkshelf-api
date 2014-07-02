@@ -22,15 +22,15 @@ include_recipe "runit"
 
 chef_gem "bundler"
 
+user node[:berkshelf_api][:owner] do
+  home node[:berkshelf_api][:home]
+  system true
+end
+
 directory node[:berkshelf_api][:home] do
   owner node[:berkshelf_api][:owner]
   group node[:berkshelf_api][:group]
   recursive true
-end
-
-user node[:berkshelf_api][:owner] do
-  home node[:berkshelf_api][:home]
-  system true
 end
 
 group node[:berkshelf_api][:group]
