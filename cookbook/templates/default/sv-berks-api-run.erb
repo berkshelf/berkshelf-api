@@ -5,4 +5,4 @@ export HOME=<%= node[:berkshelf_api][:deploy_path] %>
 cd $HOME
 
 exec 2>&1
-exec bundle exec bin/berks-api -p <%= node[:berkshelf_api][:port] %> -c <%= node[:berkshelf_api][:config_path] %>
+exec chpst -u <%= node[:berkshelf_api][:owner] %> bundle exec bin/berks-api -p <%= node[:berkshelf_api][:port] %> -c <%= node[:berkshelf_api][:config_path] %>
