@@ -25,7 +25,7 @@ module Berkshelf::API
       include Celluloid
       include Berkshelf::API::Logging
 
-      V1_API = 'http://cookbooks.opscode.com/api/v1'.freeze
+      V1_API = 'https://supermarket.getchef.com/api/v1'.freeze
 
       # @return [String]
       attr_reader :api_uri

@@ -21,7 +21,7 @@ module Berkshelf::API
         {
           type: "opscode",
           options: {
-            url: 'http://cookbooks.opscode.com/api/v1'
+            url: 'https://supermarket.getchef.com/api/v1'
           }
         }
       ]

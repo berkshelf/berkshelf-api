@@ -52,7 +52,7 @@ describe Berkshelf::API::SiteConnector::Opscode do
     let(:result) { subject.find(name, version) }
 
     it "returns the cookbook and version information" do
-      expect(result.cookbook).to eq('http://cookbooks.opscode.com/api/v1/cookbooks/nginx')
+      expect(result.cookbook).to eq('https://supermarket.getchef.com/api/v1/cookbooks/nginx')
       expect(result.version).to eq('1.4.0')
     end
 
