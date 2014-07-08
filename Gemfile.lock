@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/berkshelf/berkshelf.git
-  revision: 0a38729c8d362818dc385895918640691b4a554d
+  revision: d3865c149cb30cbd1d07d66cf7fc229ec6b45e8b
   specs:
-    berkshelf (3.1.2)
+    berkshelf (3.1.3)
       addressable (~> 2.3.4)
       berkshelf-api-client (~> 1.2)
       buff-config (~> 1.0)
@@ -93,8 +93,8 @@ GEM
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
-    coolline (0.4.3)
-    dep-selector-libgecode (1.0.1)
+    coolline (0.4.4)
+    dep-selector-libgecode (1.0.2)
     dep_selector (1.0.3)
       dep-selector-libgecode (~> 1.0)
       ffi (~> 1.9)
@@ -145,7 +145,7 @@ GEM
     http (0.6.1)
       http_parser.rb (~> 0.6.0)
     http_parser.rb (0.6.0)
-    httpclient (2.3.4.1)
+    httpclient (2.4.0)
     httpi (0.9.7)
       rack
     i18n (0.6.9)
@@ -159,7 +159,7 @@ GEM
     logging (1.8.2)
       little-plugger (>= 1.1.3)
       multi_json (>= 1.8.4)
-    lumberjack (1.0.6)
+    lumberjack (1.0.9)
     method_source (0.8.2)
     mini_portile (0.6.0)
     minitar (0.5.4)
@@ -182,9 +182,9 @@ GEM
     nori (1.1.5)
     octokit (3.1.0)
       sawyer (~> 0.5.3)
-    pry (0.9.12.6)
-      coderay (~> 1.0)
-      method_source (~> 0.8)
+    pry (0.10.0)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
       slop (~> 3.4)
     rack (1.5.2)
     rack-accept (0.4.5)
@@ -194,7 +194,7 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     rb-fsevent (0.9.4)
-    rb-inotify (0.9.4)
+    rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
@@ -223,7 +223,7 @@ GEM
       retryable
       semverse (~> 1.1)
       varia_model (~> 0.4)
-    ridley-connectors (2.3.0)
+    ridley-connectors (2.3.1)
       celluloid (~> 0.16.0.pre)
       celluloid-io (~> 0.16.0.pre)
       erubis
