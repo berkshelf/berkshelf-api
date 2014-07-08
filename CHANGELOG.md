@@ -1,3 +1,15 @@
+# 2.0.0-dev
+
+* Enhancements
+  * Opscode Cache builder is now the Supermarket cache builder
+
+* Bug fixes
+  * API server will now be configured to run as API user instead of root
+  * Fix issue where Berkshelf API user's home directory was not created
+
+* Backwards incompatible changes
+  * The Opscode cache builder was removed - the old community site is no longer a valid endpoint to cache
+
 # 1.4.0
 
 * Enhancements
