@@ -1,85 +1,90 @@
 require 'spec_helper'
 
 describe Berkshelf::API::SiteConnector::Supermarket do
-  let(:connection) { double("connection") }
-  let(:total_response) { double("total", status: 200, body: { "total" => 10 } ) }
-  let(:cookbooks_response) do
-    double("cookbooks", status: 200, body: {
-      "items"=> [
-        {"cookbook_name" => "chicken"},
-        {"cookbook_name" => "tuna"}
-      ]})
-  end
-  let(:chicken_versions_response) do
-    double("chicken_versions", status: 200, body: {
-      "versions" => [
-        "http://www.example.com/api/v1/cookbooks/chicken/versions/1_0",
-        "http://www.example.com/api/v1/cookbooks/chicken/versions/2_0"
-      ]})
-  end
-
-  subject { described_class.new }
-
-  describe "#cookbooks" do
-    it "should fetch all the cookbooks and return a list of their names" do
-      connection.should_receive(:get).
-        with("cookbooks").
-        and_return(total_response)
-
-      connection.should_receive(:get).
-        with("cookbooks?start=0&items=10").
-        and_return(cookbooks_response)
-
-      subject.should_receive(:connection).at_least(1).times.and_return(connection)
-      expect(subject.cookbooks).to eql(["chicken", "tuna"])
-    end
+  let(:url) { 'https://example.com' }
+  let(:json) do
+    <<-EOH.gsub(/^ {6}/, '')
+      {
+        "berkshelf": {
+          "0.1.0": {
+            "location_type": "supermarket",
+            "location_path": "#{url}",
+            "download_url": "#{url}/cookbooks/berkshelf/versions/0.1.0/download",
+            "dependencies": {
+              "ruby": ">= 0.0.0"
+            }
+          },
+          "0.2.0": {
+            "location_type": "supermarket",
+            "location_path": "#{url}",
+            "download_url": "#{url}/cookbooks/berkshelf/versions/0.2.0/download",
+            "dependencies": {
+              "ruby": ">= 0.0.0"
+            }
+          }
+        }
+      }
+    EOH
   end
 
-  describe "#versions" do
-    it "should call the server for the cookbook provied and return a list of available version number" do
-      connection.should_receive(:get).
-        with("cookbooks/chicken").
-        and_return(chicken_versions_response)
+  subject { described_class.new(url: url) }
 
-      subject.should_receive(:connection).at_least(1).times.and_return(connection)
-      expect(subject.versions("chicken")).to eql(["1.0", "2.0"])
-    end
+  before do
+    allow(subject).to receive(:open)
+      .and_return(double(File, read: json))
   end
 
-  describe "#find" do
-    let(:name) { "nginx" }
-    let(:version) { "1.4.0" }
-    let(:result) { subject.find(name, version) }
+  describe "#universe" do
+    it "uses OpenURI to get the universe" do
+      expect(subject).to receive(:open)
+        .with("#{url}/universe.json", kind_of(Hash))
 
-    it "returns the cookbook and version information" do
-      expect(result.cookbook).to eq('https://supermarket.getchef.com/api/v1/cookbooks/nginx')
-      expect(result.version).to eq('1.4.0')
+      subject.universe
     end
 
-    context "when the cookbook is not found" do
-      let(:name) { "not_a_real_cookbook_that_anyone_should_ever_make" }
+    it 'parses the response as JSON' do
+      expect(subject.universe).to be_a(Hash)
+      expect(subject.universe).to have_key('berkshelf')
+    end
 
-      it "returns nil" do
-        expect(result).to be_nil
+    context 'when the server does not respond' do
+      before do
+        allow(subject).to receive(:open)
+          .and_raise(Timeout::Error)
+      end
+
+      it 'catches and logs the error' do
+        expect(subject.log).to receive(:error).with(/in 15 seconds/)
+        expect { subject.universe }.to_not raise_error
+      end
+    end
+
+    context 'when the response is not valid JSON' do
+      let(:json) { 'bad json' }
+
+      it 'catches a JSON::ParserError' do
+        expect(subject.log).to receive(:error).with(/^Failed to parse JSON/)
+        expect { subject.universe }.to_not raise_error
+      end
+    end
+
+    [
+      SocketError,
+      Errno::ECONNREFUSED,
+      Errno::ECONNRESET,
+      Errno::ENETUNREACH,
+    ].each do |error|
+      context "when `#{error}' is raised" do
+        before do
+          allow(subject).to receive(:open)
+            .and_raise(error)
+        end
+
+        it "catches and logs the error" do
+          expect(subject.log).to receive(:error).with(/^Failed to get/)
+          expect { subject.universe }.to_not raise_error
+        end
       end
     end
   end
-
-  describe "#download" do
-    let(:name) { "chicken" }
-    let(:version) { "1.0.0" }
-    let(:destination) { "location" }
-
-    it "should download then ungzip/tar the cookbook" do
-      response = { file: "http://file" }
-      tempfile = double('tempfile', path: '/some/path', unlink: nil)
-
-      subject.should_receive(:find).with(name, version).and_return(response)
-      subject.should_receive(:stream).with("http://file").and_return(tempfile)
-      Archive.should_receive(:extract).with(tempfile.path, destination)
-
-      subject.download(name, version, destination)
-    end
-  end
 end
-
