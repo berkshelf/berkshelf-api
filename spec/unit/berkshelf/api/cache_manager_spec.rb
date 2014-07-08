@@ -69,8 +69,8 @@ describe Berkshelf::API::CacheManager do
   end
 
   describe "#diff" do
-    let(:cookbook_one) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode", nil, 1) }
-    let(:cookbook_two) { Berkshelf::API::RemoteCookbook.new("elixir", "2.0.0", "opscode", nil, 1) }
+    let(:cookbook_one) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "supermarket", nil, 1) }
+    let(:cookbook_two) { Berkshelf::API::RemoteCookbook.new("elixir", "2.0.0", "supermarket", nil, 1) }
     let(:comparison) { Array.new }
 
     before do
@@ -85,7 +85,7 @@ describe Berkshelf::API::CacheManager do
     end
 
     context "when there are more than one worker endpoints" do
-      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "opscode", nil, 2) }
+      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "supermarket", nil, 2) }
       let(:comparison) { [ cookbook_one, cookbook_two, new_cookbook ] }
 
       before do
@@ -100,7 +100,7 @@ describe Berkshelf::API::CacheManager do
         let(:comparison) { [cookbook_one] }
 
         before do
-         @created, @deleted = @diff = subject.send(:diff, comparison, 1) 
+         @created, @deleted = @diff = subject.send(:diff, comparison, 1)
         end
 
         it "only deletes cookbooks at the same priority" do
@@ -110,7 +110,7 @@ describe Berkshelf::API::CacheManager do
     end
 
     context "when there are created and deleted cookbooks" do
-      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "opscode", nil, 1) }
+      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "supermarket", nil, 1) }
       let(:comparison) { [ cookbook_one, new_cookbook ] }
 
       it "should return created and deleted cookbooks" do
@@ -120,7 +120,7 @@ describe Berkshelf::API::CacheManager do
     end
 
     context "when there are only created cookbooks" do
-      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "opscode", nil, 1) }
+      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "supermarket", nil, 1) }
       let(:comparison) { [ cookbook_one, cookbook_two, new_cookbook ] }
 
       it "should return only created cookbooks" do

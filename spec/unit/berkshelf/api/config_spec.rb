@@ -16,8 +16,8 @@ describe Berkshelf::API::Config do
       expect(subject.endpoints).to have(1).item
     end
 
-    it "has the Opscode community site as an endpoint" do
-      expect(subject.endpoints.first.type).to eql("opscode")
+    it "has the Supermarket community site as an endpoint" do
+      expect(subject.endpoints.first.type).to eql("supermarket")
       expect(subject.endpoints.first.options[:url]).to eql("https://supermarket.getchef.com/api/v1")
     end
   end

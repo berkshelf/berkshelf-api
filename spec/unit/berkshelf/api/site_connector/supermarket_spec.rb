@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Berkshelf::API::SiteConnector::Opscode do
+describe Berkshelf::API::SiteConnector::Supermarket do
   let(:connection) { double("connection") }
   let(:total_response) { double("total", status: 200, body: { "total" => 10 } ) }
   let(:cookbooks_response) do

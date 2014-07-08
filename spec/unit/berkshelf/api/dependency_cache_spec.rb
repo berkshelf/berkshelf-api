@@ -86,7 +86,7 @@ describe Berkshelf::API::DependencyCache do
   end
 
   describe "#add" do
-    let(:cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode") }
+    let(:cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "supermarket") }
     before { subject.clear }
 
     it "adds items to the cache" do
@@ -105,7 +105,7 @@ describe Berkshelf::API::DependencyCache do
   end
 
   describe "#clear" do
-    let(:cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode") }
+    let(:cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "supermarket") }
     before { subject.add(cookbook, double(platforms: nil, dependencies: nil)) }
 
     it "empties items added to the cache" do

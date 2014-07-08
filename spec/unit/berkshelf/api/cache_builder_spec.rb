@@ -35,8 +35,8 @@ describe Berkshelf::API::CacheBuilder do
         expect(workers).to have(1).item
       end
 
-      it "has an opscode worker started by default" do
-        expect(workers.first).to be_a(described_class::Worker::Opscode)
+      it "has an Supermarket worker started by default" do
+        expect(workers.first).to be_a(described_class::Worker::Supermarket)
       end
     end
 

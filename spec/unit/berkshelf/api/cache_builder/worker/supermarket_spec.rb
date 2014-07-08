@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Berkshelf::API::CacheBuilder::Worker::Opscode do
+describe Berkshelf::API::CacheBuilder::Worker::Supermarket do
   describe "ClassMethods" do
     subject { described_class }
-    its(:worker_type) { should eql("opscode") }
+    its(:worker_type) { should eql("supermarket") }
   end
 
   let(:cookbooks) { ["chicken", "tuna"] }
@@ -24,7 +24,7 @@ describe Berkshelf::API::CacheBuilder::Worker::Opscode do
 
   describe "#cookbooks" do
     let(:location_type) { described_class.worker_type }
-    let(:location_path) { Berkshelf::API::SiteConnector::Opscode::V1_API}
+    let(:location_path) { Berkshelf::API::SiteConnector::Supermarket::V1_API}
 
     it "returns an array of RemoteCookbooks described by the server" do
       expected_value = [

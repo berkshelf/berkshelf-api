@@ -10,7 +10,7 @@ module Berkshelf::API
       options[:platforms] ||= Hash.new
       options[:dependencies] ||= Hash.new
       cookbook = RemoteCookbook.new(name, version,
-        CacheBuilder::Worker::Opscode.worker_type, SiteConnector::Opscode::V1_API)
+        CacheBuilder::Worker::Supermarket.worker_type, SiteConnector::Supermarket::V1_API)
       metadata = Ridley::Chef::Cookbook::Metadata.new
       options[:platforms].each { |name, version| metadata.supports(name, version) }
       options[:dependencies].each { |name, constraint| metadata.depends(name, constraint) }
