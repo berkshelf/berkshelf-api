@@ -11,28 +11,23 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
   end
 
   let(:good_tag) do
-    tag = double('good_tag')
-    tag.stub(:name) { 'v1.0.0' }
-    tag
+    double('good_tag', name: 'v1.0.0')
   end
 
   let(:bad_tag) do
-    tag = double('good_tag')
-    tag.stub(:name) { 'beta2' }
-    tag
+    double('good_tag', name: 'beta2')
   end
 
   let :contents do
-    contents = double('contents')
-    contents.stub(:content) { 'dmVyc2lvbiAiMS4wLjAi' }
-    contents
+    double('contents', content: 'dmVyc2lvbiAiMS4wLjAi')
   end
 
   let(:repo) do
-    repo = double('repo')
-    repo.stub(:full_name) { 'opscode-cookbooks/apt' }
-    repo.stub(:name) { 'apt' }
-    repo
+    double('repo',
+      name: 'apt',
+      full_name: 'opscode-cookbooks/apt',
+      html_url: 'https://github.com/opscode-cookbooks/apt',
+    )
   end
 
   let(:repos) do
