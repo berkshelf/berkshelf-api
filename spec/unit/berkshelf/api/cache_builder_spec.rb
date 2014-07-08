@@ -32,7 +32,7 @@ describe Berkshelf::API::CacheBuilder do
 
     context "when no workers are explicitly configured" do
       it "has one worker started by default" do
-        expect(workers).to have(1).item
+        expect(workers.size).to eq(1)
       end
 
       it "has an Supermarket worker started by default" do
@@ -68,7 +68,7 @@ describe Berkshelf::API::CacheBuilder do
       end
 
       it "has two workers" do
-        expect(workers).to have(2).items
+        expect(workers.size).to eq(2)
       end
 
       it "keeps the ordering" do

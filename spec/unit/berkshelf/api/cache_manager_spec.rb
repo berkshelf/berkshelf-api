@@ -82,7 +82,7 @@ describe Berkshelf::API::CacheManager do
     end
 
     it "returns two items" do
-      expect(@diff).to have(2).items
+      expect(@diff.size).to eq(2)
     end
 
     context "when there are more than one worker endpoints" do

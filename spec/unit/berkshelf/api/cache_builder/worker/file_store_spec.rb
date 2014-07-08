@@ -15,7 +15,7 @@ describe Berkshelf::API::CacheBuilder::Worker::FileStore do
 
   describe "#cookbooks" do
     it "returns an array containing an item for each valid cookbook on the server" do
-      expect(subject.cookbooks).to have(1).items
+      expect(subject.cookbooks.size).to eq(1)
     end
 
     it "returns an array of RemoteCookbooks" do

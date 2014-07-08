@@ -91,7 +91,7 @@ describe Berkshelf::API::DependencyCache do
 
     it "adds items to the cache" do
       subject.add(cookbook, double(platforms: nil, dependencies: nil))
-      expect(subject.to_hash).to have(1).item
+      expect(subject.to_hash.size).to eq(1)
     end
   end
 

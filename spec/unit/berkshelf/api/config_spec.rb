@@ -13,7 +13,7 @@ describe Berkshelf::API::Config do
     subject { described_class.new }
 
     it "has a endpoint configured" do
-      expect(subject.endpoints).to have(1).item
+      expect(subject.endpoints.size).to eq(1)
     end
 
     it "has the Supermarket community site as an endpoint" do

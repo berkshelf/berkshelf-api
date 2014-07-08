@@ -24,7 +24,7 @@ describe Berkshelf::API::Application do
           generated.save
           configure
 
-          expect(described_class.config.endpoints).to have(1).item
+          expect(described_class.config.endpoints.size).to eq(1)
         end
 
         context "if the file cannot be found or loaded" do

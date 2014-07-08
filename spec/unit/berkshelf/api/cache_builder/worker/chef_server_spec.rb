@@ -23,7 +23,7 @@ describe Berkshelf::API::CacheBuilder::Worker::ChefServer do
     end
 
     it "returns an array containing an item for each cookbook on the server" do
-      expect(subject.cookbooks).to have(4).items
+      expect(subject.cookbooks.size).to eq(4)
     end
 
     it "returns an array of RemoteCookbooks" do
