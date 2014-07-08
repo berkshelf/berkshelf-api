@@ -100,7 +100,7 @@ describe Berkshelf::API::DependencyCache do
 
     it "saves the contents of the cache as json to the given path" do
       subject.save(path)
-      expect(File.exist?(path)).to be_true
+      expect(File.exist?(path)).to be_truthy
     end
   end
 
