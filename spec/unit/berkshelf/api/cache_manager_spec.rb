@@ -1,10 +1,13 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheManager do
+  subject { described_class.new }
+
   describe "ClassMethods" do
-    describe "::new" do
-      subject { described_class.new }
-      its(:cache) { should be_empty }
+    describe ".new" do
+      it 'has an empty cache' do
+        expect(subject.cache).to be_empty
+      end
 
       context "when a save file exists" do
         before do
@@ -38,8 +41,6 @@ describe Berkshelf::API::CacheManager do
       end
     end
   end
-
-  subject { described_class.new }
 
   it_behaves_like "a human-readable string"
 

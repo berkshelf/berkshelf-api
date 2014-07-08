@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheBuilder::Worker::Github do
-  describe "ClassMethods" do
-    subject { described_class }
-    its(:worker_type) { should eql("github") }
+  describe '.worker_type' do
+    it 'is github' do
+      expect(described_class.worker_type).to eq('github')
+    end
   end
 
   let(:connection) do

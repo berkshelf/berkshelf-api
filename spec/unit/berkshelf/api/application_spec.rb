@@ -2,9 +2,11 @@ require 'spec_helper'
 
 describe Berkshelf::API::Application do
   describe "ClassMethods" do
-    subject { described_class }
-
-    its(:registry) { should be_a(Celluloid::Registry) }
+    describe '.registry' do
+      it 'returns a Celluloid::Registry' do
+        expect(described_class.registry).to be_a(Celluloid::Registry)
+      end
+    end
 
     describe "::configure" do
       let(:options) { Hash.new }

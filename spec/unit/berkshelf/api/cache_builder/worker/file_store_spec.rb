@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheBuilder::Worker::FileStore do
-  describe "ClassMethods" do
-    subject { described_class }
-    its(:worker_type) { should eql("file_store") }
+  describe '.worker_type' do
+    it 'is file_store' do
+      expect(described_class.worker_type).to eq('file_store')
+    end
   end
 
   subject do

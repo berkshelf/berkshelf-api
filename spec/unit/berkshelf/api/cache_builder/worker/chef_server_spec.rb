@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheBuilder::Worker::ChefServer do
-  describe "ClassMethods" do
-    subject { described_class }
-    its(:worker_type) { should eql("chef_server") }
+  describe '.worker_type' do
+    it 'is chef_server' do
+      expect(described_class.worker_type).to eq('chef_server')
+    end
   end
 
   subject do
