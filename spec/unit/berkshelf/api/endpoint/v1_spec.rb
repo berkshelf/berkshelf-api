@@ -25,30 +25,50 @@ describe Berkshelf::API::Endpoint::V1 do
         subject { last_response }
         let(:app_cache) { cache_manager.cache }
 
-        its(:status) { should be(200) }
-        its(:body) { should eq(app_cache.to_json) }
+        it 'has the right status' do
+          expect(subject.status).to eq(200)
+        end
+
+        it 'has the right body' do
+          expect(subject.body).to eq(app_cache.to_json)
+        end
       end
       context "the user requests json" do
         subject { last_response }
         let(:app_cache) { cache_manager.cache }
         let(:rack_env) { { 'HTTP_ACCEPT' => 'application/json' } }
 
-        its(:status) { should be(200) }
-        its(:body) { should eq(app_cache.to_json) }
+        it 'has the right status' do
+          expect(subject.status).to eq(200)
+        end
+
+        it 'has the right body' do
+          expect(subject.body).to eq(app_cache.to_json)
+        end
       end
       context "the user requests msgpack" do
         subject { last_response }
         let(:app_cache) { cache_manager.cache }
         let(:rack_env) { { 'HTTP_ACCEPT' => 'application/x-msgpack' } }
 
-        its(:status) { should be(200) }
-        its(:body) { should eq(app_cache.to_msgpack) }
+        it 'has the right status' do
+          expect(subject.status).to eq(200)
+        end
+
+        it 'has the right body' do
+          expect(subject.body).to eq(app_cache.to_msgpack)
+        end
       end
     end
 
     context "the cache is still warming" do
-      its(:status) { should be(503) }
-      its(:headers) { should have_key("Retry-After") }
+      it 'has the right status' do
+        expect(subject.status).to eq(503)
+      end
+
+      it 'has the right headers' do
+        expect(subject.headers).to have_key('Retry-After')
+      end
     end
   end
 
@@ -62,13 +82,39 @@ describe Berkshelf::API::Endpoint::V1 do
     context "the cache has been warmed" do
       let(:cache_warm) { true }
 
-      its(:status) { should be(200) }
-      its(:body) { should eq({status: 'ok', version: Berkshelf::API::VERSION, cache_status: 'ok', uptime: 100.0}.to_json) }
+      it 'has the right status' do
+        expect(subject.status).to eq(200)
+      end
+
+      it 'has the right body' do
+        status = {
+          status:  'ok',
+          version: Berkshelf::API::VERSION,
+          cache_status: 'ok',
+          uptime: 100.0,
+        }.to_json
+
+        expect(subject.body).to eq(status)
+      end
     end
 
     context "the cache is still warming" do
-      its(:status) { should be(200) }
-      its(:body) { should eq({status: 'ok', version: Berkshelf::API::VERSION, cache_status: 'warming', uptime: 100.0}.to_json) }
+      let(:cache_warm) { false }
+
+      it 'has the right status' do
+        expect(subject.status).to eq(200)
+      end
+
+      it 'has the right body' do
+        status = {
+          status:  'ok',
+          version: Berkshelf::API::VERSION,
+          cache_status: 'warming',
+          uptime: 100.0,
+        }.to_json
+
+        expect(subject.body).to eq(status)
+      end
     end
   end
 end

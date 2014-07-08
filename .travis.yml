@@ -10,10 +10,10 @@ notifications:
     skip_join: true
     use_notice: true
 env: USE_SYSTEM_GECODE=1
-bundler_args: --jobs 7
+bundler_args: --without development --jobs 7
 before_install:
   - sudo apt-get install -qq libarchive12 libarchive-dev libgecode-dev
 before_script:
   - git config --global user.email "ci@berkshelf.com"
   - git config --global user.name "Berkshelf"
-script: bundle exec thor spec
+script: bundle exec rspec --color --format progress

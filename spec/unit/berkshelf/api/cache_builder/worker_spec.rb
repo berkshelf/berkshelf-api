@@ -4,7 +4,7 @@ describe Berkshelf::API::CacheBuilder::Worker do
   describe "ClassMethods" do
     describe "::[]" do
       it "returns the class of the registered worker" do
-        expect(described_class["opscode"]).to eql(Berkshelf::API::CacheBuilder::Worker::Opscode)
+        expect(described_class["supermarket"]).to eql(Berkshelf::API::CacheBuilder::Worker::Supermarket)
       end
     end
 

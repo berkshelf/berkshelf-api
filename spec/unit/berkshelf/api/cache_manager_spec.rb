@@ -1,10 +1,13 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheManager do
+  subject { described_class.new }
+
   describe "ClassMethods" do
-    describe "::new" do
-      subject { described_class.new }
-      its(:cache) { should be_empty }
+    describe ".new" do
+      it 'has an empty cache' do
+        expect(subject.cache).to be_empty
+      end
 
       context "when a save file exists" do
         before do
@@ -39,20 +42,18 @@ describe Berkshelf::API::CacheManager do
     end
   end
 
-  subject { described_class.new }
-
   it_behaves_like "a human-readable string"
 
   describe "#add" do
-    pending
+    skip
   end
 
   describe "#load_save" do
-    pending
+    skip
   end
 
   describe "#remove" do
-    pending
+    skip
   end
 
   describe "#clear" do
@@ -69,8 +70,8 @@ describe Berkshelf::API::CacheManager do
   end
 
   describe "#diff" do
-    let(:cookbook_one) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode", nil, 1) }
-    let(:cookbook_two) { Berkshelf::API::RemoteCookbook.new("elixir", "2.0.0", "opscode", nil, 1) }
+    let(:cookbook_one) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "supermarket", nil, 1) }
+    let(:cookbook_two) { Berkshelf::API::RemoteCookbook.new("elixir", "2.0.0", "supermarket", nil, 1) }
     let(:comparison) { Array.new }
 
     before do
@@ -81,11 +82,11 @@ describe Berkshelf::API::CacheManager do
     end
 
     it "returns two items" do
-      expect(@diff).to have(2).items
+      expect(@diff.size).to eq(2)
     end
 
     context "when there are more than one worker endpoints" do
-      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "opscode", nil, 2) }
+      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "supermarket", nil, 2) }
       let(:comparison) { [ cookbook_one, cookbook_two, new_cookbook ] }
 
       before do
@@ -100,7 +101,7 @@ describe Berkshelf::API::CacheManager do
         let(:comparison) { [cookbook_one] }
 
         before do
-         @created, @deleted = @diff = subject.send(:diff, comparison, 1) 
+         @created, @deleted = @diff = subject.send(:diff, comparison, 1)
         end
 
         it "only deletes cookbooks at the same priority" do
@@ -110,7 +111,7 @@ describe Berkshelf::API::CacheManager do
     end
 
     context "when there are created and deleted cookbooks" do
-      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "opscode", nil, 1) }
+      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "supermarket", nil, 1) }
       let(:comparison) { [ cookbook_one, new_cookbook ] }
 
       it "should return created and deleted cookbooks" do
@@ -120,7 +121,7 @@ describe Berkshelf::API::CacheManager do
     end
 
     context "when there are only created cookbooks" do
-      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "opscode", nil, 1) }
+      let(:new_cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "3.0.0", "supermarket", nil, 1) }
       let(:comparison) { [ cookbook_one, cookbook_two, new_cookbook ] }
 
       it "should return only created cookbooks" do

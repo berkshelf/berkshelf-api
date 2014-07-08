@@ -1,5 +1,9 @@
 require 'spec_helper'
 
+def remote_cookbook(name, version, location_type = 'supermarket', location_path = 'https://supermarket.getchef.com', priority = 1, info = {})
+  Berkshelf::API::RemoteCookbook.new(name, version, location_type, location_path, priority, info)
+end
+
 describe Berkshelf::API::DependencyCache do
   describe "ClassMethods" do
     describe "::from_file" do
@@ -77,8 +81,8 @@ describe Berkshelf::API::DependencyCache do
   describe "#cookbooks" do
     it "should return a list of RemoteCookbooks" do
       expected_value = [
-        Berkshelf::API::RemoteCookbook.new("chicken", "1.0"),
-        Berkshelf::API::RemoteCookbook.new("tuna", "3.0.0")
+        remote_cookbook("chicken", "1.0"),
+        remote_cookbook("tuna", "3.0.0")
       ]
 
       expect(subject.cookbooks).to eql(expected_value)
@@ -86,12 +90,12 @@ describe Berkshelf::API::DependencyCache do
   end
 
   describe "#add" do
-    let(:cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode") }
+    let(:cookbook) { remote_cookbook("ruby", "1.2.3", "supermarket") }
     before { subject.clear }
 
     it "adds items to the cache" do
       subject.add(cookbook, double(platforms: nil, dependencies: nil))
-      expect(subject.to_hash).to have(1).item
+      expect(subject.to_hash.size).to eq(1)
     end
   end
 
@@ -100,12 +104,12 @@ describe Berkshelf::API::DependencyCache do
 
     it "saves the contents of the cache as json to the given path" do
       subject.save(path)
-      expect(File.exist?(path)).to be_true
+      expect(File.exist?(path)).to be_truthy
     end
   end
 
   describe "#clear" do
-    let(:cookbook) { Berkshelf::API::RemoteCookbook.new("ruby", "1.2.3", "opscode") }
+    let(:cookbook) { remote_cookbook("ruby", "1.2.3", "supermarket") }
     before { subject.add(cookbook, double(platforms: nil, dependencies: nil)) }
 
     it "empties items added to the cache" do

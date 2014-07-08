@@ -11,12 +11,16 @@ describe Berkshelf::API::CacheBuilder do
     let(:future) { double('future', value: nil) }
     let(:cache_manager) { double('cache_manager') }
 
-    before { instance.stub(workers: workers) }
+    before do
+      # https://github.com/celluloid/celluloid/wiki/Testing
+      allow(instance.wrapped_object).to receive(:workers).and_return(workers)
+      allow(instance.wrapped_object).to receive(:cache_manager).and_return(cache_manager)
+      allow(cache_manager).to receive(:process_workers)
+    end
 
     it "asks the cache_manager to process all of its actors" do
-      instance.stub(:cache_manager).and_return(cache_manager)
-      cache_manager.should_receive(:process_workers).with(instance.workers).and_return(future)
-      build
+      expect(cache_manager).to receive(:process_workers).with(workers)
+      instance.build
     end
   end
 
@@ -32,11 +36,11 @@ describe Berkshelf::API::CacheBuilder do
 
     context "when no workers are explicitly configured" do
       it "has one worker started by default" do
-        expect(workers).to have(1).item
+        expect(workers.size).to eq(1)
       end
 
-      it "has an opscode worker started by default" do
-        expect(workers.first).to be_a(described_class::Worker::Opscode)
+      it "has an Supermarket worker started by default" do
+        expect(workers.first).to be_a(described_class::Worker::Supermarket)
       end
     end
 
@@ -68,7 +72,7 @@ describe Berkshelf::API::CacheBuilder do
       end
 
       it "has two workers" do
-        expect(workers).to have(2).items
+        expect(workers.size).to eq(2)
       end
 
       it "keeps the ordering" do

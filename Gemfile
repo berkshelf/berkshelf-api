@@ -6,7 +6,6 @@ group :development do
   gem 'berkflow', github: "reset/berkflow"
   gem 'berkshelf', github: "berkshelf/berkshelf"
   gem 'thor',      '~> 0.18'
-  gem 'chef-zero', '~> 1.5'
   gem 'coolline'
   gem 'fuubar', '~> 1.1'
   gem 'redcarpet', platforms: :ruby
@@ -18,6 +17,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'chef-zero', '~> 1.5'
   gem 'rack-test'
   gem 'rspec', '~> 2.13'
   gem 'spork', '~> 0.9'

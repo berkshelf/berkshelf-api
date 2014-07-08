@@ -91,15 +91,30 @@ Ruby 1.9 mode is required on all interpreters.
 
 You may configure the endpoints to index by editing the JSON configuration file (default: `#{ENV['HOME']}/.berkshelf/api-server/config.json`).
 
-### Opscode Community Site
+### Supermarket Community Site
 
-````json
+Please note: this is unnecessary. You may point your Berksfile at "https://supermarket.getchef.com" instead.
+
+```json
+{
+  "endpoints": [
+    { "type": "supermarket" }
+  ]
+}
+```
+
+### Supermarket "Behind the Firewall"
+
+Please note: this is unnecessary. You may point your Berksfile at "https://your-supermarket-install.example.com" instead.
+
+
+```json
 {
   "endpoints": [
     {
-      "type": "opscode",
+      "type": "supermarket",
       "options": {
-        "url": "https://supermarket.getchef.com/api/v1"
+        "url": "https://your-supermarket-install.example.com/"
       }
     }
   ]

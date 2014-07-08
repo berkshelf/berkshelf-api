@@ -2,13 +2,14 @@ require 'berkshelf/api/version'
 require 'celluloid'
 require 'hashie'
 require 'ridley'
-require 'faraday'
 require 'json'
 
 require_relative 'api/core_ext'
 
 module Berkshelf
   module API
+    USER_AGENT = "Berkshelf API v#{Berkshelf::API::VERSION}".freeze
+
     require_relative 'api/errors'
     require_relative 'api/logging'
     require_relative 'api/mixin'

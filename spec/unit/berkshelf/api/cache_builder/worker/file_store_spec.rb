@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheBuilder::Worker::FileStore do
-  describe "ClassMethods" do
-    subject { described_class }
-    its(:worker_type) { should eql("file_store") }
+  describe '.worker_type' do
+    it 'is file_store' do
+      expect(described_class.worker_type).to eq('file_store')
+    end
   end
 
   subject do
@@ -14,7 +15,7 @@ describe Berkshelf::API::CacheBuilder::Worker::FileStore do
 
   describe "#cookbooks" do
     it "returns an array containing an item for each valid cookbook on the server" do
-      expect(subject.cookbooks).to have(1).items
+      expect(subject.cookbooks.size).to eq(1)
     end
 
     it "returns an array of RemoteCookbooks" do

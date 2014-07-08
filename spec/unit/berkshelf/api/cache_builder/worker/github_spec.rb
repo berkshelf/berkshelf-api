@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe Berkshelf::API::CacheBuilder::Worker::Github do
-  describe "ClassMethods" do
-    subject { described_class }
-    its(:worker_type) { should eql("github") }
+  describe '.worker_type' do
+    it 'is github' do
+      expect(described_class.worker_type).to eq('github')
+    end
   end
 
   let(:connection) do
@@ -11,28 +12,23 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
   end
 
   let(:good_tag) do
-    tag = double('good_tag')
-    tag.stub(:name) { 'v1.0.0' }
-    tag
+    double('good_tag', name: 'v1.0.0')
   end
 
   let(:bad_tag) do
-    tag = double('good_tag')
-    tag.stub(:name) { 'beta2' }
-    tag
+    double('good_tag', name: 'beta2')
   end
 
   let :contents do
-    contents = double('contents')
-    contents.stub(:content) { 'dmVyc2lvbiAiMS4wLjAi' }
-    contents
+    double('contents', content: 'dmVyc2lvbiAiMS4wLjAi')
   end
 
   let(:repo) do
-    repo = double('repo')
-    repo.stub(:full_name) { 'opscode-cookbooks/apt' }
-    repo.stub(:name) { 'apt' }
-    repo
+    double('repo',
+      name: 'apt',
+      full_name: 'opscode-cookbooks/apt',
+      html_url: 'https://github.com/opscode-cookbooks/apt',
+    )
   end
 
   let(:repos) do
@@ -55,7 +51,7 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
     end
 
     it "returns an array containing an item for each valid cookbook on the server" do
-      expect(subject.cookbooks).to have(1).items
+      expect(subject.cookbooks.size).to eq(1)
     end
 
     it "returns an array of RemoteCookbooks" do

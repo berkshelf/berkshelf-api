@@ -19,10 +19,7 @@ module Berkshelf::API
       type: Array,
       default: [
         {
-          type: "opscode",
-          options: {
-            url: 'https://supermarket.getchef.com/api/v1'
-          }
+          type: "supermarket"
         }
       ]
 
