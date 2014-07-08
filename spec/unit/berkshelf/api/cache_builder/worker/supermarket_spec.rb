@@ -50,7 +50,8 @@ module Berkshelf
       end
 
       before do
-        subject.instance_variable_set(:@connection, connection)
+        allow(subject.wrapped_object).to receive(:connection)
+          .and_return(connection)
       end
 
       subject do
