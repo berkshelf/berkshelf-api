@@ -45,15 +45,15 @@ describe Berkshelf::API::CacheManager do
   it_behaves_like "a human-readable string"
 
   describe "#add" do
-    pending
+    skip
   end
 
   describe "#load_save" do
-    pending
+    skip
   end
 
   describe "#remove" do
-    pending
+    skip
   end
 
   describe "#clear" do
