@@ -1,4 +1,4 @@
-# 2.0.0-dev
+# 2.0.0
 
 * Enhancements
   * Opscode Cache builder is now the Supermarket cache builder
