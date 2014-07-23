@@ -36,7 +36,7 @@ module Berkshelf
               options[:config_file] = v
             end
 
-            opts.on("-v", "--version", "show version") do |v|
+            opts.on("-V", "--version", "show version") do |v|
               require 'berkshelf/api/version'
               puts Berkshelf::API::VERSION
               exit
