@@ -15,7 +15,7 @@ module Berkshelf
             opts.on("-h", "--host HOST", String, "set the listening address") do |h|
               options[:host] = h
             end
-            
+
             opts.on("-p", "--port PORT", Integer, "set the listening port") do |v|
               options[:port] = v
             end
@@ -34,6 +34,12 @@ module Berkshelf
 
             opts.on("-c", "--config FILE", String, "path to a configuration file to use") do |v|
               options[:config_file] = v
+            end
+
+            opts.on("-V", "--version", "show version") do |v|
+              require 'berkshelf/api/version'
+              puts "v#{Berkshelf::API::VERSION}"
+              exit
             end
 
             opts.on_tail("-h", "--help", "show this message") do
