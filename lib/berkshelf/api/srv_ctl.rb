@@ -20,7 +20,7 @@ module Berkshelf
               options[:port] = v
             end
 
-            opts.on("-v", "--verbose", "run with verbose output") do
+            opts.on("-V", "--verbose", "run with verbose output") do
               options[:log_level] = "INFO"
             end
 

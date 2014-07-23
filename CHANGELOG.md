@@ -1,3 +1,11 @@
+# 2.1.0
+
+* Enhancements
+  * Added --version flag for displaying version (alias -v)
+
+* Backwards incompatible changes
+  * --verbose alias is now -V. Previously -v.
+
 # 2.0.0
 
 * Enhancements
