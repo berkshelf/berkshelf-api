@@ -23,7 +23,7 @@ module Berkshelf::API
         }
       ]
 
-    attribute 'refresh_interval',
+    attribute 'build_interval',
       type:Float,
       default:5.0
 

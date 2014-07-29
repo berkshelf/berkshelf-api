@@ -19,9 +19,9 @@ module Berkshelf::API
       @worker_registry   = Celluloid::Registry.new
       @worker_supervisor = WorkerSupervisor.new(@worker_registry)
       @building          = false
-      @build_interval   = Application.config.refresh_interval
+      @build_interval   = Application.config.build_interval
 
-      log.info "Cache Builder refresh interval: #{@build_interval}"
+      log.info "Cache Builder build interval: #{@build_interval}"
 
       Application.config.endpoints.each_with_index do |endpoint, index|
         endpoint_options = (endpoint.options || {}).to_hash.deep_symbolize_keys

@@ -20,8 +20,8 @@ describe Berkshelf::API::Config do
       expect(subject.endpoints.first.type).to eql("supermarket")
     end
 
-    it "has the default refresh_interval" do
-      expect(subject.refresh_interval).to eq(5.0)
+    it "has the default build_interval" do
+      expect(subject.build_interval).to eq(5.0)
     end
   end
 end
