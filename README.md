@@ -55,10 +55,12 @@ And add your configuration to the `node[:berkshelf_api][:config]` attribute
             "client_name": "berkshelf"
           }
         }
-      ]
+      ],
+      "refresh_interval":5.0
+
     },
-    "host":"your.fqdn.here",
-    "refresh_interval":5.0
+    "host":"your.fqdn.here"
+
   }
 }
 ```
