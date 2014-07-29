@@ -19,5 +19,9 @@ describe Berkshelf::API::Config do
     it "has the Supermarket community site as an endpoint" do
       expect(subject.endpoints.first.type).to eql("supermarket")
     end
+
+    it "has the default refresh_interval" do
+      expect(subject.refresh_interval).to eq(5.0)
+    end
   end
 end
