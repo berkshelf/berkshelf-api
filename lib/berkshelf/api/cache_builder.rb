@@ -4,8 +4,6 @@ module Berkshelf::API
 
     class WorkerSupervisor < Celluloid::SupervisionGroup; end
 
-    
-
     include Berkshelf::API::GenericServer
     include Berkshelf::API::Logging
     include Berkshelf::API::Mixin::Services
@@ -13,15 +11,12 @@ module Berkshelf::API
     server_name :cache_builder
     finalizer :finalize_callback
 
-
     def initialize
       log.info "Cache Builder starting..."
       @worker_registry   = Celluloid::Registry.new
       @worker_supervisor = WorkerSupervisor.new(@worker_registry)
       @building          = false
       @build_interval   = Application.config.build_interval
-
-      log.info "Cache Builder build interval: #{@build_interval}"
 
       Application.config.endpoints.each_with_index do |endpoint, index|
         endpoint_options = (endpoint.options || {}).to_hash.deep_symbolize_keys

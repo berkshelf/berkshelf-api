@@ -56,16 +56,18 @@ And add your configuration to the `node[:berkshelf_api][:config]` attribute
           }
         }
       ],
-      "build_interval":5.0
-
+      "build_interval": 5.0
     },
-    "host":"your.fqdn.here"
-
+    "host": "your.fqdn.here"
   }
 }
 ```
- Explanation of some optional attributes
-  - build_interval : The number of seconds before it refreshes from the endpoints.
+
+Options:
+
+  * build_interval - the number of seconds before it refreshes from the endpoints.
+  * endpoints - an array of endpoints to cache
+  * home_path - data directory for the berkshelf-api server
 
 > See configuration endpoints below for a complete list of supported endpoints, and the [api cookbook readme](https://github.com/berkshelf/berkshelf-api/tree/master/cookbook) for all configuration options.
 

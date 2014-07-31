@@ -24,8 +24,8 @@ module Berkshelf::API
       ]
 
     attribute 'build_interval',
-      type:Float,
-      default:5.0
+      type: Float,
+      default: 5.0
 
     def endpoints_checksum
       Digest::SHA1.hexdigest(endpoints.collect {|x| x.to_hash }.to_s)
