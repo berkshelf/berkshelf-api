@@ -55,12 +55,17 @@ And add your configuration to the `node[:berkshelf_api][:config]` attribute
             "client_name": "berkshelf"
           }
         }
-      ]
+      ],
+      "build_interval":5.0
+
     },
     "host":"your.fqdn.here"
+
   }
 }
 ```
+ Explanation of some optional attributes
+  - build_interval : The number of seconds before it refreshes from the endpoints.
 
 > See configuration endpoints below for a complete list of supported endpoints, and the [api cookbook readme](https://github.com/berkshelf/berkshelf-api/tree/master/cookbook) for all configuration options.
 
