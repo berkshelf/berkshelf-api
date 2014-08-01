@@ -20,8 +20,8 @@ describe Berkshelf::API::SrvCtl do
         end
       end
 
-      context "given -v" do
-        let(:args) { ["-v"] }
+      context "given -V" do
+        let(:args) { ["-V"] }
 
         it "sets :log_level to INFO" do
           expect(subject[:log_level]).to eql("INFO")
@@ -44,8 +44,8 @@ describe Berkshelf::API::SrvCtl do
         end
       end
 
-      context "given -v and -d" do
-        let(:args) { ["-v", "-d"] }
+      context "given -V and -d" do
+        let(:args) { ["-V", "-d"] }
 
         it "sets :log_level to DEBUG" do
           expect(subject[:log_level]).to eql("DEBUG")
