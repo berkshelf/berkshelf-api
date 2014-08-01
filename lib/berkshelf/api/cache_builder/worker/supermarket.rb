@@ -16,7 +16,7 @@ module Berkshelf::API
         def cookbooks
           connection.universe.inject([]) do |list, (name, versions)|
             versions.each do |version, info|
-              list << RemoteCookbook.new(name, version, self.class.worker_type, connection.api_url, priority, info)
+              list << RemoteCookbook.new(name, version, self.class.worker_type, info["location_path"], priority, info)
             end
 
             list
@@ -40,7 +40,6 @@ module Berkshelf::API
         private
 
           attr_accessor :connection
-
       end
     end
   end
