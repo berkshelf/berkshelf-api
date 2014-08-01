@@ -2,6 +2,10 @@
 
 * Enhancements
   * Added --version flag for displaying version (alias -v)
+  * Build interval for cache builder is now configurable
+
+* Bug Fixes
+  * Supermarket location_path was not correctly set
 
 * Backwards incompatible changes
   * --verbose alias is now -V. Previously -v.
