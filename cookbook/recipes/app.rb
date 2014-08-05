@@ -23,6 +23,7 @@ include_recipe "runit"
 chef_gem "bundler"
 
 user node[:berkshelf_api][:owner] do
+  gid node[:berkshelf_api][:group]
   home node[:berkshelf_api][:home]
   system true
 end
