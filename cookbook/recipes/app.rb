@@ -22,9 +22,7 @@ include_recipe "runit"
 
 chef_gem "bundler"
 
-unless node[:berkshelf_api][:group] == node[:berkshelf_api][:owner]
-  group node[:berkshelf_api][:group]
-end
+group node[:berkshelf_api][:group]
 
 user node[:berkshelf_api][:owner] do
   gid node[:berkshelf_api][:group]
