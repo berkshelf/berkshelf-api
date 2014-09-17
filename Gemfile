@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'berkflow', github: "reset/berkflow"
-  gem 'berkshelf', github: "berkshelf/berkshelf"
+  gem 'berkflow', git: "https://github.com/reset/berkflow.git"
+  gem 'berkshelf', git: "https://github.com/berkshelf/berkshelf.git"
   gem 'thor',      '~> 0.18'
   gem 'coolline'
   gem 'fuubar', '~> 1.1'
