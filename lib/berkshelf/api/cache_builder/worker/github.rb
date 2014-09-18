@@ -51,7 +51,7 @@ module Berkshelf::API
                     next unless cookbook_metadata = load_metadata(repo.name, tag.name)
 
                     if cookbook_metadata.version.to_s == match[:version].to_s
-                      cookbook_versions << RemoteCookbook.new(repo.name, cookbook_metadata.version,
+                      cookbook_versions << RemoteCookbook.new(cookbook_metadata.name, cookbook_metadata.version,
                         self.class.worker_type, repo.html_url, priority)
                     else
                       log.warn "Version found in metadata for #{repo.name} (#{tag.name}) does not " +
