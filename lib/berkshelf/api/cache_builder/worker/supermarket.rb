@@ -14,12 +14,16 @@ module Berkshelf::API
         # @return [Array<RemoteCookbook>]
         #  The list of cookbooks this builder can find
         def cookbooks
-          connection.universe.inject([]) do |list, (name, versions)|
-            versions.each do |version, info|
-              list << RemoteCookbook.new(name, version, self.class.worker_type, info["location_path"], priority, info)
-            end
+          begin
+            connection.universe.inject([]) do |list, (name, versions)|
+              versions.each do |version, info|
+                list << RemoteCookbook.new(name, version, self.class.worker_type, info["location_path"], priority, info)
+              end
 
-            list
+              list
+            end
+          rescue
+            return []
           end
         end
 
