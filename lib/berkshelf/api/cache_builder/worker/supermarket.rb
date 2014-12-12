@@ -22,7 +22,7 @@ module Berkshelf::API
 
               list
             end
-          rescue
+          rescue NoMethodError
             return []
           end
         end
