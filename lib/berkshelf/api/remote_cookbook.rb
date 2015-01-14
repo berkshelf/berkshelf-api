@@ -8,12 +8,12 @@ module Berkshelf::API
     attr_accessor :info
 
     def initialize(name, version, location_type, location_path, priority, info = {})
-      @name = name
-      @version = version
+      @name          = name
+      @version       = version
       @location_type = location_type
       @location_path = location_path
-      @priority = priority
-      @info = info
+      @priority      = priority
+      @info          = info
     end
 
     def hash
