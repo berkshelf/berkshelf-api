@@ -17,7 +17,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'chef-zero', '~> 1.5'
+  gem 'chef-zero', '~> 3.2'
   gem 'rack-test'
   gem 'rspec', '~> 2.13'
   gem 'spork', '~> 0.9'

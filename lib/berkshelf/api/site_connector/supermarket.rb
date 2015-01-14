@@ -1,5 +1,4 @@
 require 'open-uri'
-require 'retryable'
 require 'archive'
 require 'tempfile'
 

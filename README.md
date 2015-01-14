@@ -26,7 +26,7 @@ Create an environment
 
 Bootstrap a server into that environment
 
-    $ knife ec2 server create -I ami-22e08b12 -f t1.micro -E berks-api-production -r "recipe[organization-base::default]" -G ssh-admin,http-https --ssh-user ubuntu
+    $ knife ec2 server create -I ami-23f78e13 -f t1.micro -E berks-api-production -r "recipe[organization-base::default]" -G ssh-admin,http-https --ssh-user ubuntu
 
 Install the cookbooks into your environment
 
