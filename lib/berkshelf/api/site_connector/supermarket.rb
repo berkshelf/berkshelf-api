@@ -31,6 +31,8 @@ module Berkshelf::API
       # The timeout for the HTTP request
       TIMEOUT = 15
 
+      EMPTY_UNIVERSE = {}.freeze
+
       # @return [String]
       attr_reader :api_url
 
@@ -52,14 +54,17 @@ module Berkshelf::API
         end
       rescue JSON::ParserError => e
         log.error "Failed to parse JSON: #{e}"
+        EMPTY_UNIVERSE
       rescue Timeout::Error
         log.error "Failed to get `#{universe_url}' in #{TIMEOUT} seconds!"
+        EMPTY_UNIVERSE
       rescue SocketError,
              Errno::ECONNREFUSED,
              Errno::ECONNRESET,
              Errno::ENETUNREACH,
              OpenURI::HTTPError => e
         log.error "Failed to get `#{universe_url}': #{e}"
+        EMPTY_UNIVERSE
       end
     end
   end
