@@ -42,17 +42,6 @@ module Berkshelf
         }
       end
 
-      let(:connection) do
-        double(SiteConnector::Supermarket,
-          universe: universe,
-          api_url:  location_path,
-        )
-      end
-
-      before do
-        allow(subject.wrapped_object).to receive(:connection)
-          .and_return(connection)
-      end
 
       subject do
         CacheManager.start
@@ -62,6 +51,18 @@ module Berkshelf
       it_behaves_like "a human-readable string"
 
       describe "#cookbooks" do
+        let(:connection) do
+          double(SiteConnector::Supermarket,
+            universe: universe,
+            api_url:  location_path,
+          )
+        end
+
+        before do
+          allow(subject.wrapped_object).to receive(:connection)
+            .and_return(connection)
+        end
+
         it "returns an array of RemoteCookbooks described by the server" do
           expected = [
             RemoteCookbook.new('chicken', '1.0', location_type, location_path, priority),
@@ -98,6 +99,36 @@ module Berkshelf
           expect(result[3].priority).to eq(priority)
         end
       end
+
+
+      describe "#cookbooks cannot connect to supermarket to retrieve universe.json" do
+        let(:connection) do
+          double(SiteConnector::Supermarket,
+            universe: true,
+            api_url:  location_path,
+          )
+        end
+
+        before do
+          allow(subject.wrapped_object).to receive(:connection)
+            .and_return(connection)
+        end
+        
+        it "returns an array of RemoteCookbooks described by the server" do
+          expected = [
+            RemoteCookbook.new('chicken', '1.0', location_type, location_path, priority),
+            RemoteCookbook.new('chicken', '2.0', location_type, location_path, priority),
+            RemoteCookbook.new('tuna', '3.0.0',  location_type, location_path, priority),
+            RemoteCookbook.new('tuna', '3.0.1',  location_type, location_path, priority),
+          ]
+
+          result = subject.cookbooks
+          expect(result).to be_a(Array)
+          expect(result.size).to eq(0)
+
+        end
+      end
+
     end
   end
 end
