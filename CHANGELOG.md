@@ -1,3 +1,11 @@
+# 2.1.1
+
+* Bug Fixes
+  * Calling berks_dependency/2 rspec support function no longer results in a runtime crash
+  * Failures when calling Supermarket.universe/0 will now return a hash instead of a boolean
+  * Cookbook name, not repo name, will be used when caching Github cookbooks
+  * Group/User will be created in proper order during cookbook converge
+
 # 2.1.0
 
 * Enhancements
