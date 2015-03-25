@@ -27,5 +27,7 @@ suites:
                 url: "https://chef.myorg.com"
                 client_key: "/etc/berkshelf/api-server/client.pem"
                 client_name: "berkshelf"
+                ssl_certificate: '/etc/pki/tls/star.myorg.com.crt'
+                ssl_key: '/etc/pki/tls/star.myorg.com.key'
           build_interval: 5.0
         host: berkshelf.myorg.com

@@ -29,5 +29,7 @@ default[:berkshelf_api][:proxy_server]   = 'nginx'
 default[:berkshelf_api][:host]           = node[:fqdn]
 default[:berkshelf_api][:config_path]    = "#{node[:berkshelf_api][:home]}/config.json"
 default[:berkshelf_api][:config]         = {
-  home_path: node[:berkshelf_api][:home]
+  home_path: node[:berkshelf_api][:home],
+  ssl_certificate: '/etc/pki/tls/certificate.crt',
+  ssl_key: '/etc/pki/tls/certificate.com.key'
 }

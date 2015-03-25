@@ -65,7 +65,7 @@
     RewriteRule ^.*$ /system/maintenance.html [L]
     
     SSLEngine on
-    SSLCertificateFile /etc/pki/tls/star.showmobile.com.crt
-    SSLCertificateKeyFile /etc/pki/tls/star.showmobile.com.key
+    SSLCertificateFile <%= @node[:berkshelf_api][:config][:ssl_certificate] %>
+    SSLCertificateKeyFile <%= @node[:berkshelf_api][:config][:ssl_key] %>
     
 </VirtualHost>
