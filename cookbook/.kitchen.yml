@@ -1,0 +1,31 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: debian-7.4
+    run_list:
+      - recipe[hostupgrade]
+    attributes:
+      hostupgrade:
+        compile_time: true
+
+suites:
+  - name: default
+    run_list:
+      - recipe[berkshelf-api-server]
+    attributes:
+      berkshelf_api:
+        proxy_server: 'apache'
+        config:
+          endpoints:
+            - type: chef_server
+              options:
+                url: "https://chef.myorg.com"
+                client_key: "/etc/berkshelf/api-server/client.pem"
+                client_name: "berkshelf"
+          build_interval: 5.0
+        host: berkshelf.myorg.com
