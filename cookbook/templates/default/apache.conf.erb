@@ -1,0 +1,71 @@
+<VirtualHost *:80>
+    ServerName <%= @params[:server_name] %>
+    ServerAlias <% @params[:server_aliases] && @params[:server_aliases].each do |a| %><%= a %> <% end %>
+
+    ProxyPreserveHost On
+    <Location />
+        ProxyPass http://127.0.0.1:<%= @node[:berkshelf_api][:port] %>/
+        ProxyPassReverse http://127.0.0.1:<%= @node[:berkshelf_api][:port] %>/
+        Order Deny,Allow
+        Allow from all
+    </Location>
+    
+    <Location /server-status>
+        SetHandler server-status
+        
+        Order Deny,Allow
+        Deny from all
+        Allow from 127.0.0.1
+    </Location>
+    
+    LogLevel info
+    ErrorLog <%= @node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
+    CustomLog <%= @node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName <%= @params[:server_name] %>
+    ServerAlias <% @params[:server_aliases].each do |a| %><%= a %> <% end %>
+    RewriteEngine On
+    
+    ProxyPreserveHost On
+    <Location />
+        Order Deny,Allow
+        Allow from all
+        SSLRequireSSL
+        ProxyPass http://127.0.0.1:<%= @node[:berkshelf_api][:port] %>/
+        ProxyPassReverse http://127.0.0.1:<%= @node[:berkshelf_api][:port] %>/
+        RequestHeader set X-FORWARDED-PROTOCOL ssl
+        RequestHeader set X-FORWARDED-SSL on
+    </Location>
+    
+    <Location /server-status>
+        SetHandler server-status
+        
+        Order Deny,Allow
+        Deny from all
+        Allow from 127.0.0.1
+    </Location>
+    
+    LogLevel info
+    ErrorLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-error.log
+    CustomLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-access.log combined
+    
+    RewriteEngine On
+    RewriteLog <%= node['apache']['log_dir'] %>/<%= @application_name %>-rewrite.log
+    RewriteLogLevel 0
+    
+    # Canonical host, <%= @params[:server_name] %>
+    RewriteCond %{HTTP_HOST}   !^<%= @params[:server_name] %> [NC]
+    RewriteCond %{HTTP_HOST}   !^$
+    RewriteRule ^/(.*)$        http://<%= @params[:server_name] %>/$1 [L,R=301]
+    
+    RewriteCond %{DOCUMENT_ROOT}/system/maintenance.html -f
+    RewriteCond %{SCRIPT_FILENAME} !maintenance.html
+    RewriteRule ^.*$ /system/maintenance.html [L]
+    
+    SSLEngine on
+    SSLCertificateFile <%= @node[:berkshelf_api][:config][:ssl_certificate] %>
+    SSLCertificateKeyFile <%= @node[:berkshelf_api][:config][:ssl_key] %>
+    
+</VirtualHost>

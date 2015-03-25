@@ -13,3 +13,4 @@ pkg/
 Gemfile.lock
 bin/*
 .bundle/*
+.kitchen/*
