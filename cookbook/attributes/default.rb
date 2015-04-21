@@ -18,6 +18,7 @@
 #
 
 default[:berkshelf_api][:repo]           = "berkshelf/berkshelf-api"
+default[:berkshelf_api][:token]          = nil
 default[:berkshelf_api][:release]        = "v#{Berkshelf::API::Chef.cookbook_version(run_context)}"
 default[:berkshelf_api][:owner]          = "berkshelf"
 default[:berkshelf_api][:group]          = "berkshelf"
