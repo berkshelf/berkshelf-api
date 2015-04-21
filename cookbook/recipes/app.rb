@@ -43,6 +43,7 @@ end
 asset = github_asset "berkshelf-api.tar.gz" do
   repo node[:berkshelf_api][:repo]
   release node[:berkshelf_api][:release]
+  github_token node[:berkshelf_api][:token] unless node[:berkshelf_api][:token].nil?
 end
 
 libarchive_file "berkshelf-api.tar.gz" do
