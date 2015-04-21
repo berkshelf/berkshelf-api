@@ -30,6 +30,12 @@ Installs/Configures a berkshelf-api server
     <td><tt>v{cookbook_version}</tt></td>
   </tr>
   <tr>
+    <td><tt>[:berkshelf_api][:token]</tt></td>
+    <td>String</td>
+    <td>Optional github token (https://developer.github.com/v3/#rate-limiting)</td>
+    <td><tt>nil</tt></td>
+  </tr>
+  <tr>
     <td><tt>[:berkshelf_api][:owner]</tt></td>
     <td>String</td>
     <td>Owner of the deployed application files</td>
