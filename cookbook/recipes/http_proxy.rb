@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-node.set[:nginx][:install_method] = "source"
 include_recipe "nginx"
 
 nginx_site "default" do
