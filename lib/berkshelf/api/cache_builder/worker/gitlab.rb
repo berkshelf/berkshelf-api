@@ -46,7 +46,6 @@ module Berkshelf::API
           [].tap do |cookbook_versions|
             log.debug "#{self} Searching for cookbooks..."
             connection.group(group).projects.each do |project|
-              next unless project.public?
 
               tags = project.tags.select { |tag| tag =~ /\Av[0-9][0-9.]+\Z/ }
               tags.each do |tag|
@@ -67,7 +66,7 @@ module Berkshelf::API
         #
         # @return [Ridley::Chef::Cookbook::Metadata, nil]
         def metadata(remote)
-          load_metadata(remote.external_id, "v#{remote.version}")
+          load_metadata(remote.info, "v#{remote.version}")
         end
 
         private
@@ -84,7 +83,7 @@ module Berkshelf::API
             return nil unless cookbook_metadata = load_metadata(project.id, tag)
 
             if cookbook_metadata.version.to_s == tag[1..-1]
-              location_type = 'uri'
+              location_type = 'gitlab'
               location_path = "#{project.web_url}/repository/archive.tar.gz?ref=#{tag}"
               return RemoteCookbook.new(cookbook_metadata.name,
                                         cookbook_metadata.version,
