@@ -52,7 +52,7 @@ module Berkshelf::API
 
                     if cookbook_metadata.version.to_s == match[:version].to_s
                       cookbook_versions << RemoteCookbook.new(cookbook_metadata.name, cookbook_metadata.version,
-                        self.class.worker_type, repo.html_url, priority)
+                        self.class.worker_type, repo.html_url, priority, {:repo_name => repo.name} )
                     else
                       log.warn "Version found in metadata for #{repo.name} (#{tag.name}) does not " +
                         "match the tag. Got #{cookbook_metadata.version}."
@@ -77,7 +77,7 @@ module Berkshelf::API
         #
         # @return [Ridley::Chef::Cookbook::Metadata, nil]
         def metadata(remote)
-          load_metadata(remote.name, "v#{remote.version}")
+          load_metadata(remote.info[:repo_name], "v#{remote.version}")
         end
 
         private
