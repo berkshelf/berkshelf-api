@@ -47,9 +47,6 @@ describe Berkshelf::API::CacheBuilder::Worker::Gitlab do
     # Project
     before do
       expect(project_double)
-        .to receive(:public?)
-        .and_return(true)
-      expect(project_double)
         .to receive(:tags)
         .and_return([good_tag, 'bad-tag'])
       allow(project_double)
@@ -74,9 +71,9 @@ describe Berkshelf::API::CacheBuilder::Worker::Gitlab do
       end
     end
 
-    it 'each RemoteCookbook is tagged with a location_type of :uri' do
+    it 'each RemoteCookbook is tagged with a location_type of :gitlab' do
       subject.cookbooks.each do |cookbook|
-        expect(cookbook.location_type).to eql('uri')
+        expect(cookbook.location_type).to eql('gitlab')
       end
     end
   end
