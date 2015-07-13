@@ -31,8 +31,16 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
     )
   end
 
+  let(:repo_mismached) do
+    double('repo',
+      name: 'enterprise',
+      full_name: 'opscode-cookbooks/enterprise-chef-common',
+      html_url: 'https://github.com/opscode-cookbooks/enterprise-chef-common',
+    )
+  end
+
   let(:repos) do
-    [repo]
+    [repo, repo_mismached]
   end
 
   subject do
@@ -43,15 +51,18 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
   it_behaves_like "a human-readable string"
 
   describe "#cookbooks" do
+
     before do
       expect(connection).to receive(:organization_repositories) { repos }
-      expect(connection).to receive(:tags) { [good_tag, bad_tag] }
-      expect(connection).to receive(:contents).with("opscode-cookbooks/apt",
-        { path: "metadata.rb", ref: "v1.0.0"}) { contents }
+      repos.each do |repo|
+        expect(connection).to receive(:tags) { [good_tag, bad_tag] }
+        expect(connection).to receive(:contents).with("opscode-cookbooks/" + repo.name,
+          { path: "metadata.rb", ref: "v1.0.0"}) { contents }
+      end
     end
 
     it "returns an array containing an item for each valid cookbook on the server" do
-      expect(subject.cookbooks.size).to eq(1)
+      expect(subject.cookbooks.size).to eq(2)
     end
 
     it "returns an array of RemoteCookbooks" do
