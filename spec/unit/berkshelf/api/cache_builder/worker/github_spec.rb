@@ -40,11 +40,7 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
   end
 
   let(:repos) do
-    [repo]
-  end
-
-  let(:repos_mismached) do
-    [repo_mismached]
+    [repo, repo_mismached]
   end
 
   subject do
@@ -56,58 +52,29 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
 
   describe "#cookbooks" do
 
-    context "when cookbook's name match repository name" do
-      
-      before do
-        expect(connection).to receive(:organization_repositories) { repos }
+    before do
+      expect(connection).to receive(:organization_repositories) { repos }
+      repos.each do |repo|
         expect(connection).to receive(:tags) { [good_tag, bad_tag] }
-        expect(connection).to receive(:contents).with("opscode-cookbooks/apt",
+        expect(connection).to receive(:contents).with("opscode-cookbooks/" + repo.name,
           { path: "metadata.rb", ref: "v1.0.0"}) { contents }
       end
-
-      it "returns an array containing an item for each valid cookbook on the server" do
-        expect(subject.cookbooks.size).to eq(1)
-      end
-
-      it "returns an array of RemoteCookbooks" do
-        subject.cookbooks.each do |cookbook|
-          expect(cookbook).to be_a(Berkshelf::API::RemoteCookbook)
-        end
-      end
-
-      it "each RemoteCookbook is tagged with a location_type matching the worker_type of the builder" do
-        subject.cookbooks.each do |cookbook|
-          expect(cookbook.location_type).to eql(described_class.worker_type)
-        end
-      end
-
     end
 
-    context "when cookbook's name mismatch repository name" do
+    it "returns an array containing an item for each valid cookbook on the server" do
+      expect(subject.cookbooks.size).to eq(2)
+    end
 
-      before do
-        expect(connection).to receive(:organization_repositories) { repos_mismached }
-        expect(connection).to receive(:tags) { [good_tag, bad_tag] }
-        expect(connection).to receive(:contents).with("opscode-cookbooks/" + repo_mismached.name,
-          { path: "metadata.rb", ref: "v1.0.0"}) { contents }
-      end
-
-      it "returns an array containing an item for each valid cookbook on the server" do
-        expect(subject.cookbooks.size).to eq(1)
-      end
-
-      it "returns an array of RemoteCookbooks" do
-        subject.cookbooks.each do |cookbook|
-          expect(cookbook).to be_a(Berkshelf::API::RemoteCookbook)
-        end
-      end
-
-      it "each RemoteCookbook is tagged with a location_type matching the worker_type of the builder" do
-        subject.cookbooks.each do |cookbook|
-          expect(cookbook.location_type).to eql(described_class.worker_type)
-        end
+    it "returns an array of RemoteCookbooks" do
+      subject.cookbooks.each do |cookbook|
+        expect(cookbook).to be_a(Berkshelf::API::RemoteCookbook)
       end
     end
-    
+
+    it "each RemoteCookbook is tagged with a location_type matching the worker_type of the builder" do
+      subject.cookbooks.each do |cookbook|
+        expect(cookbook.location_type).to eql(described_class.worker_type)
+      end
+    end
   end
 end
