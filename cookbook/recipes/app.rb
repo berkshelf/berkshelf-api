@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe "libarchive::default"
 include_recipe "runit"
 
 chef_gem "bundler"
@@ -40,22 +39,13 @@ file node[:berkshelf_api][:config_path] do
   content JSON.generate(node[:berkshelf_api][:config].to_hash)
 end
 
-asset = github_asset "berkshelf-api.tar.gz" do
-  repo node[:berkshelf_api][:repo]
-  release node[:berkshelf_api][:release]
-  github_token node[:berkshelf_api][:token] unless node[:berkshelf_api][:token].nil?
-end
-
-libarchive_file "berkshelf-api.tar.gz" do
-  path asset.asset_path
-  extract_to node[:berkshelf_api][:deploy_path]
-  extract_options :no_overwrite
+ark node[:berkshelf_api][:release] do
   owner node[:berkshelf_api][:owner]
   group node[:berkshelf_api][:group]
-
-  action :extract
-  notifies :restart, "runit_service[berks-api]"
-  only_if { ::File.exist?(asset.asset_path) }
+  url "#{node[:berkshelf_api][:home]}/berkshelf-api.tar.gz"
+  prefix_root '/opt/berkshelf-api/'
+  action :put
+  notifies :restart, 'runit_service[berks-api]'
 end
 
 execute "berkshelf-api-bundle-install" do
