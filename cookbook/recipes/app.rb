@@ -42,7 +42,7 @@ end
 ark node[:berkshelf_api][:release] do
   owner node[:berkshelf_api][:owner]
   group node[:berkshelf_api][:group]
-  url "#{node[:berkshelf_api][:home]}/berkshelf-api.tar.gz"
+  url node[:berkshelf_api][:artifact_url]
   prefix_root '/opt/berkshelf-api/'
   action :put
   notifies :restart, 'runit_service[berks-api]'
