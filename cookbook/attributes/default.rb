@@ -31,3 +31,4 @@ default[:berkshelf_api][:config_path]    = "#{node[:berkshelf_api][:home]}/confi
 default[:berkshelf_api][:config]         = {
   home_path: node[:berkshelf_api][:home]
 }
+default[:berkshelf_api][:init_style] = "runit"

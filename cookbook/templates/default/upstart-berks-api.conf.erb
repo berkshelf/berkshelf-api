@@ -1,0 +1,19 @@
+description "berks-api service"
+
+start on (net-device-up
+and local-filesystems
+and runlevel [2345])
+
+stop on runlevel [!2345]
+
+expect fork
+setuid <%= node[:berkshelf_api][:owner] %>
+console none
+
+script
+  export PATH=/opt/chef/embedded/bin:$PATH
+  export HOME=<%= node[:berkshelf_api][:deploy_path] %>
+  cd $HOME
+
+  bundle exec bin/berks-api -p <%= node[:berkshelf_api][:port] %> -c <%= node[:berkshelf_api][:config_path] %>
+end script
