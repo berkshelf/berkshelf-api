@@ -16,4 +16,4 @@ suites:
     attributes:
       berkshelf_api:
           release: 'v2.1.1'
-          artifact_url: "https://dl.dropboxusercontent.com/s/46pc7uca4lubon0/berkshelf-api.tar.gz"
+          artifact_url: "<%= ENV['berks_artifact_url'] %>"
