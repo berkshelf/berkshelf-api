@@ -1,0 +1,19 @@
+---
+driver:
+  name: vagrant
+  pre_create_command:
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centos-6.6
+
+suites:
+  - name: default
+    run_list:
+      - recipe[berkshelf-api-server::default]
+    attributes:
+      berkshelf_api:
+          release: 'v2.1.1'
+          artifact_url: "https://dl.dropboxusercontent.com/s/46pc7uca4lubon0/berkshelf-api.tar.gz"

@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+include_recipe "build-essential::default"
 include_recipe "libarchive::default"
 include_recipe "runit"
 
@@ -40,22 +41,24 @@ file node[:berkshelf_api][:config_path] do
   content JSON.generate(node[:berkshelf_api][:config].to_hash)
 end
 
-asset = github_asset "berkshelf-api.tar.gz" do
-  repo node[:berkshelf_api][:repo]
-  release node[:berkshelf_api][:release]
-  github_token node[:berkshelf_api][:token] unless node[:berkshelf_api][:token].nil?
+berks_file_path = Chef::Config[:file_cache_path] + "berkshelf_api.tar.gz"
+
+remote_file "berkshelf-api.tar.gz" do
+  source node[:berkshelf_api][:artifact_url]
+  path berks_file_path
+  group node[:berkshelf_api][:group]
+  owner node[:berkshelf_api][:owner]
 end
 
 libarchive_file "berkshelf-api.tar.gz" do
-  path asset.asset_path
+  path berks_file_path
   extract_to node[:berkshelf_api][:deploy_path]
   extract_options :no_overwrite
   owner node[:berkshelf_api][:owner]
   group node[:berkshelf_api][:group]
-
   action :extract
   notifies :restart, "runit_service[berks-api]"
-  only_if { ::File.exist?(asset.asset_path) }
+  only_if { ::File.exist?(berks_file_path) }
 end
 
 execute "berkshelf-api-bundle-install" do
