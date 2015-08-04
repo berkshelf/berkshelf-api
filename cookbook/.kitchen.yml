@@ -8,6 +8,7 @@ provisioner:
 
 platforms:
   - name: centos-6.6
+  - name: ubuntu-12.04
 
 suites:
   - name: default
