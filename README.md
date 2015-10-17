@@ -170,6 +170,32 @@ a GitHub Enterprise server within your own organization
 }
 ```
 
+### GitLab group
+
+This searches a [GitLab](https://gitlab.com/) group looking for *public*
+repositories that contain cookbooks with [semver](http://semver.org/) tags
+(e.g. "v1.2.3").
+
+Requirements:
+
+* A private token; available via your account page.
+* GitLab version 6.6.0 or newer
+
+```json
+{
+  "endpoints": [
+    {
+      "type": "gitlab",
+      "options": {
+        "group": "my-cookbooks",
+        "private_token": "",
+        "url": "https://gitlab.example.com/"
+      }
+    }
+  ]
+}
+```
+
 ### FileStore directory
 
 A local directory containing cookbooks.
