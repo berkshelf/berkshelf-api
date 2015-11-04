@@ -28,6 +28,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'hashie',         '>= 2.0.4', '< 4.0.0'
   spec.add_dependency 'archive',        '= 0.0.6'
   spec.add_dependency 'buff-config',    '~> 1.0'
-  spec.add_dependency 'octokit',        '~> 4.0'
+  spec.add_dependency 'octokit',        '>= 3.0.0', '< 5.0.0'
   spec.add_dependency 'semverse',       '~> 1.0'
+  # varia_mode 0.5 depends on Ruby 2.x - we can update to that
+  # when we are prepared to bump our own required_ruby_version
+  spec.add_dependency 'varia_model',    '>= 0.4.0', '< 0.5.0'
 end
