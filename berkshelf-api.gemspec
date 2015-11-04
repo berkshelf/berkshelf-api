@@ -28,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'hashie',         '>= 2.0.4', '< 4.0.0'
   spec.add_dependency 'archive',        '= 0.0.6'
   spec.add_dependency 'buff-config',    '~> 1.0'
-  spec.add_dependency 'octokit',        '~> 4.0'
+  spec.add_dependency 'octokit',        '>= 3.0.0', '< 5.0.0'
   spec.add_dependency 'semverse',       '~> 1.0'
 end
