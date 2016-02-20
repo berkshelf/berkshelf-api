@@ -1,8 +1,15 @@
+sudo: false
 language: ruby
 rvm:
-  - 1.9.3
   - 2.0.0
   - 2.1
+cache: bundler
+addons:
+  apt:
+    packages:
+    - libarchive12
+    - libarchive-dev 
+    - libgecode-dev
 notifications:
   irc:
     channels:
@@ -11,8 +18,6 @@ notifications:
     use_notice: true
 env: USE_SYSTEM_GECODE=1
 bundler_args: --without development --jobs 7
-before_install:
-  - sudo apt-get install -qq libarchive12 libarchive-dev libgecode-dev
 before_script:
   - git config --global user.email "ci@berkshelf.com"
   - git config --global user.name "Berkshelf"
