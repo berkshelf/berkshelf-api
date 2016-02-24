@@ -1,6 +1,7 @@
 require 'open-uri'
 require 'archive'
 require 'tempfile'
+require 'faraday'
 
 module OpenURI
   class << self
@@ -49,9 +50,12 @@ module Berkshelf::API
         log.debug "Loading universe from `#{universe_url}'..."
 
         Timeout.timeout(TIMEOUT) do
-          response = open(universe_url, 'User-Agent' => USER_AGENT)
-          JSON.parse(response.read)
-        end
+          response =  Faraday.new(url: universe_url) do |faraday|
+            faraday.request  :url_encoded
+            faraday.response :logger
+            faraday.adapter  :httpclient
+          end
+          JSON.parse(response.get.body)d
       rescue JSON::ParserError => e
         log.error "Failed to parse JSON: #{e}"
         EMPTY_UNIVERSE
