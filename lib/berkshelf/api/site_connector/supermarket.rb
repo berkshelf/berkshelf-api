@@ -55,7 +55,8 @@ module Berkshelf::API
             faraday.response :logger
             faraday.adapter  :httpclient
           end
-          JSON.parse(response.get.body)d
+          JSON.parse(response.get.body)
+	end
       rescue JSON::ParserError => e
         log.error "Failed to parse JSON: #{e}"
         EMPTY_UNIVERSE
