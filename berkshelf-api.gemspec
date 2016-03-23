@@ -23,7 +23,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'celluloid',      '~> 0.16'
   spec.add_dependency 'celluloid-io',   '~> 0.16'
   spec.add_dependency 'reel',           '~> 0.6.0'
-  spec.add_dependency 'grape',          '~> 0.6'
+  # There is a grape 0.15 available, but it doesn't work correctly with
+  # grape-msgpack; It causes an error like this when you `require "grape-msgpack"`:
+  #
+  #   /home/travis/build/berkshelf/berkshelf/vendor/bundle/ruby/2.0.0/gems/grape-msgpack-0.1.2/lib/grape/msgpack.rb:39:in `<top (required)>': uninitialized constant Grape::Formatter::Base (NameError)
+  #
+  spec.add_dependency 'grape',          '~> 0.14.0'
   spec.add_dependency 'grape-msgpack',  '~> 0.1'
   spec.add_dependency 'hashie',         '>= 2.0.4', '< 4.0.0'
   spec.add_dependency 'archive',        '= 0.0.6'
