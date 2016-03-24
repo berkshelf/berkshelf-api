@@ -20,8 +20,8 @@
 node.set[:nginx][:install_method] = "source"
 include_recipe "nginx"
 
-nginx_site "default" do
-  enable false
+file "/etc/nginx/conf.d/default.conf" do
+  action :delete
 end
 
 template "#{node[:nginx][:dir]}/sites-available/berks-api" do
