@@ -1,0 +1,20 @@
+---
+driver:
+  name: vagrant
+  pre_create_command:
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centos-6.6
+  - name: ubuntu-12.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[berkshelf-api-server::default]
+    attributes:
+      berkshelf_api:
+          release: 'v2.1.1'
+          artifact_url: "<%= ENV['berks_artifact_url'] %>"

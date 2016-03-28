@@ -1,4 +1,4 @@
-# berkshelf-api-server cookbook
+<!-- # berkshelf-api-server cookbook -->
 
 Installs/Configures a berkshelf-api server
 
@@ -18,22 +18,16 @@ Installs/Configures a berkshelf-api server
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>[:berkshelf_api][:repo]</tt></td>
+    <td><tt>[:berkshelf_api][:artifact_url]</tt></td>
     <td>String</td>
-    <td>Github Organization containing the Github release</td>
-    <td><tt>"berkshelf/berkshelf-api"</tt></td>
+    <td>Download URL for the berkshelf tarball</td>
+    <td><tt>"https://github.com/berkshelf/berkshelf-api/releases/download/#{node[:berkshelf_api][:release]}/berkshelf-api.tar.gz"</tt></td>
   </tr>
   <tr>
     <td><tt>[:berkshelf_api][:release]</tt></td>
     <td>String</td>
     <td>Name of the release to deploy</td>
     <td><tt>v{cookbook_version}</tt></td>
-  </tr>
-  <tr>
-    <td><tt>[:berkshelf_api][:token]</tt></td>
-    <td>String</td>
-    <td>Optional github token (https://developer.github.com/v3/#rate-limiting)</td>
-    <td><tt>nil</tt></td>
   </tr>
   <tr>
     <td><tt>[:berkshelf_api][:owner]</tt></td>

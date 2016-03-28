@@ -8,7 +8,7 @@
 /cookbooks
 pkg/
 .ruby-version
-
+.kitchen/
 # Bundler
 Gemfile.lock
 bin/*

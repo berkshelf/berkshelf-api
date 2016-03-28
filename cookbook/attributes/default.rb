@@ -17,9 +17,8 @@
 # limitations under the License.
 #
 
-default[:berkshelf_api][:repo]           = "berkshelf/berkshelf-api"
-default[:berkshelf_api][:token]          = nil
 default[:berkshelf_api][:release]        = "v#{Berkshelf::API::Chef.cookbook_version(run_context)}"
+default[:berkshelf_api][:artifact_url]   = "https://github.com/berkshelf/berkshelf-api/releases/download/#{node[:berkshelf_api][:release]}/berkshelf-api.tar.gz"
 default[:berkshelf_api][:owner]          = "berkshelf"
 default[:berkshelf_api][:group]          = "berkshelf"
 default[:berkshelf_api][:home]           = "/etc/berkshelf/api-server"
