@@ -38,4 +38,6 @@ Gem::Specification.new do |spec|
   # varia_mode 0.5 depends on Ruby 2.x - we can update to that
   # when we are prepared to bump our own required_ruby_version
   spec.add_dependency 'varia_model',    '>= 0.4.0', '< 0.5.0'
+  spec.add_dependency 'faraday',        '~> 0.9.0'
+  spec.add_dependency 'httpclient',     '~> 2.7.0'
 end
