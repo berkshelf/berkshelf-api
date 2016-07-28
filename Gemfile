@@ -19,6 +19,6 @@ end
 group :development, :test do
   gem 'chef-zero'
   gem 'rack-test'
-  gem 'rspec', '~> 2.13'
+  gem 'rspec'
   gem 'spork'
 end

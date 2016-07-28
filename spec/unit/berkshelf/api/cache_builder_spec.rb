@@ -67,8 +67,8 @@ describe Berkshelf::API::CacheBuilder do
       end
 
       before do
-        Berkshelf::API::Application.config.stub(:endpoints).and_return(endpoint_array)
-        Berkshelf::API::CacheBuilder::Worker.stub(:[]).and_return(dummy_endpoint_klass, dummy_endpoint_klass)
+        allow(Berkshelf::API::Application.config).to receive(:endpoints).and_return(endpoint_array)
+        allow(Berkshelf::API::CacheBuilder::Worker).to receive(:[]).and_return(dummy_endpoint_klass, dummy_endpoint_klass)
       end
 
       it "has two workers" do

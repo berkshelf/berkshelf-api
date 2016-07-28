@@ -44,7 +44,7 @@ describe Berkshelf::API::CacheBuilder::Worker::Github do
   end
 
   subject do
-    expect(Octokit::Client).to receive(:new) { connection }
+    expect(Octokit::Client).to receive(:new).and_return(connection)
     described_class.new(organization: "opscode-cookbooks", access_token: "asdf")
   end
 

@@ -12,21 +12,23 @@ describe Berkshelf::API::CacheManager do
       context "when a save file exists" do
         before do
           @tempfile = Tempfile.new('berkshelf-api-rspec')
-          described_class.stub(:cache_file) { @tempfile.path }
+          allow(described_class).to receive(:cache_file) { @tempfile.path }
         end
         after { @tempfile.close(true) }
 
         it "loads the saved cache" do
-          described_class.any_instance.should_receive(:load_save)
+          expect_any_instance_of(described_class).to receive(:load_save)
           subject
         end
       end
 
       context "when a save file does not exist" do
-        before { described_class.stub(cache_file: tmp_path.join('does_not_exist').to_s) }
+        before do
+          allow(described_class).to receive(:cache_file).and_return(tmp_path.join('does_not_exist').to_s)
+        end
 
         it "skips loading of the saved cache" do
-          described_class.any_instance.should_not_receive(:load_save)
+          expect_any_instance_of(described_class).not_to receive(:load_save)
           subject
         end
       end
