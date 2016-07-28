@@ -74,8 +74,8 @@ describe Berkshelf::API::Endpoint::V1 do
 
   describe "GET /status" do
     before do
-      Berkshelf::API::Application.stub(:start_time) { Time.at(0) }
-      Time.stub(:now) { Time.at(100) }
+      allow(Berkshelf::API::Application).to receive(:start_time) { Time.at(0) }
+      allow(Time).to receive(:now) { Time.at(100) }
       get '/status'
     end
 
