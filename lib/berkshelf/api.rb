@@ -8,6 +8,8 @@ require_relative 'api/core_ext'
 
 module Berkshelf
   module API
+    Encoding.default_external = Encoding::UTF_8
+
     USER_AGENT = "Berkshelf API v#{Berkshelf::API::VERSION}".freeze
 
     require_relative 'api/errors'
