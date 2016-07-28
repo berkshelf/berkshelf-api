@@ -1,25 +1,38 @@
 sudo: false
 language: ruby
-rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1
+matrix:
+  include:
+    - rvm: 2.1.10
+    - rvm: 2.2.5
+    - rvm: 2.3.1
+    - rvm: ruby-head
+  allow_failures:
+    - rvm: 2.3.1
+    - rvm: ruby-head
 cache: bundler
+dist: trusty
 addons:
   apt:
     packages:
     - libarchive12
-    - libarchive-dev 
-    - libgecode-dev
+    - libarchive-dev
+#    - libgecode-dev
 notifications:
   irc:
     channels:
       - "irc.freenode.org#berkshelf"
     skip_join: true
     use_notice: true
-env: USE_SYSTEM_GECODE=1
-bundler_args: --without development --jobs 7
+#env: USE_SYSTEM_GECODE=1
+before_install:
+  - gem update --system
+  - gem install bundler
+install:  travis_wait bundle install --without development --jobs 7 --retry=3
 before_script:
   - git config --global user.email "ci@berkshelf.com"
   - git config --global user.name "Berkshelf"
 script: bundle exec rspec --color --format progress
+branches:
+  only:
+    - master
+
