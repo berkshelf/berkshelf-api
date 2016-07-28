@@ -31,5 +31,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'octokit',        '>= 3.0.0', '< 5.0.0'
   spec.add_dependency 'semverse',       '~> 1.0'
   spec.add_dependency 'varia_model',    '~> 0.4'
-  spec.add_dependency 'rack',           '~> 1.0'
+  spec.add_dependency 'rack',           '~> 1.0'  # ruby 2.1.0
+  spec.add_dependency 'activesupport',  '~> 4.0'  # ruby 2.1.0
 end
