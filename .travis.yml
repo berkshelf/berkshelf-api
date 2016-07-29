@@ -1,38 +1,116 @@
 sudo: false
 language: ruby
+cache: bundler
+dist: trusty
+
+#    - libgecode-dev
+
+#env: USE_SYSTEM_GECODE=1
+before_install:
+  - gem update --system
+  - gem install bundler
+
+install:  travis_wait bundle install --without development --jobs 7 --retry=3
+
+before_script:
+  - git config --global user.email "ci@berkshelf.com"
+  - git config --global user.name "Berkshelf"
+
+script: bundle exec rspec --color --format progress
+
 matrix:
   include:
     - rvm: 2.1.10
+      addons:
+        apt:
+          packages:
+          - libarchive12
+          - libarchive-dev
     - rvm: 2.2.5
+      addons:
+        apt:
+          packages:
+          - libarchive12
+          - libarchive-dev
     - rvm: 2.3.1
+      addons:
+        apt:
+          packages:
+          - libarchive12
+          - libarchive-dev
     - rvm: ruby-head
+      addons:
+        apt:
+          packages:
+          - libarchive12
+          - libarchive-dev
+    - rvm: 2.2.5
+      services: docker
+      sudo: required
+      gemfile: cookbook/Gemfile
+      before_script:
+        - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+        - cd cookbook
+      script:
+        - bundle exec kitchen test ubuntu-1404
+      after_failure:
+        - cat .kitchen/logs/kitchen.log
+      env:
+        - UBUNTU=1404
+        - KITCHEN_YAML=.kitchen.travis.yml
+    - rvm: 2.2.5
+      services: docker
+      sudo: required
+      gemfile: cookbook/Gemfile
+      before_script:
+        - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+        - cd cookbook
+      script:
+        - bundle exec kitchen test ubuntu-1604
+      after_failure:
+        - cat .kitchen/logs/kitchen.log
+      env:
+        - UBUNTU=1604
+        - KITCHEN_YAML=.kitchen.travis.yml
+    - rvm: 2.2.5
+      services: docker
+      sudo: required
+      gemfile: cookbook/Gemfile
+      before_script:
+        - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+        - cd cookbook
+      script:
+        - bundle exec kitchen test centos-6
+      after_failure:
+        - cat .kitchen/logs/kitchen.log
+      env:
+        - CENTOS=6
+        - KITCHEN_YAML=.kitchen.travis.yml
+    - rvm: 2.2.5
+      services: docker
+      sudo: required
+      gemfile: cookbook/Gemfile
+      before_script:
+        - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+        - cd cookbook
+      script:
+        - bundle exec kitchen test centos-7
+      after_failure:
+        - cat .kitchen/logs/kitchen.log
+      env:
+        - CENTOS=7
+        - KITCHEN_YAML=.kitchen.travis.yml
+
   allow_failures:
-    - rvm: 2.3.1
     - rvm: ruby-head
-cache: bundler
-dist: trusty
-addons:
-  apt:
-    packages:
-    - libarchive12
-    - libarchive-dev
-#    - libgecode-dev
+
+branches:
+  only:
+    - master
+
 notifications:
   irc:
     channels:
       - "irc.freenode.org#berkshelf"
     skip_join: true
     use_notice: true
-#env: USE_SYSTEM_GECODE=1
-before_install:
-  - gem update --system
-  - gem install bundler
-install:  travis_wait bundle install --without development --jobs 7 --retry=3
-before_script:
-  - git config --global user.email "ci@berkshelf.com"
-  - git config --global user.name "Berkshelf"
-script: bundle exec rspec --color --format progress
-branches:
-  only:
-    - master
-
