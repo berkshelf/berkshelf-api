@@ -8,6 +8,12 @@ A server which indexes cookbooks from various sources and hosts it over a REST A
 
 The API server can be installed in two ways; from a Chef Cookbook (recommended) and from a Rubygem.
 
+## Supports
+
+Chef >= 12.2
+Ubuntu 12.04/16.04
+RHEL/CentOS 6.x/7.x
+
 ### Cookbook install
 
 #### Basic
