@@ -80,20 +80,6 @@ matrix:
         - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
         - cd cookbook
       script:
-        - bundle exec kitchen test centos-6
-      after_failure:
-        - cat .kitchen/logs/kitchen.log
-      env:
-        - CENTOS=6
-        - KITCHEN_YAML=.kitchen.travis.yml
-    - rvm: 2.2.5
-      services: docker
-      sudo: required
-      gemfile: cookbook/Gemfile
-      before_script:
-        - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
-        - cd cookbook
-      script:
         - bundle exec kitchen test centos-7
       after_failure:
         - cat .kitchen/logs/kitchen.log
