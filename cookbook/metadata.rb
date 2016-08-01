@@ -17,5 +17,6 @@ end
 depends "runit"
 depends "build-essential", ">= 2.0.2"
 depends "nginx",           ">= 1.7.0"
-depends "libarchive",      "~> 0.4"
-depends "github",          "~> 0.3"
+depends "libarchive",      ">= 0.4"
+depends "github",          ">= 0.3"
+depends "apt"

@@ -17,3 +17,4 @@ tmp
 /tags
 /vendor
 .DS_Store
+.kitchen

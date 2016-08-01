@@ -17,7 +17,8 @@
 # limitations under the License.
 #
 
-node.set[:nginx][:install_method] = "source"
+include_recipe "apt" if node["platform_family"] == "debian"
+node.force_default[:nginx][:install_method] = "source"
 include_recipe "nginx"
 
 nginx_site "default" do

@@ -17,10 +17,13 @@
 # limitations under the License.
 #
 
+include_recipe "apt" if node["platform_family"] == "debian"
 include_recipe "libarchive::default"
 include_recipe "runit"
 
-chef_gem "bundler"
+chef_gem "bundler" do
+  compile_time false
+end
 
 group node[:berkshelf_api][:group]
 

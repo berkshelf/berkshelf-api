@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+default['apt']['compile_time_update'] = true
+default['build-essential']['compile_time'] = true
 default[:berkshelf_api][:repo]           = "berkshelf/berkshelf-api"
 default[:berkshelf_api][:token]          = nil
 default[:berkshelf_api][:release]        = "v#{Berkshelf::API::Chef.cookbook_version(run_context)}"
