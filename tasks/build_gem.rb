@@ -20,7 +20,6 @@ class BuildGem < Thor
   method_option :github_token,
     type: :string,
     default: ENV["GITHUB_TOKEN"],
-    required: true,
     aliases: "-t",
     banner: "TOKEN"
   desc "release", "Create tag v#{Berkshelf::API::VERSION} and build and push berkshelf-api-#{Berkshelf::API::VERSION}.gem to Rubygems"
