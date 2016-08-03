@@ -15,7 +15,7 @@ class Default < Thor
   namespace "build"
   default_task :all
 
-  GITHUB_ORG_REGEX = /(git\@github.com\:|https\:\/\/github.com\/)(.+).git/.freeze
+  GITHUB_ORG_REGEX = /(git\@github.com\:|https\:\/\/github.com\/)(.+)(.git)?/.freeze
   PKG_DIR          = File.expand_path("../pkg", __FILE__).freeze
   VENDOR_DIR       = File.expand_path("../vendor", __FILE__).freeze
   PROJECT_DIR      = File.dirname(__FILE__)
