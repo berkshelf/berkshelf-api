@@ -1,6 +1,6 @@
 # Berkshelf::API
-[![Gem Version](https://badge.fury.io/rb/berkshelf-api.png)](http://badge.fury.io/rb/berkshelf-api)
-[![Build Status](https://secure.travis-ci.org/berkshelf/berkshelf-api.png?branch=master)](http://travis-ci.org/berkshelf/berkshelf-api)
+[![Gem Version](https://badge.fury.io/rb/berkshelf-api.svg)](http://badge.fury.io/rb/berkshelf-api)
+[![Build Status](https://travis-ci.org/berkshelf/berkshelf-api.svg?branch=master)](https://travis-ci.org/berkshelf/berkshelf-api)
 
 A server which indexes cookbooks from various sources and hosts it over a REST API
 
