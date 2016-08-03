@@ -52,4 +52,4 @@ suites:
   - name: default
     run_list:
       - recipe[berkshelf-api-server]
-    attributes: { berkshelf_api: { release: "v2.1.1" } }
+    attributes: { berkshelf_api: { release: "v2.2.0" } }
