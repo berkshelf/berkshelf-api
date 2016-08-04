@@ -9,6 +9,9 @@ license          "Apache 2.0"
 description      "Installs/Configures a berkshelf-api server"
 long_description "Installs/Configures a berkshelf-api server"
 version          Berkshelf::API::VERSION
+source_url       'https://github.com/berkshelf/berkshelf-api'
+issues_url       'https://github.com/berkshelf/berkshelf-api/issues'
+
 
 %w{ redhat centos ubuntu }.each do |os|
   supports os
