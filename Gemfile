@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'berkflow', github: "reset/berkflow"
+  gem 'berkflow', github: "berkshelf/berkflow"
   gem 'berkshelf', github: "berkshelf/berkshelf"
   gem 'thor'
   gem 'coolline'
