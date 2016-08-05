@@ -12,6 +12,7 @@ version          Berkshelf::API::VERSION
 source_url       'https://github.com/berkshelf/berkshelf-api'
 issues_url       'https://github.com/berkshelf/berkshelf-api/issues'
 
+chef_version ">= 12.2.0"
 
 %w{ redhat centos ubuntu }.each do |os|
   supports os
