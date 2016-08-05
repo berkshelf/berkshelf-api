@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = ">= 2.2.0"
 
-  spec.add_dependency 'ridley',         '~> 5.0'
+  spec.add_dependency 'ridley',         '>= 4.0', '< 6.0'
   spec.add_dependency 'celluloid',      '~> 0.16'
   spec.add_dependency 'celluloid-io',   '~> 0.16'
   spec.add_dependency 'reel',           '~> 0.6.0'
@@ -27,8 +27,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'grape-msgpack',  '~> 0.1'
   spec.add_dependency 'hashie',         '>= 2.0.4', '< 4.0.0'
   spec.add_dependency 'archive',        '= 0.0.6'
-  spec.add_dependency 'buff-config',    '~> 2.0'
+  spec.add_dependency 'buff-config',    '>= 1.0', '< 3.0'
   spec.add_dependency 'octokit',        '>= 3.0.0', '< 5.0.0'
-  spec.add_dependency 'semverse',       '~> 2.0'
-  spec.add_dependency 'varia_model',    '~> 0.6'
+  spec.add_dependency 'semverse',       '>= 1.0', '< 3.0'
+  spec.add_dependency 'varia_model',    '~> 0.4'
 end
